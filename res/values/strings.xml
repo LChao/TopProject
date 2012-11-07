@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">养生视线</string>
+    <string-array name="tab_text">
+        <item>养生视线</item>
+        <item>分类</item>
+        <item>文摘</item>
+        <item>心愿</item>
+        <item>设置</item>
+    </string-array>
+    <string name="item_avatar">avatar</string>
+
+    <string name="app_exit_message">确定要退出应用养生视线?</string>
+
+    <string name="info_options">选项</string>
+    <string name="info_options_share">分享</string>
+    <string name="info_options_share_title">分享一条来自《养生视线》的资讯</string>
+
+    <string name="digest_footer_suggest_tips">推荐书籍</string>
+
+    <string name="favorite_add_wish">添加心愿</string>
+    <string name="favorite_edit_wish">编辑心愿</string>
+    <string name="favorite_clear_wish">清除所有心愿</string>
+
+    <string name="setting_contact_tel">"tel:15800413861"</string>
+
+    <string name="setting_about_subject">养生视线\nHealth World</string>
+    <string name="setting_about_description">每天饮食,常识等资讯，您的健康小助手！</string>
+
+    <string name="setting_share_app_subject">向你分享一个精彩应用《养生视线》</string>
+    <string name="setting_share_app_body">向你分享一个精彩应用《养生视线》，每天饮食,常识等资讯，您的健康小助手，下载地址:</string>
+</resources>

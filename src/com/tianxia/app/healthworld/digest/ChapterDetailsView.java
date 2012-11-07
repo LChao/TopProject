@@ -1,0 +1,149 @@
+/*
+ * Copyright (C) 2012 Jayfeng.
+ */
+
+package com.tianxia.app.healthworld.digest;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.Paint.FontMetrics;
+import android.util.AttributeSet;
+import android.view.MotionEvent;
+import android.view.View;
+
+public class ChapterDetailsView extends View{
+
+    private String mInitText;
+    private String mContent;
+    private List<String> mLines;
+
+    private int mPage = 1;
+    private int mPageLines;
+    private int mPageMax;
+
+    private int mMarginTopAndBottom = 50;
+    private int mMarginLeftAndRight = 25;
+
+    private Paint mPaint;
+    private float mFontHeight;
+    private float mPaintDescent;
+    private float mPaintAscent;
+
+    private boolean mNeedRefresh = true;
+
+    public ChapterDetailsView(Context context,AttributeSet attrs) {
+        super(context, attrs);
+        mLines = new ArrayList<String>();
+        mPaint = new Paint();
+        mPaint.setAntiAlias(true);
+        mPaint.setTextSize(25);
+        FontMetrics fm = mPaint.getFontMetrics();
+        mFontHeight = fm.descent - fm.top;
+        mPaintDescent = mPaint.descent();
+        mPaintAscent = mPaint.ascent();
+    }
+
+    public void setInitText(String initText) {
+        mInitText = initText;
+        invalidate();
+    }
+
+    public void setContent(String content) {
+        mContent = content;
+        invalidate();
+    }
+
+    @Override
+    public void onDraw(Canvas canvas) {
+        if (mContent != null && !"".equals(mContent)) {
+            if (mNeedRefresh) {
+                splitContentToPageLines();
+                mNeedRefresh = false;
+            }
+            float drawTop = mMarginTopAndBottom - mPaintAscent;
+            int startLine = (mPage - 1)*mPageLines;
+            for (int i = startLine; i < startLine + mPageLines && i < mLines.size(); i++) {
+                canvas.drawText(mLines.get(i), mMarginLeftAndRight, drawTop, mPaint);
+                drawTop += mFontHeight;
+            }
+        } else if (mInitText != null && !"".equals(mInitText)) {
+            int initTextWidth = (int) mPaint.measureText(mInitText);
+            int initTextX = (getWidth() - initTextWidth)/2;
+            int initTextY = (getHeight() - (int)mFontHeight)/2;
+            canvas.drawText(mInitText, initTextX, initTextY, mPaint);
+        }
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                if (event.getX() > getWidth()/2) {
+                    if (mPage < mPageMax) {
+                        mPage++;
+                        invalidate();
+                    } else {
+                    }
+                } else if (event.getX() < getWidth()/2) {
+                    if (mPage > 1) {
+                        mPage--;
+                        invalidate();
+                    } else {
+                    }
+                }
+                break;
+            default:
+                break;
+        }
+        return super.onTouchEvent(event);
+    }
+
+    public void splitContentToPageLines() {
+        mPageLines = (int)((float)(getHeight() - mMarginTopAndBottom*2)/mFontHeight);
+        int start = 0, end;
+        mLines.clear();
+        int textWidth = getWidth() - mMarginLeftAndRight*2;
+
+        for (int i = 0; i < mContent.length(); i++) {
+            end = i;
+            String line = mContent.substring(start, end + 1);
+            if (mPaint.measureText(line) >= textWidth) {
+                line = mContent.substring(start, end);
+                mLines.add(line);
+                start = i;
+            } else if (i == mContent.length() - 1 ){
+                mLines.add(line);
+                start = i;
+            } else if (mContent.charAt(i) == '\r' && mContent.charAt(i+1) == '\n') {
+                // if goto this if branch, there is must be : i < mContent.length() - 1
+                if (start >= end) {
+                    continue;
+                }
+                line = mContent.substring(start, end);
+                mLines.add(line);
+                start = i + 2;
+                if (start > mContent.length() - 1) {
+                    start = mContent.length() - 1;
+                }
+            } else if (mContent.charAt(i) == '\n') {
+                if (start >= end) {
+                    continue;
+                }
+                line = mContent.substring(start, end);
+                mLines.add(line);
+                start = i + 1;
+            }
+
+        }
+
+        if (mLines.size()%mPageLines == 0) {
+            mPageMax = mLines.size()/mPageLines;
+        } else {
+            mPageMax = mLines.size()/mPageLines + 1;
+        }
+    }
+}
