@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name">淘色记</string>
     <string-array name="tab_text">
-        <item>养生视线</item>
+        <item>首页</item>
         <item>分类</item>
         <item>文摘</item>
         <item>心愿</item>

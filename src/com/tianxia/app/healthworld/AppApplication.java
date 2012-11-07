@@ -14,6 +14,7 @@ import com.tianxia.app.healthworld.cache.ConfigCache;
 import com.tianxia.app.healthworld.category.CategoryTabActivity;
 import com.tianxia.app.healthworld.digest.DigestTabActivity;
 import com.tianxia.app.healthworld.favorite.FavoriteTabActivity;
+import com.tianxia.app.healthworld.home.IdentificationTabActivity;
 import com.tianxia.app.healthworld.infomation.InfomationTabActivity;
 import com.tianxia.app.healthworld.setting.SettingTabActivity;
 import com.tianxia.lib.baseworld.BaseApplication;
@@ -38,7 +39,7 @@ public class AppApplication extends BaseApplication {
 
     @Override
     public void fillTabs() {
-        mTabActivitys.add(InfomationTabActivity.class);
+        mTabActivitys.add(IdentificationTabActivity.class);
         mTabActivitys.add(CategoryTabActivity.class);
         mTabActivitys.add(DigestTabActivity.class);
         mTabActivitys.add(FavoriteTabActivity.class);
