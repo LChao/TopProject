@@ -1,13 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">淘色记</string>
-    <string-array name="tab_text">
-        <item>首页</item>
-        <item>分类</item>
-        <item>文摘</item>
-        <item>心愿</item>
-        <item>设置</item>
-    </string-array>
     <string name="item_avatar">avatar</string>
 
     <string name="app_exit_message">确定要退出应用养生视线?</string>

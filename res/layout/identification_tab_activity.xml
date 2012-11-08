@@ -4,6 +4,37 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
+    <RelativeLayout
+        android:id="@+id/main_tab_banner"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/main_banner_bg" >
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/app_btn_back"
+            android:paddingRight="10dip" >
+
+            <ProgressBar
+                android:id="@+id/app_loading_pbar_top"
+                android:layout_width="24dip"
+                android:layout_height="24dip"
+                android:layout_gravity="center_horizontal"
+                android:indeterminateDrawable="@anim/app_refresh_progress" />
+
+            <ImageView
+                android:id="@+id/app_loading_btn_top"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/app_refresh"
+                android:src="@drawable/app_icon_refresh"
+                android:visibility="gone" />
+        </FrameLayout>
+    </RelativeLayout>
+
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
