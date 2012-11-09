@@ -11,7 +11,6 @@ import android.content.DialogInterface;
 import android.os.Environment;
 
 import com.tianxia.app.healthworld.cache.ConfigCache;
-import com.tianxia.app.healthworld.category.CategoryTabActivity;
 import com.tianxia.app.healthworld.digest.DigestTabActivity;
 import com.tianxia.app.healthworld.favorite.FavoriteTabActivity;
 import com.tianxia.app.healthworld.home.HomeTabActivity;
@@ -40,19 +39,16 @@ public class AppApplication extends BaseApplication {
     @Override
     public void fillTabs() {
         mTabActivitys.add(HomeTabActivity.class);
-        mTabActivitys.add(CategoryTabActivity.class);
         mTabActivitys.add(DigestTabActivity.class);
         mTabActivitys.add(FavoriteTabActivity.class);
         mTabActivitys.add(SettingTabActivity.class);
 
         mTabNormalImages.add(R.drawable.infomation_normal);
-        mTabNormalImages.add(R.drawable.category_normal);
         mTabNormalImages.add(R.drawable.digest_normal);
         mTabNormalImages.add(R.drawable.favorite_normal);
         mTabNormalImages.add(R.drawable.setting_normal);
 
         mTabPressImages.add(R.drawable.infomation_press);
-        mTabPressImages.add(R.drawable.category_press);
         mTabPressImages.add(R.drawable.digest_press);
         mTabPressImages.add(R.drawable.favorite_press);
         mTabPressImages.add(R.drawable.setting_press);

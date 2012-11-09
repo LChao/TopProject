@@ -64,14 +64,6 @@
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".category.CategoryTabActivity"
-            android:screenOrientation="portrait" >
-        </activity>
-        <activity
-            android:name=".category.CategoryListActivity"
-            android:screenOrientation="portrait" >
-        </activity>
-        <activity
             android:name=".digest.DigestTabActivity"
             android:screenOrientation="portrait" >
         </activity>
