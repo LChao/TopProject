@@ -56,7 +56,7 @@
         </receiver>
 
         <activity
-            android:name=".home.IdentificationTabActivity"
+            android:name=".home.HomeTabActivity"
             android:screenOrientation="portrait" >
         </activity>
         <activity

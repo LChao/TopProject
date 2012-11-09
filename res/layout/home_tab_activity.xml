@@ -5,10 +5,27 @@
     android:orientation="vertical" >
 
     <RelativeLayout
-        android:id="@+id/main_tab_banner"
+        android:id="@+id/home_tab_banner"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/main_banner_bg" >
+        android:background="@drawable/home_banner_bg" >
+
+        <TextView
+            android:id="@+id/home_tab_banner_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="全部商品"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <ImageView
+            android:id="@+id/home_tab_banner_arrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="5dip"
+            android:layout_toRightOf="@id/home_tab_banner_title"
+            android:background="@drawable/home_arrow_down" />
 
         <FrameLayout
             android:layout_width="wrap_content"
@@ -43,14 +60,14 @@
         android:padding="2dip" >
 
         <Button
-            android:id="@+id/app_category_left"
+            android:id="@+id/home_category_left"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/app_category_left_selected"
             android:text="新品" />
 
         <Button
-            android:id="@+id/app_category_right"
+            android:id="@+id/home_category_right"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/app_category_right_normal"
@@ -82,7 +99,7 @@
     </LinearLayout>
 
     <GridView
-        android:id="@+id/identification_list"
+        android:id="@+id/home_list"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_margin="4dip"
