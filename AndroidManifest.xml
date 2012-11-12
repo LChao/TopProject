@@ -20,7 +20,7 @@
 
     <application
         android:name=".AppApplication"
-        android:icon="@drawable/icon"
+        android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@android:style/Theme.Black.NoTitleBar" >
         <meta-data
@@ -57,6 +57,10 @@
 
         <activity
             android:name=".home.HomeTabActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".home.HomeDetailsActivity"
             android:screenOrientation="portrait" >
         </activity>
         <activity

@@ -1,6 +1,6 @@
-package com.tianxia.app.healthworld.cache;
+package com.tianxia.app.healthworld.model;
 
-public class AppreciateLatestInfo {
+public class HomeDetailsInfo {
 
     public String prefix;
     public String title;

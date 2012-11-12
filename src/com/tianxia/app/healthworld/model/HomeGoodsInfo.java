@@ -1,6 +1,6 @@
 package com.tianxia.app.healthworld.model;
 
-public class AppreciateCategoryInfo {
+public class HomeGoodsInfo {
 
     public String filename;
     public String category;

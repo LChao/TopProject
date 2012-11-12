@@ -32,14 +32,13 @@ import android.widget.PopupWindow.OnDismissListener;
 
 import com.tianxia.app.healthworld.R;
 import com.tianxia.app.healthworld.cache.ConfigCache;
-import com.tianxia.app.healthworld.model.AppreciateCategoryInfo;
+import com.tianxia.app.healthworld.model.HomeGoodsInfo;
 import com.tianxia.lib.baseworld.activity.AdapterActivity;
-import com.tianxia.lib.baseworld.main.MainTabFrame;
 import com.tianxia.lib.baseworld.sync.http.AsyncHttpClient;
 import com.tianxia.lib.baseworld.sync.http.AsyncHttpResponseHandler;
 import com.tianxia.widget.image.SmartImageView;
 
-public class HomeTabActivity extends AdapterActivity<AppreciateCategoryInfo> {
+public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> {
 	public static final String TAG = "HomeTabActivity";
 	private int screenWidth;
 	// banner下拉菜单部分
@@ -110,7 +109,7 @@ public class HomeTabActivity extends AdapterActivity<AppreciateCategoryInfo> {
 		mTopLoadingImage = (ImageView) findViewById(R.id.app_loading_btn_top);
 
 		mBannerLayout = (RelativeLayout) findViewById(R.id.home_tab_banner);
-		mBannerTitle = (TextView) findViewById(R.id.home_tab_banner_title);
+		mBannerTitle = (TextView) findViewById(R.id.top_banner_title);
 		mBannerArrow = (ImageView) findViewById(R.id.home_tab_banner_arrow);
 
 		mBannerTitle.setOnClickListener(new OnClickListener() {
@@ -136,15 +135,16 @@ public class HomeTabActivity extends AdapterActivity<AppreciateCategoryInfo> {
 		DisplayMetrics metric = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(metric);
 		screenWidth = metric.widthPixels; // 屏幕宽度（像素）
-		// int height = metric.heightPixels; // 屏幕高度（像素）
-		// float density = metric.density; // 屏幕密度（0.75 / 1.0 / 1.5）
-		// int densityDpi = metric.densityDpi; // 屏幕密度DPI（120 / 160 / 240）
+		int height = metric.heightPixels; // 屏幕高度（像素）
+		float density = metric.density; // 屏幕密度（0.75 / 1.0 / 1.5）
+		int densityDpi = metric.densityDpi; // 屏幕密度DPI（120 / 160 / 240）
+		Log.d(TAG, "width: "+screenWidth+" height: "+height+" density: "+density+" densityDpi: "+densityDpi);
 
 	}
 
 	private void loadGridView() {
 		String cacheConfigString = ConfigCache
-				.getUrlCache(IdentificationApi.IDENTIFICATION_CONFIG_URL);
+				.getUrlCache(HomeApi.HOME_GOODS_URL);
 		if (cacheConfigString != null) {
 			setAppreciateCategoryList(cacheConfigString);
 			mAppLoadingLinearLayout.setVisibility(View.GONE);
@@ -152,42 +152,38 @@ public class HomeTabActivity extends AdapterActivity<AppreciateCategoryInfo> {
 			mTopLoadingImage.setVisibility(View.VISIBLE);
 		} else {
 			AsyncHttpClient client = new AsyncHttpClient();
-			client.get(IdentificationApi.IDENTIFICATION_CONFIG_URL,
-					new AsyncHttpResponseHandler() {
+			client.get(HomeApi.HOME_GOODS_URL, new AsyncHttpResponseHandler() {
 
-						@Override
-						public void onStart() {
-							mAppLoadingTip.setText(R.string.app_loading);
-							mAppLoadingLinearLayout.setVisibility(View.VISIBLE);
-							// mAppLoadingTip.setVisibility(View.VISIBLE);
-							// mAppLoadingPbar.setVisibility(View.VISIBLE);
-							mTopLoadingPbar.setVisibility(View.VISIBLE);
-							mTopLoadingImage.setVisibility(View.GONE);
-							listView.setAdapter(null);
-						}
+				@Override
+				public void onStart() {
+					mAppLoadingTip.setText(R.string.app_loading);
+					mAppLoadingLinearLayout.setVisibility(View.VISIBLE);
+					// mAppLoadingTip.setVisibility(View.VISIBLE);
+					// mAppLoadingPbar.setVisibility(View.VISIBLE);
+					mTopLoadingPbar.setVisibility(View.VISIBLE);
+					mTopLoadingImage.setVisibility(View.GONE);
+					listView.setAdapter(null);
+				}
 
-						@Override
-						public void onSuccess(String result) {
-							mAppLoadingLinearLayout.setVisibility(View.GONE);
-							ConfigCache
-									.setUrlCache(
-											result,
-											IdentificationApi.IDENTIFICATION_CONFIG_URL);
-							setAppreciateCategoryList(result);
-						}
+				@Override
+				public void onSuccess(String result) {
+					mAppLoadingLinearLayout.setVisibility(View.GONE);
+					ConfigCache.setUrlCache(result, HomeApi.HOME_GOODS_URL);
+					setAppreciateCategoryList(result);
+				}
 
-						@Override
-						public void onFailure(Throwable arg0) {
-							mAppLoadingPbar.setVisibility(View.GONE);
-							mAppLoadingTip.setText(R.string.app_loading_fail);
-						}
+				@Override
+				public void onFailure(Throwable arg0) {
+					mAppLoadingPbar.setVisibility(View.GONE);
+					mAppLoadingTip.setText(R.string.app_loading_fail);
+				}
 
-						@Override
-						public void onFinish() {
-							mTopLoadingPbar.setVisibility(View.GONE);
-							mTopLoadingImage.setVisibility(View.VISIBLE);
-						}
-					});
+				@Override
+				public void onFinish() {
+					mTopLoadingPbar.setVisibility(View.GONE);
+					mTopLoadingImage.setVisibility(View.VISIBLE);
+				}
+			});
 		}
 	}
 
@@ -260,10 +256,10 @@ public class HomeTabActivity extends AdapterActivity<AppreciateCategoryInfo> {
 		try {
 			JSONObject json = new JSONObject(jsonString);
 			JSONArray jsonArray = json.getJSONArray("list");
-			listData = new ArrayList<AppreciateCategoryInfo>();
-			AppreciateCategoryInfo appreciateCategoryInfo = null;
+			listData = new ArrayList<HomeGoodsInfo>();
+			HomeGoodsInfo appreciateCategoryInfo = null;
 			for (int i = 0; i < jsonArray.length(); i++) {
-				appreciateCategoryInfo = new AppreciateCategoryInfo();
+				appreciateCategoryInfo = new HomeGoodsInfo();
 				appreciateCategoryInfo.filename = jsonArray.getJSONObject(i)
 						.optString("filename");
 				appreciateCategoryInfo.category = jsonArray.getJSONObject(i)
@@ -314,14 +310,15 @@ public class HomeTabActivity extends AdapterActivity<AppreciateCategoryInfo> {
 	@Override
 	protected void onItemClick(AdapterView<?> adapterView, View view,
 			int position, long id) {
-		// mIdentificationIntent = new Intent(IdentificationTabActivity.this,
-		// AppreciateLatestActivity.class);
+		mIdentificationIntent = new Intent(HomeTabActivity.this,
+				HomeDetailsActivity.class);
+		mIdentificationIntent.putExtra("url", HomeApi.HOME_DETAILS_URL);
 		// mIdentificationIntent.putExtra("url",
 		// AppreciateApi.APPRECIATE_CATEGORY_BASE_URL +
 		// listData.get(position).filename + ".json");
 		// mIdentificationIntent.putExtra("title",
 		// listData.get(position).category);
-		// startActivity(mIdentificationIntent);
+		startActivity(mIdentificationIntent);
 	}
 
 	OnItemClickListener PopwindowlistClickListener = new OnItemClickListener() {

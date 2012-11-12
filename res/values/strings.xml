@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">淘色记</string>
+    <string name="app_name">情趣宝</string>
     <string name="item_avatar">avatar</string>
+    
+    <string name="ad_company_name">店名:</string>
+    <string name="ad_company_contact">联系人:</string>
+    <string name="ad_company_address">地址:</string>
+    <string name="ad_company_tel">联系电话:</string>
+    <string name="ad_company_phone">手机:</string>
+    <string name="ad_company_business">业务:</string>
 
     <string name="app_exit_message">确定要退出应用养生视线?</string>
 

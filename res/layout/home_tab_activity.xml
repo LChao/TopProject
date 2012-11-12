@@ -11,12 +11,13 @@
         android:background="@drawable/home_banner_bg" >
 
         <TextView
-            android:id="@+id/home_tab_banner_title"
+            android:id="@+id/top_banner_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:text="全部商品"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+            android:textColor="#FFFFFF"
+            android:textSize="20sp" />
 
         <ImageView
             android:id="@+id/home_tab_banner_arrow"
@@ -24,7 +25,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="5dip"
-            android:layout_toRightOf="@id/home_tab_banner_title"
+            android:layout_toRightOf="@id/top_banner_title"
             android:background="@drawable/home_arrow_down" />
 
         <FrameLayout
@@ -32,20 +33,21 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:background="@drawable/app_btn_back"
-            android:paddingRight="10dip" >
+            android:layout_marginRight="10dp"
+            android:background="@drawable/app_btn_back" >
 
             <ProgressBar
                 android:id="@+id/app_loading_pbar_top"
                 android:layout_width="24dip"
                 android:layout_height="24dip"
-                android:layout_gravity="center_horizontal"
+                android:layout_gravity="center"
                 android:indeterminateDrawable="@anim/app_refresh_progress" />
 
             <ImageView
                 android:id="@+id/app_loading_btn_top"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:contentDescription="@string/app_refresh"
                 android:src="@drawable/app_icon_refresh"
                 android:visibility="gone" />
