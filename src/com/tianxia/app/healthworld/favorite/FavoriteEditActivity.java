@@ -48,7 +48,7 @@ public class FavoriteEditActivity extends BaseActivity implements DragListView.O
             SQLiteDatabase db = AppApplication.mSQLiteHelper.getReadableDatabase();
             Cursor cursor = null;
             try {
-                cursor = db.query(AppSQLiteHelper.TABLE_WISH, null, null, null, null, null, "sort");
+                cursor = db.query(AppSQLiteHelper.TABLE_COLLECT, null, null, null, null, null, "sort");
                 if (cursor.moveToFirst()) {
                     do {
                         WishInfo wishInfo = new WishInfo();
@@ -94,7 +94,7 @@ public class FavoriteEditActivity extends BaseActivity implements DragListView.O
                     ContentValues contentValue = new ContentValues();
                     contentValue.put("sort", i * 100);
                     String where = "_id = " + wishInfo._id;
-                    db.update(AppSQLiteHelper.TABLE_WISH, contentValue, where, null);
+                    db.update(AppSQLiteHelper.TABLE_COLLECT, contentValue, where, null);
                 }
                 db.setTransactionSuccessful();
                 FavoriteTabActivity.mDataSetChanged = true;

@@ -54,7 +54,7 @@ public class FavoriteTabActivity extends BaseActivity{
             SQLiteDatabase db = AppApplication.mSQLiteHelper.getReadableDatabase();
             Cursor cursor = null;
             try {
-                cursor = db.query(AppSQLiteHelper.TABLE_WISH, null, null, null, null, null, "sort");
+                cursor = db.query(AppSQLiteHelper.TABLE_COLLECT, null, null, null, null, null, "sort");
                 if (cursor.moveToFirst()) {
                     do {
                         TagCloudInfo tagCloudInfo = new TagCloudInfo();
@@ -151,7 +151,7 @@ public class FavoriteTabActivity extends BaseActivity{
             ContentValues contentValue = new ContentValues();
             contentValue.put("title", title);
             contentValue.put("sort", 9999);
-            long count = db.insert(AppSQLiteHelper.TABLE_WISH, null, contentValue);
+            long count = db.insert(AppSQLiteHelper.TABLE_COLLECT, null, contentValue);
             if (count != -1) {
                 //reload the data
                 mTagCloudView.setTagList(getTags());
@@ -167,7 +167,7 @@ public class FavoriteTabActivity extends BaseActivity{
     private void clearWishes() {
         synchronized (AppApplication.mSQLiteHelper) {
             SQLiteDatabase db = AppApplication.mSQLiteHelper.getWritableDatabase();
-            int count = db.delete(AppSQLiteHelper.TABLE_WISH, null, null);
+            int count = db.delete(AppSQLiteHelper.TABLE_COLLECT, null, null);
             if (count > 0) {
                 //reload the data
                 mTagCloudView.setTagList(getTags());

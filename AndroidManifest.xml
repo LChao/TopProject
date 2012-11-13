@@ -68,15 +68,7 @@
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".digest.DigestTabActivity"
-            android:screenOrientation="portrait" >
-        </activity>
-        <activity
-            android:name=".digest.ChapterListActivity"
-            android:screenOrientation="portrait" >
-        </activity>
-        <activity
-            android:name=".digest.ChapterDetailsActivity"
+            android:name=".collect.CollectTabActivity"
             android:screenOrientation="portrait" >
         </activity>
         <activity

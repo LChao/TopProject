@@ -1,6 +1,8 @@
 package com.tianxia.app.healthworld.home;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import net.youmi.android.AdView;
 
@@ -8,10 +10,14 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.content.ContentValues;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
@@ -25,6 +31,7 @@ import android.widget.TextView;
 import android.widget.ImageView.ScaleType;
 import android.widget.Toast;
 
+import com.tianxia.app.healthworld.AppApplication;
 import com.tianxia.app.healthworld.R;
 import com.tianxia.app.healthworld.cache.ConfigCache;
 import com.tianxia.app.healthworld.model.HomeDetailsAdCompanyInfo;
@@ -38,6 +45,8 @@ public class HomeDetailsActivity extends AdapterActivity<HomeDetailsInfo> {
 
 	private String mUrl = null;
 	private String mHomeDetailsTitle = null;
+	private SQLiteDatabase db;
+	private Boolean isFavorite;
 
 	// 顶部banner
 	private TextView mHomeDetailsTitleView = null;
@@ -59,6 +68,8 @@ public class HomeDetailsActivity extends AdapterActivity<HomeDetailsInfo> {
 	private TextView mAdCompanyBusiness = null;
 
 	public AdView mAdView = null;
+	private Button collect;
+	private Button buy;
 
 	private int width;
 	private int height;
@@ -72,6 +83,8 @@ public class HomeDetailsActivity extends AdapterActivity<HomeDetailsInfo> {
 		width = dm.widthPixels;
 		height = dm.heightPixels;
 
+		db = AppApplication.mSQLiteHelper.getWritableDatabase();
+
 		mUrl = getIntent().getStringExtra("url");
 		mHomeDetailsTitle = getIntent().getStringExtra("title");
 
@@ -79,6 +92,8 @@ public class HomeDetailsActivity extends AdapterActivity<HomeDetailsInfo> {
 		if (mHomeDetailsTitle != null) {
 			mHomeDetailsTitleView.setText(mHomeDetailsTitle);
 		}
+		collect = (Button) findViewById(R.id.home_details_bt_collect);
+		buy = (Button) findViewById(R.id.home_details_bt_buy);
 		mAdContainer = (LinearLayout) findViewById(R.id.home_details_ad);
 
 		mAppBackButton = (Button) findViewById(R.id.app_back);
@@ -96,6 +111,29 @@ public class HomeDetailsActivity extends AdapterActivity<HomeDetailsInfo> {
 			@Override
 			public void onClick(View v) {
 				loadGridView();
+			}
+		});
+
+		isFavorite = queryDB();
+		if (isFavorite) {
+			collect.setText("取消收藏");
+		} else {
+			collect.setText("收藏");
+		}
+		collect.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				favorite();
+			}
+		});
+		buy.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				Toast.makeText(HomeDetailsActivity.this, "购买商品.", 0).show();
 			}
 		});
 
@@ -243,6 +281,55 @@ public class HomeDetailsActivity extends AdapterActivity<HomeDetailsInfo> {
 	protected void onItemClick(AdapterView<?> adapterView, View view,
 			int position, long id) {
 		Toast.makeText(this, "position" + position, 0).show();
+	}
+
+	/**
+	 * 改变商品再数据库中的收藏状态
+	 */
+	public void favorite() {
+		synchronized (AppApplication.mSQLiteHelper) {
+			db = AppApplication.mSQLiteHelper.getWritableDatabase();
+			if (!isFavorite) {
+				ContentValues contentValue = new ContentValues();
+				contentValue.put("num_iid", "123456");
+				contentValue.put("title", "米奇**，美国进口，舒适耐用");
+				// contentValue.put("url", "");
+				SimpleDateFormat formatter = new SimpleDateFormat("yyyy年MM月dd日");
+				contentValue.put("date",
+						formatter.format(new Date(System.currentTimeMillis())));
+				db.insert("collection", null, contentValue);
+				isFavorite = true;
+				Toast.makeText(this, "收藏成功", Toast.LENGTH_SHORT).show();
+				collect.setText("取消收藏");
+			} else {
+				db.execSQL("delete from collection where num_iid = '"
+						+ "123456" + "'");
+				isFavorite = false;
+				Toast.makeText(this, "删除收藏", Toast.LENGTH_SHORT).show();
+				collect.setText("收藏");
+			}
+		}
+	}
+
+	/**
+	 * 查询数据库中商品收藏状态
+	 * 
+	 * @return
+	 */
+	public boolean queryDB() {
+		boolean result = false;
+		synchronized (AppApplication.mSQLiteHelper) {
+			db = AppApplication.mSQLiteHelper.getWritableDatabase();
+			Cursor cursor = db.query("collection", new String[] { "num_iid" },
+					"num_iid = ?", new String[] { "123456" }, null, null, null);
+			if (cursor == null || cursor.getCount() == 0) {
+				result = false;
+			} else {
+				result = true;
+			}
+			cursor.close();
+		}
+		return result;
 	}
 
 	public void showAd() {

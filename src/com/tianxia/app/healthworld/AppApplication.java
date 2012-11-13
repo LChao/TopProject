@@ -11,7 +11,7 @@ import android.content.DialogInterface;
 import android.os.Environment;
 
 import com.tianxia.app.healthworld.cache.ConfigCache;
-import com.tianxia.app.healthworld.digest.DigestTabActivity;
+import com.tianxia.app.healthworld.collect.CollectTabActivity;
 import com.tianxia.app.healthworld.favorite.FavoriteTabActivity;
 import com.tianxia.app.healthworld.home.HomeTabActivity;
 import com.tianxia.app.healthworld.infomation.InfomationTabActivity;
@@ -31,7 +31,7 @@ public class AppApplication extends BaseApplication {
     public static String mDomain = "http://www.kaiyuanxiangmu.com/";
     public static String mBakeDomain = "http://1.kaiyuanxiangmu.sinaapp.com/";
 
-    private static final String DB_NAME = "healthworld.db";
+    private static final String DB_NAME = "qingqubao.db";
 
     public static String mSdcardDataDir;
     public static String mApkDownloadUrl = null;
@@ -39,7 +39,7 @@ public class AppApplication extends BaseApplication {
     @Override
     public void fillTabs() {
         mTabActivitys.add(HomeTabActivity.class);
-        mTabActivitys.add(DigestTabActivity.class);
+        mTabActivitys.add(CollectTabActivity.class);
         mTabActivitys.add(FavoriteTabActivity.class);
         mTabActivitys.add(SettingTabActivity.class);
 

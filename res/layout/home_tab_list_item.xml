@@ -27,6 +27,6 @@
             android:layout_gravity="right|top"
             android:gravity="center"
             android:visibility="gone"
-            android:background="@drawable/appreciate_category_count_bg"
+            android:background="@drawable/home_gridview_item_count_bg"
             android:singleLine="true"/>
 </FrameLayout>
