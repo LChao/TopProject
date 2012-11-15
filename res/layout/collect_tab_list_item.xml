@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content" >
+
+    <FrameLayout
+        android:id="@+id/collect_listitem_topframe"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="#dddddd"
+        android:padding="1px" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="#FFFFFA"
+            android:orientation="vertical"
+            android:padding="1px" >
+
+            <com.tianxia.widget.image.SmartImageView
+                android:id="@+id/collect_listitem_image"
+                android:layout_width="fill_parent"
+                android:layout_height="90dip"
+                android:scaleType="centerCrop" />
+
+            <TextView
+                android:id="@+id/collect_listitem_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:textColor="#000000" />
+        </LinearLayout>
+    </FrameLayout>
+
+    <Button
+        android:id="@+id/collect_listitem_delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/collect_listitem_topframe"
+        android:text="删除" />
+
+    <TextView
+        android:id="@+id/collect_listitem_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/collect_listitem_topframe"
+        android:layout_toLeftOf="@id/collect_listitem_delete"
+        android:singleLine="true" />
+
+</RelativeLayout>

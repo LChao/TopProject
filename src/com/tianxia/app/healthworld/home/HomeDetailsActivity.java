@@ -17,7 +17,6 @@ import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
@@ -233,7 +232,9 @@ public class HomeDetailsActivity extends AdapterActivity<HomeDetailsInfo> {
 		setListView(R.id.home_details_gallery);
 	}
 
-	// 顶部广告栏初始化
+	/**
+	 * 顶部广告栏初始化
+	 */
 	private void setHeaderView() {
 		View view = LayoutInflater.from(this).inflate(
 				R.layout.home_ad_company_shop, null);
@@ -292,6 +293,7 @@ public class HomeDetailsActivity extends AdapterActivity<HomeDetailsInfo> {
 			if (!isFavorite) {
 				ContentValues contentValue = new ContentValues();
 				contentValue.put("num_iid", "123456");
+				contentValue.put("thumbnail", "http://t2.qpic.cn/mblogpic/d37a7d6365d47d0808fe/160");
 				contentValue.put("title", "米奇**，美国进口，舒适耐用");
 				// contentValue.put("url", "");
 				SimpleDateFormat formatter = new SimpleDateFormat("yyyy年MM月dd日");

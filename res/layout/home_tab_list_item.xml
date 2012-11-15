@@ -3,30 +3,38 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:background="#dddddd"
-    android:padding="1px"
-    android:gravity="center_horizontal">
-    <LinearLayout android:layout_width="fill_parent"
+    android:padding="1px" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:padding="1px"
+        android:background="#FFFFFA"
         android:orientation="vertical"
-        android:background="#FFFFFA">
-        <com.tianxia.widget.image.SmartImageView android:id="@+id/item_image"
-             android:layout_width="fill_parent"
-             android:layout_height="90dip"
-             android:scaleType="centerCrop" />
-        <TextView android:id="@+id/item_category"
+        android:padding="1px" >
+
+        <com.tianxia.widget.image.SmartImageView
+            android:id="@+id/item_image"
+            android:layout_width="fill_parent"
+            android:layout_height="90dip"
+            android:scaleType="centerCrop" />
+
+        <TextView
+            android:id="@+id/item_category"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:singleLine="true"
-            android:ellipsize="end"/>
+            android:ellipsize="end"
+            android:singleLine="true" />
     </LinearLayout>
-    <TextView android:id="@+id/item_count"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right|top"
-            android:gravity="center"
-            android:visibility="gone"
-            android:background="@drawable/home_gridview_item_count_bg"
-            android:singleLine="true"/>
+
+    <TextView
+        android:id="@+id/item_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right|top"
+        android:background="@drawable/home_gridview_item_count_bg"
+        android:gravity="center"
+        android:singleLine="true"
+        android:visibility="gone" />
+
 </FrameLayout>

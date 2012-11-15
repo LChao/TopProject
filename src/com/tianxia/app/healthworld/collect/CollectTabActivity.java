@@ -1,10 +1,5 @@
 package com.tianxia.app.healthworld.collect;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -12,35 +7,31 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Toast;
 
-import com.feedback.UMFeedbackService;
 import com.tianxia.app.healthworld.AppApplication;
-import com.tianxia.app.healthworld.AppApplicationApi;
 import com.tianxia.app.healthworld.AppSQLiteHelper;
 import com.tianxia.app.healthworld.R;
-import com.tianxia.app.healthworld.cache.ConfigCache;
 import com.tianxia.app.healthworld.model.CollectInfo;
 import com.tianxia.lib.baseworld.activity.AdapterActivity;
 import com.tianxia.lib.baseworld.activity.AdapterActivity.Adapter;
-import com.tianxia.lib.baseworld.sync.http.AsyncHttpClient;
-import com.tianxia.lib.baseworld.sync.http.AsyncHttpResponseHandler;
 import com.tianxia.widget.image.SmartImageView;
 
 public class CollectTabActivity extends AdapterActivity<CollectInfo> {
 
 	private TextView mItemTitleTextView = null;
 	private SmartImageView mItemConverImageView = null;
-	private TextView mItemSummaryTextView = null;
+	private TextView mItemDateTextView = null;
+	private Button mItemDeleteView = null;
+	private SQLiteDatabase db;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		getCollectList();
-        adapter = new Adapter(CollectTabActivity.this);
-        listView.setAdapter(adapter);
+
+		adapter = new Adapter(CollectTabActivity.this);
+		listView.setAdapter(adapter);
 	}
 
 	@Override
@@ -50,62 +41,97 @@ public class CollectTabActivity extends AdapterActivity<CollectInfo> {
 	}
 
 	private void getCollectList() {
-        listData.clear();
-        synchronized (AppApplication.mSQLiteHelper) {
-            SQLiteDatabase db = AppApplication.mSQLiteHelper.getReadableDatabase();
-            Cursor cursor = null;
-            try {
-                cursor = db.query(AppSQLiteHelper.TABLE_COLLECT, null, null, null, null, null, null);
-                if (cursor.moveToFirst()) {
-                    do {
-                    	CollectInfo collectInfo = new CollectInfo();
-                    	collectInfo.num_iid = cursor.getInt(cursor.getColumnIndex("num_iid"));
-                    	collectInfo.thumbnail = cursor.getString(cursor.getColumnIndex("thumbnail"));
-                    	collectInfo.title = cursor.getString(cursor.getColumnIndex("title"));
-                    	collectInfo.date = cursor.getString(cursor.getColumnIndex("date"));
-                        listData.add(collectInfo);
-                    } while (cursor.moveToNext());
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            } finally {
-                if (cursor != null) {
-                    cursor.close();
-                }
-            }
-        }
-    }
+		listData.clear();
+		synchronized (AppApplication.mSQLiteHelper) {
+			db = AppApplication.mSQLiteHelper.getReadableDatabase();
+			Cursor cursor = null;
+			try {
+				cursor = db.query(AppSQLiteHelper.TABLE_COLLECT, null, null,
+						null, null, null, null);
+				if (cursor.moveToFirst()) {
+					do {
+						CollectInfo collectInfo = new CollectInfo();
+						collectInfo.num_iid = cursor.getInt(cursor
+								.getColumnIndex("num_iid"));
+						collectInfo.thumbnail = cursor.getString(cursor
+								.getColumnIndex("thumbnail"));
+						collectInfo.title = cursor.getString(cursor
+								.getColumnIndex("title"));
+						collectInfo.date = cursor.getString(cursor
+								.getColumnIndex("date"));
+						listData.add(collectInfo);
+					} while (cursor.moveToNext());
+				} else {
+					Toast.makeText(CollectTabActivity.this, "您的收藏为空", 1).show();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				if (cursor != null) {
+					cursor.close();
+				}
+			}
+		}
+	}
 
 	@Override
-	protected View getView(int position, View convertView) {
+	protected View getView(final int position, View convertView) {
 		View view = convertView;
 		if (view == null) {
 			view = LayoutInflater.from(getApplicationContext()).inflate(
-					R.layout.digest_tab_list_item, null);
+					R.layout.collect_tab_list_item, null);
 		}
 
 		mItemConverImageView = (SmartImageView) view
-				.findViewById(R.id.item_image);
+				.findViewById(R.id.collect_listitem_image);
 		mItemConverImageView.setImageUrl(
-				AppApplication.mDomain + listData.get(position).cover,
-				R.drawable.icon, 0);
+				AppApplication.mDomain + listData.get(position).thumbnail,
+				R.drawable.icon, R.drawable.app_download_loading);
 
-		mItemTitleTextView = (TextView) view.findViewById(R.id.item_text);
+		mItemTitleTextView = (TextView) view
+				.findViewById(R.id.collect_listitem_title);
 		mItemTitleTextView.setText(listData.get(position).title);
 
-		mItemSummaryTextView = (TextView) view
-				.findViewById(R.id.item_text_describe);
-		mItemSummaryTextView.setText(listData.get(position).summary);
+		mItemDateTextView = (TextView) view
+				.findViewById(R.id.collect_listitem_date);
+		mItemDateTextView.setText(listData.get(position).date);
+
+		mItemDeleteView = (Button) view
+				.findViewById(R.id.collect_listitem_delete);
+		mItemDeleteView.setOnClickListener(new Button.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				db.execSQL("delete from collection where num_iid = '"
+						+ listData.get(position).num_iid + "'");
+				Toast.makeText(CollectTabActivity.this, "删除收藏",
+						Toast.LENGTH_SHORT).show();
+				showFavoriteList();
+			}
+		});
 
 		return view;
 	}
 
 	protected void onItemClick(AdapterView<?> adapterView, View view,
 			int position, long id) {
-//		Intent intent = new Intent(this, ChapterListActivity.class);
-//		intent.putExtra("title", listData.get(position).title);
-//		intent.putExtra("url", listData.get(position).url);
-//		startActivity(intent);
+		// Intent intent = new Intent(this, ChapterListActivity.class);
+		// intent.putExtra("title", listData.get(position).title);
+		// intent.putExtra("url", listData.get(position).url);
+		// startActivity(intent);
+	}
+
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		showFavoriteList();
+	}
+
+	private void showFavoriteList() {
+		getCollectList();
+		adapter.notifyDataSetChanged();
 	}
 
 }
