@@ -84,10 +84,6 @@
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".setting.SettingActivity"
-            android:screenOrientation="portrait" >
-        </activity>
-        <activity
             android:name="com.tianxia.lib.baseworld.activity.SettingAboutActivity"
             android:screenOrientation="portrait" >
         </activity>
