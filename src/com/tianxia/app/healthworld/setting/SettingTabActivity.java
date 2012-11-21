@@ -56,7 +56,10 @@ public class SettingTabActivity extends BaseActivity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				Toast.makeText(SettingTabActivity.this, "意见反馈", 0).show();
+				// Toast.makeText(SettingTabActivity.this, "意见反馈", 0).show();
+				Intent intent = new Intent(SettingTabActivity.this,
+						SettingFeedbackActivity.class);
+				startActivity(intent);
 			}
 		});
 		layoutUpdate.setOnClickListener(new OnClickListener() {

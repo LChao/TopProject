@@ -55,16 +55,15 @@
             </intent-filter>
         </receiver>
 
+        <service android:name="com.tianxia.lib.baseworld.upgrade.AppUpgradeService" >
+        </service>
+
         <activity
             android:name=".home.HomeTabActivity"
             android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".home.HomeDetailsActivity"
-            android:screenOrientation="portrait" >
-        </activity>
-        <activity
-            android:name=".infomation.InfomationTabActivity"
             android:screenOrientation="portrait" >
         </activity>
         <activity
@@ -84,13 +83,13 @@
             android:screenOrientation="portrait" >
         </activity>
         <activity
+            android:name=".setting.SettingFeedbackActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
             android:name="com.tianxia.lib.baseworld.activity.SettingAboutActivity"
             android:screenOrientation="portrait" >
         </activity>
-
-        <service android:name="com.tianxia.lib.baseworld.upgrade.AppUpgradeService" >
-        </service>
-
         <activity
             android:name="com.feedback.ui.SendFeedback"
             android:windowSoftInputMode="adjustResize" />
