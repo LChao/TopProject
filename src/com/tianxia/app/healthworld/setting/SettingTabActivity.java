@@ -3,6 +3,7 @@ package com.tianxia.app.healthworld.setting;
 import com.tianxia.app.healthworld.R;
 import com.tianxia.lib.baseworld.activity.BaseActivity;
 import com.tianxia.lib.baseworld.activity.SettingAboutActivity;
+import com.tianxia.lib.baseworld.utils.PreferencesUtils;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,6 +15,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class SettingTabActivity extends BaseActivity {
+
+	private static final String PERSONAL = "personalData";
+	private static final String PASSWORD = "password";
+	private String password;
 
 	private TextView tvAccount;
 	private Button btLogin;
@@ -27,6 +32,9 @@ public class SettingTabActivity extends BaseActivity {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.setting_tab_activity);
+
+		password = PreferencesUtils.getStringPreference(
+				getApplicationContext(), PERSONAL, PASSWORD, "");
 
 		tvAccount = (TextView) findViewById(R.id.setting_account);
 		btLogin = (Button) findViewById(R.id.setting_login);
@@ -49,6 +57,7 @@ public class SettingTabActivity extends BaseActivity {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				Toast.makeText(SettingTabActivity.this, "设置密码", 0).show();
+				
 			}
 		});
 		layoutFeedback.setOnClickListener(new OnClickListener() {
@@ -81,5 +90,9 @@ public class SettingTabActivity extends BaseActivity {
 				startActivity(intent);
 			}
 		});
+	}
+	
+	buildPasswordDialog(){
+		
 	}
 }
