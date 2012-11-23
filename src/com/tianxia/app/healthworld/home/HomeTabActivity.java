@@ -8,6 +8,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,6 +20,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -33,14 +36,19 @@ import android.widget.PopupWindow.OnDismissListener;
 import com.tianxia.app.healthworld.R;
 import com.tianxia.app.healthworld.cache.ConfigCache;
 import com.tianxia.app.healthworld.model.HomeGoodsInfo;
+import com.tianxia.app.healthworld.setting.SettingTabActivity;
+import com.tianxia.lib.baseworld.BaseApplication;
 import com.tianxia.lib.baseworld.activity.AdapterActivity;
 import com.tianxia.lib.baseworld.sync.http.AsyncHttpClient;
 import com.tianxia.lib.baseworld.sync.http.AsyncHttpResponseHandler;
+import com.tianxia.lib.baseworld.utils.PreferencesUtils;
 import com.tianxia.widget.image.SmartImageView;
 
 public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> {
 	public static final String TAG = "HomeTabActivity";
 	private int screenWidth;
+	// 软件密码
+	private String password;
 	// banner下拉菜单部分
 	private TextView mBannerTitle;
 	private ImageView mBannerArrow;
@@ -129,8 +137,6 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> {
 			}
 		});
 
-		loadGridView();
-
 		// 获取当前屏幕属性
 		DisplayMetrics metric = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(metric);
@@ -138,7 +144,61 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> {
 		int height = metric.heightPixels; // 屏幕高度（像素）
 		float density = metric.density; // 屏幕密度（0.75 / 1.0 / 1.5）
 		int densityDpi = metric.densityDpi; // 屏幕密度DPI（120 / 160 / 240）
-		Log.d(TAG, "width: "+screenWidth+" height: "+height+" density: "+density+" densityDpi: "+densityDpi);
+		Log.d(TAG, "width: " + screenWidth + " height: " + height
+				+ " density: " + density + " densityDpi: " + densityDpi);
+
+		password = PreferencesUtils.getStringPreference(
+				getApplicationContext(), "personalData", "password", "");
+		if (password.equals("")) {
+			loadGridView();
+		} else {
+			LayoutInflater li = getLayoutInflater();
+			View dialogView = li.inflate(
+					R.layout.home_tab_dialog_layout_inputpassword, null);
+			final EditText inputPw = (EditText) dialogView
+					.findViewById(R.id.home_tab_dialog_inputPassword);
+			Button cancelButton = (Button) dialogView
+					.findViewById(R.id.setting_tab_dialog_cancel);
+			Button confirmButton = (Button) dialogView
+					.findViewById(R.id.setting_tab_dialog_confirm);
+
+			AlertDialog.Builder builder = new Builder(this);
+			builder.setTitle("输入密码");
+			builder.setView(dialogView);
+
+			final AlertDialog ad = builder.create();
+			ad.setCancelable(false);
+			ad.show();
+
+			cancelButton.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					onBackPressed();
+				}
+			});
+			confirmButton.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					String pwText = inputPw.getText().toString().trim();
+					if (pwText.equals("") || pwText == null) {
+						Toast.makeText(HomeTabActivity.this, "亲，输入密码不可为空", 1)
+								.show();
+					} else if (password.equals(pwText)) {
+						Toast.makeText(HomeTabActivity.this, "亲，欢迎回来！", 1)
+								.show();
+						ad.dismiss();
+						loadGridView();
+					} else {
+						Toast.makeText(HomeTabActivity.this, "亲，密码输入错误", 1)
+								.show();
+					}
+				}
+			});
+		}
 
 	}
 
