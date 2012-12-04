@@ -6,7 +6,7 @@
 
     <uses-sdk
         android:minSdkVersion="8"
-        android:targetSdkVersion="16" />
+        android:targetSdkVersion="17" />
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -67,19 +67,23 @@
             android:screenOrientation="portrait" >
         </activity>
         <activity
+            android:name=".home.HomeTaobaoWebview"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
             android:name=".collect.CollectTabActivity"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".favorite.FavoriteTabActivity"
-            android:screenOrientation="portrait" >
-        </activity>
-        <activity
-            android:name=".favorite.FavoriteEditActivity"
+            android:name=".forum.ForumTabActivity"
             android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".setting.SettingTabActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".setting.SettingLoginWebview"
             android:screenOrientation="portrait" >
         </activity>
         <activity
@@ -88,8 +92,7 @@
         </activity>
         <activity
             android:name="com.tianxia.lib.baseworld.activity.SettingAboutActivity"
-            android:screenOrientation="portrait" >
-        </activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name="com.feedback.ui.SendFeedback"
             android:windowSoftInputMode="adjustResize" />

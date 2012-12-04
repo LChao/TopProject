@@ -67,6 +67,9 @@ public class SettingTabActivity extends BaseActivity {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				Toast.makeText(SettingTabActivity.this, "绑定账号", 0).show();
+				Intent in = new Intent(SettingTabActivity.this,
+						SettingLoginWebview.class);
+				startActivity(in);
 			}
 		});
 		layoutPassword.setOnClickListener(new OnClickListener() {

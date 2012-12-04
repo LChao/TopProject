@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="#FFFFFA"
+    android:background="#FFFFFF"
     android:orientation="vertical" >
 
     <RelativeLayout
@@ -10,21 +10,22 @@
         android:layout_height="wrap_content"
         android:background="@drawable/home_banner_bg" >
 
-        <Button
+        <ImageView
             android:id="@+id/app_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"
-            android:background="@drawable/app_btn_back"
-            android:text="@string/app_back" />
+            android:background="@drawable/app_btn_back" />
 
         <TextView
             android:id="@+id/top_banner_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
+            android:paddingBottom="4dp"
+            android:paddingTop="4dp"
             android:text="商品详情"
             android:textColor="#FFFFFF"
             android:textSize="20sp" />
@@ -33,14 +34,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="10dp"
-            android:background="@drawable/app_btn_back" >
+            android:layout_centerVertical="true" >
 
             <ProgressBar
                 android:id="@+id/app_loading_pbar_top"
-                android:layout_width="24dip"
-                android:layout_height="24dip"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
                 android:layout_gravity="center"
                 android:indeterminateDrawable="@anim/app_refresh_progress" />
 
@@ -50,8 +49,10 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:contentDescription="@string/app_refresh"
-                android:src="@drawable/app_icon_refresh"
-                android:visibility="gone" />
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:src="@drawable/app_icon_loading"
+                android:visibility="invisible" />
         </FrameLayout>
     </RelativeLayout>
 
@@ -68,19 +69,70 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:gravity="center"
-        android:text="@string/app_loading" />
+        android:text="@string/app_loading"
+        android:visibility="gone" />
 
-    <com.tianxia.widget.gallery.PicGallery
-        android:id="@+id/home_details_gallery"
+    <RelativeLayout
         android:layout_width="fill_parent"
-        android:layout_height="0px"
-        android:layout_weight="3"
-        android:fadingEdgeLength="3dp" />
+        android:layout_height="wrap_content" >
+
+        <Gallery
+            android:id="@+id/home_details_gallery"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_margin="5dp" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/home_details_nav_left" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/home_details_nav_right" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginRight="3dp"
+            android:layout_marginTop="6dp"
+            android:background="#88b2b2b2"
+            android:orientation="vertical" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:text="30天销量"
+                android:textColor="#333333"
+                android:textSize="10sp" />
+
+            <TextView
+                android:id="@+id/home_details_goods_sales"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:text="257件"
+                android:textColor="#e9235f"
+                android:textSize="12sp" />
+        </LinearLayout>
+    </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:background="#FF5BAC" >
+        android:background="#e9235f" >
 
         <TextView
             android:id="@+id/home_details_goods_price"
@@ -92,10 +144,10 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_marginTop="5dp"
-            android:background="#FF0990"
-            android:padding="3dp"
             android:text="￥19.00"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="#ffffff"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/home_details_goods_name"
@@ -107,17 +159,19 @@
             android:ellipsize="marquee"
             android:focusable="true"
             android:focusableInTouchMode="true"
-            android:marqueeRepeatLimit="marquee_forever"
+            android:marqueeRepeatLimit="1"
             android:scrollHorizontally="true"
             android:singleLine="true"
-            android:text="包邮！蕾丝花边薄纱透明睡裙性感套装诱惑 黑色女式情趣内衣"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+            android:text="包邮！蕾丝花边薄纱透明睡裙性感套装"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="#ffffff" />
     </RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0px"
-        android:layout_weight="2"
+        android:layout_margin="3dp"
+        android:layout_weight="1"
         android:orientation="vertical" >
 
         <TextView
@@ -131,7 +185,7 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="1px"
-            android:background="#000000" />
+            android:background="#e6e5e5" />
 
         <TextView
             android:id="@+id/home_details_tv_evaluate"
@@ -145,17 +199,17 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#aaaaaa"
+        android:background="@drawable/tab_bg"
         android:orientation="horizontal" >
 
-        <Button
+        <ImageView
             android:id="@+id/home_details_bt_collect"
-            android:layout_width="80dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
             android:layout_marginLeft="20dp"
             android:layout_marginTop="5dp"
-            android:background="@drawable/app_btn_back"
+            android:background="@drawable/home_details_bt_collect_bg"
             android:text="收藏" />
 
         <View
@@ -163,15 +217,14 @@
             android:layout_height="0px"
             android:layout_weight="1" />
 
-        <Button
+        <ImageView
             android:id="@+id/home_details_bt_buy"
-            android:layout_width="80dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
             android:layout_marginRight="20dp"
             android:layout_marginTop="5dp"
-            android:background="@drawable/app_btn_back"
-            android:text="前往购买" />
+            android:background="@drawable/home_details_bt_buy_bg" />
     </LinearLayout>
 
 </LinearLayout>

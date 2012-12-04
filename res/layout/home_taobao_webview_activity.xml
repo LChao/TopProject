@@ -9,32 +9,31 @@
         android:layout_height="wrap_content"
         android:background="@drawable/home_banner_bg" >
 
+        <ImageView
+            android:id="@+id/app_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/app_btn_back" />
+
         <TextView
-            android:id="@+id/top_banner_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:paddingBottom="4dp"
             android:paddingTop="4dp"
-            android:text="我的收藏"
+            android:text="淘宝网"
             android:textColor="#FFFFFF"
             android:textSize="20sp" />
     </RelativeLayout>
 
-    <GridView
-        android:id="@+id/collect_list"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_margin="4dip"
-        android:background="#FFFFFF"
-        android:cacheColorHint="#00000000"
-        android:fastScrollEnabled="true"
-        android:gravity="center"
-        android:horizontalSpacing="4dip"
-        android:listSelector="@null"
-        android:numColumns="3"
-        android:stretchMode="columnWidth"
-        android:verticalSpacing="4dip" >
-    </GridView>
+    <WebView
+        android:id="@+id/home_taobao_webview"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:scrollbarStyle="insideOverlay" />
 
 </LinearLayout>

@@ -12,7 +12,7 @@ import android.os.Environment;
 
 import com.tianxia.app.healthworld.cache.ConfigCache;
 import com.tianxia.app.healthworld.collect.CollectTabActivity;
-import com.tianxia.app.healthworld.favorite.FavoriteTabActivity;
+import com.tianxia.app.healthworld.forum.ForumTabActivity;
 import com.tianxia.app.healthworld.home.HomeTabActivity;
 import com.tianxia.app.healthworld.setting.SettingTabActivity;
 import com.tianxia.lib.baseworld.BaseApplication;
@@ -26,7 +26,8 @@ public class AppApplication extends BaseApplication {
 
 	public static final String DOMAIN = "domain";
 	public static final String DOMAIN_URL = "url";
-	public static String mDomain = "http://www.kaiyuanxiangmu.com/";
+	// public static String mDomain = "http://www.kaiyuanxiangmu.com/";
+	public static String mDomain = "http://doss.cn/";
 	public static String mBakeDomain = "http://1.kaiyuanxiangmu.sinaapp.com/";
 
 	private static final String DB_NAME = "qingqubao.db";
@@ -38,17 +39,17 @@ public class AppApplication extends BaseApplication {
 	public void fillTabs() {
 		mTabActivitys.add(HomeTabActivity.class);
 		mTabActivitys.add(CollectTabActivity.class);
-		mTabActivitys.add(FavoriteTabActivity.class);
+		mTabActivitys.add(ForumTabActivity.class);
 		mTabActivitys.add(SettingTabActivity.class);
 
-		mTabNormalImages.add(R.drawable.infomation_normal);
-		mTabNormalImages.add(R.drawable.digest_normal);
-		mTabNormalImages.add(R.drawable.favorite_normal);
+		mTabNormalImages.add(R.drawable.home_normal);
+		mTabNormalImages.add(R.drawable.collect_normal);
+		mTabNormalImages.add(R.drawable.forum_normal);
 		mTabNormalImages.add(R.drawable.setting_normal);
 
-		mTabPressImages.add(R.drawable.infomation_press);
-		mTabPressImages.add(R.drawable.digest_press);
-		mTabPressImages.add(R.drawable.favorite_press);
+		mTabPressImages.add(R.drawable.home_press);
+		mTabPressImages.add(R.drawable.collect_press);
+		mTabPressImages.add(R.drawable.forum_press);
 		mTabPressImages.add(R.drawable.setting_press);
 	}
 
@@ -59,12 +60,12 @@ public class AppApplication extends BaseApplication {
 
 	@Override
 	public void initEnv() {
-		mAppName = "healthworld";
-		mDownloadPath = "/healthworld/download";
+		mAppName = "qingqubao";
+		mDownloadPath = "/qingqubao/download";
 		if (Environment.getExternalStorageState().equals(
 				android.os.Environment.MEDIA_MOUNTED)) {
 			File file = new File(Environment.getExternalStorageDirectory()
-					.getPath() + "/healthworld/config/");
+					.getPath() + "/qingqubao/config/");
 			if (!file.exists()) {
 				if (file.mkdirs()) {
 					mSdcardDataDir = file.getAbsolutePath();
@@ -75,8 +76,8 @@ public class AppApplication extends BaseApplication {
 		}
 
 		mNetWorkState = NetworkUtils.getNetworkState(this);
-		checkDomain(mDomain, false);
-		AppConnect.getInstance(getApplicationContext());
+		// checkDomain(mDomain, false);
+		// AppConnect.getInstance(getApplicationContext());
 	}
 
 	@Override

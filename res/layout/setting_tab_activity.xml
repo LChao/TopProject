@@ -14,6 +14,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
+            android:paddingBottom="4dp"
+            android:paddingTop="4dp"
             android:text="软件设置"
             android:textColor="#FFFFFF"
             android:textSize="20sp" />
@@ -59,8 +61,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="6dp"
-                android:background="@drawable/app_btn_back"
-                android:text="    注销    " />
+                android:background="@drawable/setting_btn_bg"
+                android:text="注销" />
         </LinearLayout>
 
         <ImageView

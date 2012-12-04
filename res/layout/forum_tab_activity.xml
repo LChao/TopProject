@@ -16,25 +16,17 @@
             android:layout_centerInParent="true"
             android:paddingBottom="4dp"
             android:paddingTop="4dp"
-            android:text="我的收藏"
+            android:text="一起夜聊"
             android:textColor="#FFFFFF"
             android:textSize="20sp" />
     </RelativeLayout>
 
-    <GridView
-        android:id="@+id/collect_list"
+    <TextView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_margin="4dip"
-        android:background="#FFFFFF"
-        android:cacheColorHint="#00000000"
-        android:fastScrollEnabled="true"
         android:gravity="center"
-        android:horizontalSpacing="4dip"
-        android:listSelector="@null"
-        android:numColumns="3"
-        android:stretchMode="columnWidth"
-        android:verticalSpacing="4dip" >
-    </GridView>
+        android:text="论坛即将推出，敬请期待哦~\n欢迎大家加入QQ群：xxxxx，畅聊性福，你懂的..."
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="#000000" />
 
 </LinearLayout>

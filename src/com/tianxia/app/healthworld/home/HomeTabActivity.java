@@ -22,7 +22,6 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.ProgressBar;
@@ -31,13 +30,12 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ImageView.ScaleType;
 import android.widget.PopupWindow.OnDismissListener;
 
 import com.tianxia.app.healthworld.R;
 import com.tianxia.app.healthworld.cache.ConfigCache;
 import com.tianxia.app.healthworld.model.HomeGoodsInfo;
-import com.tianxia.app.healthworld.setting.SettingTabActivity;
-import com.tianxia.lib.baseworld.BaseApplication;
 import com.tianxia.lib.baseworld.activity.AdapterActivity;
 import com.tianxia.lib.baseworld.sync.http.AsyncHttpClient;
 import com.tianxia.lib.baseworld.sync.http.AsyncHttpResponseHandler;
@@ -51,29 +49,22 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> {
 	private String password;
 	// banner下拉菜单部分
 	private TextView mBannerTitle;
-	private ImageView mBannerArrow;
 	private RelativeLayout mBannerLayout;
 	private boolean isOpenPop = false;
 	private PopupWindow popwindow;
 	private static final String KEY = "key";
 	private ArrayList<Map<String, Object>> items = new ArrayList<Map<String, Object>>();
-
-	// 新品、热门按钮
-	private Button mAppCategotyLeft = null;
-	private Button mAppCategotyRight = null;
-
+	// 新品、热门
+	private boolean isHot = true;
+	private TextView categotyTv = null;
 	// 主界面布局content部分的数据加载指示控件
-	private LinearLayout mAppLoadingLinearLayout;
 	private TextView mAppLoadingTip = null;
-	private ProgressBar mAppLoadingPbar = null;
 	// 顶部刷新按钮
 	private ProgressBar mTopLoadingPbar = null;
 	private ImageView mTopLoadingImage = null;
-
 	// 网格item控件
 	private SmartImageView mItemImageView = null;
 	private TextView mItemTextView = null;
-	private TextView mItemCount = null;
 
 	private Intent mIdentificationIntent = null;
 
@@ -81,44 +72,14 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		mAppCategotyLeft = (Button) findViewById(R.id.home_category_left);
-		mAppCategotyRight = (Button) findViewById(R.id.home_category_right);
-		mAppCategotyLeft.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				mAppCategotyLeft
-						.setBackgroundResource(R.drawable.app_category_left_selected);
-				mAppCategotyRight
-						.setBackgroundResource(R.drawable.app_category_right_normal);
-				// if (mFavoriteType == FavoriteType.ARTICLE) {
-				// mFavoriteType = FavoriteType.PICTURE;
-				// showFavoriteList(mFavoriteType);
-				// }
-			}
-		});
-		mAppCategotyRight.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				mAppCategotyLeft
-						.setBackgroundResource(R.drawable.app_category_left_normal);
-				mAppCategotyRight
-						.setBackgroundResource(R.drawable.app_category_right_selected);
-				// if (mFavoriteType == FavoriteType.PICTURE) {
-				// mFavoriteType = FavoriteType.ARTICLE;
-				// showFavoriteList(mFavoriteType);
-				// }
-			}
-		});
+		categotyTv = (TextView) findViewById(R.id.home_textview_category);
 
-		mAppLoadingLinearLayout = (LinearLayout) findViewById(R.id.app_loading);
 		mAppLoadingTip = (TextView) findViewById(R.id.app_loading_tip);
-		mAppLoadingPbar = (ProgressBar) findViewById(R.id.app_loading_pbar);
 		mTopLoadingPbar = (ProgressBar) findViewById(R.id.app_loading_pbar_top);
 		mTopLoadingImage = (ImageView) findViewById(R.id.app_loading_btn_top);
 
 		mBannerLayout = (RelativeLayout) findViewById(R.id.home_tab_banner);
 		mBannerTitle = (TextView) findViewById(R.id.top_banner_title);
-		mBannerArrow = (ImageView) findViewById(R.id.home_tab_banner_arrow);
 
 		mBannerTitle.setOnClickListener(new OnClickListener() {
 
@@ -133,7 +94,22 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> {
 		mTopLoadingImage.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				loadGridView();
+				loadGridView(true);
+			}
+		});
+
+		categotyTv.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				if (isHot) {
+					isHot = false;
+					categotyTv.setText("新品");
+				} else {
+					isHot = true;
+					categotyTv.setText("热门");
+				}
 			}
 		});
 
@@ -150,7 +126,7 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> {
 		password = PreferencesUtils.getStringPreference(
 				getApplicationContext(), "personalData", "password", "");
 		if (password.equals("")) {
-			loadGridView();
+			loadGridView(false);
 		} else {
 			LayoutInflater li = getLayoutInflater();
 			View dialogView = li.inflate(
@@ -191,7 +167,7 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> {
 						Toast.makeText(HomeTabActivity.this, "亲，欢迎回来！", 1)
 								.show();
 						ad.dismiss();
-						loadGridView();
+						loadGridView(false);
 					} else {
 						Toast.makeText(HomeTabActivity.this, "亲，密码输入错误", 1)
 								.show();
@@ -202,48 +178,84 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> {
 
 	}
 
-	private void loadGridView() {
-		String cacheConfigString = ConfigCache
-				.getUrlCache(HomeApi.HOME_GOODS_URL);
-		if (cacheConfigString != null) {
-			setAppreciateCategoryList(cacheConfigString);
-			mAppLoadingLinearLayout.setVisibility(View.GONE);
-			mTopLoadingPbar.setVisibility(View.GONE);
-			mTopLoadingImage.setVisibility(View.VISIBLE);
-		} else {
+	private void loadGridView(boolean isRefresh) {
+		if (isRefresh) {
 			AsyncHttpClient client = new AsyncHttpClient();
 			client.get(HomeApi.HOME_GOODS_URL, new AsyncHttpResponseHandler() {
 
 				@Override
 				public void onStart() {
 					mAppLoadingTip.setText(R.string.app_loading);
-					mAppLoadingLinearLayout.setVisibility(View.VISIBLE);
-					// mAppLoadingTip.setVisibility(View.VISIBLE);
-					// mAppLoadingPbar.setVisibility(View.VISIBLE);
+					mAppLoadingTip.setVisibility(View.VISIBLE);
 					mTopLoadingPbar.setVisibility(View.VISIBLE);
-					mTopLoadingImage.setVisibility(View.GONE);
+					mTopLoadingImage.setVisibility(View.INVISIBLE);
 					listView.setAdapter(null);
 				}
 
 				@Override
 				public void onSuccess(String result) {
-					mAppLoadingLinearLayout.setVisibility(View.GONE);
 					ConfigCache.setUrlCache(result, HomeApi.HOME_GOODS_URL);
 					setAppreciateCategoryList(result);
 				}
 
 				@Override
 				public void onFailure(Throwable arg0) {
-					mAppLoadingPbar.setVisibility(View.GONE);
+					Toast.makeText(HomeTabActivity.this, "加载失败..", 0).show();
+					mAppLoadingTip.setVisibility(View.VISIBLE);
 					mAppLoadingTip.setText(R.string.app_loading_fail);
 				}
 
 				@Override
 				public void onFinish() {
+					mAppLoadingTip.setVisibility(View.GONE);
 					mTopLoadingPbar.setVisibility(View.GONE);
 					mTopLoadingImage.setVisibility(View.VISIBLE);
 				}
 			});
+		} else {
+
+			String cacheConfigString = ConfigCache
+					.getUrlCache(HomeApi.HOME_GOODS_URL);
+			if (cacheConfigString != null) {
+				setAppreciateCategoryList(cacheConfigString);
+				mAppLoadingTip.setVisibility(View.GONE);
+				mTopLoadingPbar.setVisibility(View.GONE);
+				mTopLoadingImage.setVisibility(View.VISIBLE);
+			} else {
+				AsyncHttpClient client = new AsyncHttpClient();
+				client.get(HomeApi.HOME_GOODS_URL,
+						new AsyncHttpResponseHandler() {
+
+							@Override
+							public void onStart() {
+								mAppLoadingTip.setText(R.string.app_loading);
+								mAppLoadingTip.setVisibility(View.VISIBLE);
+								mTopLoadingPbar.setVisibility(View.VISIBLE);
+								mTopLoadingImage.setVisibility(View.INVISIBLE);
+								listView.setAdapter(null);
+							}
+
+							@Override
+							public void onSuccess(String result) {
+								ConfigCache.setUrlCache(result,
+										HomeApi.HOME_GOODS_URL);
+								setAppreciateCategoryList(result);
+							}
+
+							@Override
+							public void onFailure(Throwable arg0) {
+								mAppLoadingTip
+										.setText(R.string.app_loading_fail);
+							}
+
+							@Override
+							public void onFinish() {
+								mAppLoadingTip.setVisibility(View.GONE);
+								mTopLoadingPbar.setVisibility(View.GONE);
+								mTopLoadingImage.setVisibility(View.VISIBLE);
+							}
+						});
+			}
 		}
 	}
 
@@ -255,10 +267,12 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> {
 
 		isOpenPop = !isOpenPop;
 		if (isOpenPop) {
-			mBannerArrow.setBackgroundResource(R.drawable.home_arrow_up);
+			mBannerTitle.setCompoundDrawablesWithIntrinsicBounds(0, 0,
+					R.drawable.home_arrow_up, 0);
 			popAwindow(v);
 		} else {
-			mBannerArrow.setBackgroundResource(R.drawable.home_arrow_up);
+			mBannerTitle.setCompoundDrawablesWithIntrinsicBounds(0, 0,
+					R.drawable.home_arrow_down, 0);
 			if (popwindow != null) {
 				popwindow.dismiss();
 			}
@@ -300,19 +314,19 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> {
 			public void onDismiss() {
 				// TODO Auto-generated method stub
 				isOpenPop = false;
-				mBannerArrow.setBackgroundResource(R.drawable.home_arrow_down);
+				mBannerTitle.setCompoundDrawablesWithIntrinsicBounds(0, 0,
+						R.drawable.home_arrow_down, 0);
 			}
 		});
 		popwindow.update();
 		popwindow.showAsDropDown(mBannerLayout,
-				(screenWidth - popwindow.getWidth()) / 2, 0);
+				(screenWidth - popwindow.getWidth()) / 2, -11);
 		// window.showAtLocation(parent, Gravity.CENTER_HORIZONTAL,
 		// 0, (int) getResources().getDimension(R.dimen.pop_layout_y));
 
 	}
 
 	private void setAppreciateCategoryList(String jsonString) {
-		mAppLoadingLinearLayout.setVisibility(View.GONE);
 		try {
 			JSONObject json = new JSONObject(jsonString);
 			JSONArray jsonArray = json.getJSONArray("list");
@@ -320,14 +334,22 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> {
 			HomeGoodsInfo appreciateCategoryInfo = null;
 			for (int i = 0; i < jsonArray.length(); i++) {
 				appreciateCategoryInfo = new HomeGoodsInfo();
-				appreciateCategoryInfo.filename = jsonArray.getJSONObject(i)
-						.optString("filename");
-				appreciateCategoryInfo.category = jsonArray.getJSONObject(i)
-						.optString("category");
-				appreciateCategoryInfo.thumbnail = jsonArray.getJSONObject(i)
-						.optString("thumbnail");
-				appreciateCategoryInfo.count = jsonArray.getJSONObject(i)
-						.optString("count");
+				appreciateCategoryInfo.mResUrl = jsonArray.getJSONObject(i)
+						.optString("mResUrl");
+				appreciateCategoryInfo.price = jsonArray.getJSONObject(i)
+						.optString("price");
+				appreciateCategoryInfo.tradeCount = jsonArray.getJSONObject(i)
+						.optString("tradeCount");
+				appreciateCategoryInfo.sResUrl = jsonArray.getJSONObject(i)
+						.optString("sResUrl");
+				appreciateCategoryInfo.name = jsonArray.getJSONObject(i)
+						.optString("name");
+				appreciateCategoryInfo.desci = jsonArray.getJSONObject(i)
+						.optString("desci");
+				appreciateCategoryInfo.spreadUrl = jsonArray.getJSONObject(i)
+						.optString("spreadUrl");
+				appreciateCategoryInfo.evaluation = jsonArray.getJSONObject(i)
+						.optString("evaluation");
 				listData.add(appreciateCategoryInfo);
 			}
 		} catch (JSONException e) {
@@ -345,26 +367,49 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> {
 
 	@Override
 	protected View getView(int position, View convertView) {
-		View view = convertView;
-		if (view == null) {
-			view = LayoutInflater.from(getApplicationContext()).inflate(
+		ViewHolder holder;
+		if (convertView == null) {
+			convertView = LayoutInflater.from(getApplicationContext()).inflate(
 					R.layout.home_tab_list_item, null);
+			holder = new ViewHolder();
+
+			holder.price = (TextView) convertView
+					.findViewById(R.id.home_tab_galleryitem_price);
+			holder.sales = (TextView) convertView
+					.findViewById(R.id.home_tab_galleryitem_sales);
+			holder.cover = (SmartImageView) convertView
+					.findViewById(R.id.item_image);
+
+			convertView.setTag(holder);
+		} else {
+			holder = (ViewHolder) convertView.getTag();
 		}
 
-		mItemImageView = (SmartImageView) view.findViewById(R.id.item_image);
-		if (listData != null && position < listData.size()) {
-			mItemImageView.setImageUrl(listData.get(position).thumbnail,
-					R.drawable.app_download_fail,
-					R.drawable.app_download_loading);
-		}
+		// holder.cover.setScaleType(ScaleType.CENTER);
+//		holder.cover.setImageResource((position & 1) == 1 ? R.drawable.griditem
+//				: R.drawable.griditem1);
 
-		mItemTextView = (TextView) view.findViewById(R.id.item_category);
-		mItemTextView.setText(listData.get(position).category + "("
-				+ listData.get(position).count + ")");
+		// mItemImageView = (SmartImageView) view.findViewById(R.id.item_image);
+		//if (listData != null && position < listData.size()) {
+		holder.cover.setImageUrl(listData.get(position).mResUrl,
+		R.drawable.app_download_fail,
+		R.drawable.app_download_loading);
+		// }
+		holder.sales.setText(listData.get(position).tradeCount);
+		holder.price.setText(listData.get(position).price);
+		// mItemTextView = (TextView) view.findViewById(R.id.item_category);
+		// mItemTextView.setText(listData.get(position).category + "("
+		// + listData.get(position).count + ")");
 
-		mItemCount = (TextView) view.findViewById(R.id.item_count);
-		mItemCount.setText(listData.get(position).count);
-		return view;
+		return convertView;
+	}
+
+	static class ViewHolder {
+
+		TextView price;
+		TextView sales;
+		SmartImageView cover;
+
 	}
 
 	@Override
@@ -413,7 +458,7 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> {
 		Map<String, Object> map;
 
 		map = new HashMap<String, Object>();
-		map.put(KEY, "全部商品");
+		map.put(KEY, "全部精选");
 		items.add(map);
 		map = new HashMap<String, Object>();
 		map.put(KEY, "情趣内衣");

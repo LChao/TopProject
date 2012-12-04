@@ -11,6 +11,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -21,7 +22,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -49,7 +49,7 @@ public class HomeDetailsActivity extends AdapterActivity<HomeDetailsInfo> {
 
 	// 顶部banner
 	private TextView mHomeDetailsTitleView = null;
-	private Button mAppBackButton = null;
+	private ImageView mAppBackButton = null;
 	private TextView mAppLoadingTip = null;
 	private ProgressBar mAppLoadingPbar = null;
 	private ImageView mAppLoadingImage = null;
@@ -67,8 +67,9 @@ public class HomeDetailsActivity extends AdapterActivity<HomeDetailsInfo> {
 	private TextView mAdCompanyBusiness = null;
 
 	public AdView mAdView = null;
-	private Button collect;
-	private Button buy;
+	// 底部按钮栏
+	private ImageView collect;
+	private ImageView buy;
 
 	private int width;
 	private int height;
@@ -91,11 +92,11 @@ public class HomeDetailsActivity extends AdapterActivity<HomeDetailsInfo> {
 		if (mHomeDetailsTitle != null) {
 			mHomeDetailsTitleView.setText(mHomeDetailsTitle);
 		}
-		collect = (Button) findViewById(R.id.home_details_bt_collect);
-		buy = (Button) findViewById(R.id.home_details_bt_buy);
+		collect = (ImageView) findViewById(R.id.home_details_bt_collect);
+		buy = (ImageView) findViewById(R.id.home_details_bt_buy);
 		mAdContainer = (LinearLayout) findViewById(R.id.home_details_ad);
 
-		mAppBackButton = (Button) findViewById(R.id.app_back);
+		mAppBackButton = (ImageView) findViewById(R.id.app_back);
 		mAppLoadingTip = (TextView) findViewById(R.id.app_loading_tip);
 		mAppLoadingPbar = (ProgressBar) findViewById(R.id.app_loading_pbar_top);
 		mAppLoadingImage = (ImageView) findViewById(R.id.app_loading_btn_top);
@@ -115,9 +116,9 @@ public class HomeDetailsActivity extends AdapterActivity<HomeDetailsInfo> {
 
 		isFavorite = queryDB();
 		if (isFavorite) {
-			collect.setText("取消收藏");
+			collect.setBackgroundResource(R.drawable.home_details_bt_delete_bg);
 		} else {
-			collect.setText("收藏");
+			collect.setBackgroundResource(R.drawable.home_details_bt_collect_bg);
 		}
 		collect.setOnClickListener(new OnClickListener() {
 
@@ -132,7 +133,12 @@ public class HomeDetailsActivity extends AdapterActivity<HomeDetailsInfo> {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				Toast.makeText(HomeDetailsActivity.this, "购买商品.", 0).show();
+				Intent in = new Intent(HomeDetailsActivity.this,
+						HomeTaobaoWebview.class);
+				in.putExtra(
+						"url",
+						"http://s.click.taobao.com/t?e=zGU34CA7K%2BPkqB07S4%2FK0CITy7klxxrJ35Nnc0vXqRNKlJ25d9hUqzAT1MO%2FQpCWHvRu21WCZ8pjmqyU%2FP1%2Bb6XtJUjo7WQon%2BvbGRFOW4BqaA%3D%3D");
+				startActivity(in);
 			}
 		});
 
@@ -271,10 +277,13 @@ public class HomeDetailsActivity extends AdapterActivity<HomeDetailsInfo> {
 		// mItemSmartImageView.setImageUrl(listData.get(position).origin,
 		// R.drawable.app_download_fail_large,
 		// R.drawable.app_download_loading_large, true);
-		mItemSmartImageView.setImageUrl(listData.get(position).origin,
-				R.drawable.app_download_fail_large,
-				R.drawable.app_download_loading_large, true);
-		mItemSmartImageView.setScaleType(ScaleType.FIT_XY);
+		// mItemSmartImageView.setImageUrl(listData.get(position).origin,
+		// R.drawable.app_download_fail_large,
+		// R.drawable.app_download_loading_large, true);
+		mItemSmartImageView.setScaleType(ScaleType.CENTER);
+		mItemSmartImageView
+				.setImageResource((position & 1) == 1 ? R.drawable.gallery_it
+						: R.drawable.gallery_it0);
 		return view;
 	}
 
@@ -293,7 +302,8 @@ public class HomeDetailsActivity extends AdapterActivity<HomeDetailsInfo> {
 			if (!isFavorite) {
 				ContentValues contentValue = new ContentValues();
 				contentValue.put("num_iid", "123456");
-				contentValue.put("thumbnail", "http://t2.qpic.cn/mblogpic/d37a7d6365d47d0808fe/160");
+				contentValue.put("thumbnail",
+						"http://t2.qpic.cn/mblogpic/d37a7d6365d47d0808fe/160");
 				contentValue.put("title", "米奇**，美国进口，舒适耐用");
 				// contentValue.put("url", "");
 				SimpleDateFormat formatter = new SimpleDateFormat("yyyy年MM月dd日");
@@ -302,13 +312,13 @@ public class HomeDetailsActivity extends AdapterActivity<HomeDetailsInfo> {
 				db.insert("collection", null, contentValue);
 				isFavorite = true;
 				Toast.makeText(this, "收藏成功", Toast.LENGTH_SHORT).show();
-				collect.setText("取消收藏");
+				collect.setBackgroundResource(R.drawable.home_details_bt_delete_bg);
 			} else {
 				db.execSQL("delete from collection where num_iid = '"
 						+ "123456" + "'");
 				isFavorite = false;
 				Toast.makeText(this, "删除收藏", Toast.LENGTH_SHORT).show();
-				collect.setText("收藏");
+				collect.setBackgroundResource(R.drawable.home_details_bt_collect_bg);
 			}
 		}
 	}

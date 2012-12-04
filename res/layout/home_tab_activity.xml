@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    android:background="#FFFFFF"
     android:orientation="vertical" >
 
     <RelativeLayout
@@ -11,35 +12,42 @@
         android:background="@drawable/home_banner_bg" >
 
         <TextView
+            android:id="@+id/home_textview_category"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:drawableLeft="@drawable/home_category_image"
+            android:gravity="center"
+            android:paddingLeft="10dp"
+            android:text="热门"
+            android:textColor="#FFFFFF"
+            android:textSize="15sp" />
+
+        <TextView
             android:id="@+id/top_banner_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="全部商品"
+            android:drawablePadding="4dp"
+            android:drawableRight="@drawable/home_arrow_down"
+            android:paddingBottom="4dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="4dp"
+            android:text="全部精选"
             android:textColor="#FFFFFF"
             android:textSize="20sp" />
-
-        <ImageView
-            android:id="@+id/home_tab_banner_arrow"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="5dip"
-            android:layout_toRightOf="@id/top_banner_title"
-            android:background="@drawable/home_arrow_down" />
 
         <FrameLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="10dp"
-            android:background="@drawable/app_btn_back" >
+            android:layout_centerVertical="true" >
 
             <ProgressBar
                 android:id="@+id/app_loading_pbar_top"
-                android:layout_width="24dip"
-                android:layout_height="24dip"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
                 android:layout_gravity="center"
                 android:indeterminateDrawable="@anim/app_refresh_progress" />
 
@@ -49,71 +57,41 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:contentDescription="@string/app_refresh"
-                android:src="@drawable/app_icon_refresh"
-                android:visibility="gone" />
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:src="@drawable/app_icon_loading"
+                android:visibility="invisible" />
         </FrameLayout>
     </RelativeLayout>
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:background="#FFFFFA"
-        android:gravity="center_horizontal"
-        android:padding="2dip" >
-
-        <Button
-            android:id="@+id/home_category_left"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/app_category_left_selected"
-            android:text="新品" />
-
-        <Button
-            android:id="@+id/home_category_right"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/app_category_right_normal"
-            android:text="热门" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/app_loading"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:padding="5dip" >
-
-        <ProgressBar
-            android:id="@+id/app_loading_pbar"
-            android:layout_width="24dip"
-            android:layout_height="24dip"
-            android:layout_gravity="center"
-            android:indeterminateDrawable="@anim/app_refresh_progress" />
+        android:layout_height="fill_parent" >
 
         <TextView
             android:id="@+id/app_loading_tip"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="5dip"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:gravity="center"
             android:text="@string/app_loading"
-            android:textColor="@color/gray_light" />
-    </LinearLayout>
+            android:textColor="#aaaaaa"
+            android:visibility="visible" />
 
-    <GridView
-        android:id="@+id/home_list"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_margin="4dip"
-        android:background="#FFFFFA"
-        android:cacheColorHint="#00000000"
-        android:fastScrollEnabled="true"
-        android:gravity="center"
-        android:horizontalSpacing="4dip"
-        android:listSelector="@null"
-        android:numColumns="3"
-        android:stretchMode="columnWidth"
-        android:verticalSpacing="4dip" >
-    </GridView>
+        <GridView
+            android:id="@+id/home_list"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center"
+            android:layout_margin="4dip"
+            android:cacheColorHint="#00000000"
+            android:fastScrollEnabled="true"
+            android:gravity="center_horizontal"
+            android:horizontalSpacing="4dip"
+            android:listSelector="@null"
+            android:numColumns="2"
+            android:stretchMode="columnWidth"
+            android:verticalSpacing="4dip" >
+        </GridView>
+    </FrameLayout>
 
 </LinearLayout>
