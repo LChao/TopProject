@@ -33,9 +33,11 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView.ScaleType;
 import android.widget.PopupWindow.OnDismissListener;
 
+import com.tianxia.app.healthworld.AppApplication;
 import com.tianxia.app.healthworld.R;
 import com.tianxia.app.healthworld.cache.ConfigCache;
 import com.tianxia.app.healthworld.model.HomeGoodsInfo;
+import com.tianxia.app.healthworld.utils.FinalBitmap;
 import com.tianxia.lib.baseworld.activity.AdapterActivity;
 import com.tianxia.lib.baseworld.sync.http.AsyncHttpClient;
 import com.tianxia.lib.baseworld.sync.http.AsyncHttpResponseHandler;
@@ -45,6 +47,7 @@ import com.tianxia.widget.image.SmartImageView;
 public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> {
 	public static final String TAG = "HomeTabActivity";
 	private int screenWidth;
+	private FinalBitmap fb;
 	// 软件密码
 	private String password;
 	// banner下拉菜单部分
@@ -71,6 +74,16 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		fb = new FinalBitmap(this).init();
+		fb.configLoadingImage(R.drawable.griditem);
+		// fb.configLoadfailImage(R.drawable.gallery_it);
+		// 这里可以进行其他十几项的配置，也可以不用配置，配置之后必须调用init()函数,才生效
+		fb.configDiskCachePath(AppApplication.mSdcardImageDir);
+		// fb.configBitmapMaxHeight(221);
+		// fb.configBitmapMaxWidth(221);
+		fb.init();
+		// fb.configBitmapLoadThreadSize(int size)
+		// fb.configBitmapMaxHeight(bitmapHeight)
 
 		categotyTv = (TextView) findViewById(R.id.home_textview_category);
 
@@ -377,8 +390,9 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> {
 					.findViewById(R.id.home_tab_galleryitem_price);
 			holder.sales = (TextView) convertView
 					.findViewById(R.id.home_tab_galleryitem_sales);
-			holder.cover = (SmartImageView) convertView
+			holder.cover = (ImageView) convertView
 					.findViewById(R.id.item_image);
+			holder.cover.setScaleType(ScaleType.CENTER_CROP);
 
 			convertView.setTag(holder);
 		} else {
@@ -386,15 +400,17 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> {
 		}
 
 		// holder.cover.setScaleType(ScaleType.CENTER);
-//		holder.cover.setImageResource((position & 1) == 1 ? R.drawable.griditem
-//				: R.drawable.griditem1);
+		// holder.cover.setImageResource((position & 1) == 1 ?
+		// R.drawable.griditem
+		// : R.drawable.griditem1);
 
 		// mItemImageView = (SmartImageView) view.findViewById(R.id.item_image);
-		//if (listData != null && position < listData.size()) {
-		holder.cover.setImageUrl(listData.get(position).mResUrl,
-		R.drawable.app_download_fail,
-		R.drawable.app_download_loading);
+		// if (listData != null && position < listData.size()) {
+		// holder.cover.setImageUrl(listData.get(position).mResUrl,
+		// R.drawable.app_download_fail, R.drawable.app_download_loading);
 		// }
+		// bitmap加载就这一行代码，display还有其他重载，详情查看源码
+		fb.display(holder.cover, listData.get(position).mResUrl);
 		holder.sales.setText(listData.get(position).tradeCount);
 		holder.price.setText(listData.get(position).price);
 		// mItemTextView = (TextView) view.findViewById(R.id.item_category);
@@ -408,7 +424,7 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> {
 
 		TextView price;
 		TextView sales;
-		SmartImageView cover;
+		ImageView cover;
 
 	}
 

@@ -33,6 +33,7 @@ public class AppApplication extends BaseApplication {
 	private static final String DB_NAME = "qingqubao.db";
 
 	public static String mSdcardDataDir;
+	public static String mSdcardImageDir;
 	public static String mApkDownloadUrl = null;
 
 	@Override
@@ -64,6 +65,7 @@ public class AppApplication extends BaseApplication {
 		mDownloadPath = "/qingqubao/download";
 		if (Environment.getExternalStorageState().equals(
 				android.os.Environment.MEDIA_MOUNTED)) {
+			// Set up data cache path
 			File file = new File(Environment.getExternalStorageDirectory()
 					.getPath() + "/qingqubao/config/");
 			if (!file.exists()) {
@@ -73,8 +75,13 @@ public class AppApplication extends BaseApplication {
 			} else {
 				mSdcardDataDir = file.getAbsolutePath();
 			}
+			// Set up image cache path
+			mSdcardImageDir = Environment.getExternalStorageDirectory()
+					.getPath() + "/" + mAppName + "/image/";
+		} else {
+			mSdcardImageDir = getCacheDir().getAbsolutePath() + "/" + mAppName
+					+ "/image/";
 		}
-
 		mNetWorkState = NetworkUtils.getNetworkState(this);
 		// checkDomain(mDomain, false);
 		// AppConnect.getInstance(getApplicationContext());

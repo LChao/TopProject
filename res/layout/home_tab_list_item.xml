@@ -1,29 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="fill_parent"
     android:background="@drawable/home_tab_galleryitem_bg" >
 
+    <!--
     <com.tianxia.widget.image.SmartImageView
         android:id="@+id/item_image"
         android:layout_width="fill_parent"
         android:layout_height="207dp"
         android:scaleType="centerCrop" />
+    -->
 
-    <!--
     <ImageView
         android:id="@+id/item_image"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:scaleType="centerCrop" />
-    -->
+        android:layout_height="fill_parent" />
 
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_alignBottom="@id/item_image"
         android:background="#90989892"
-        android:orientation="horizontal" >
+        android:orientation="horizontal"
+        android:visibility="gone" >
 
         <TextView
             android:id="@+id/home_tab_galleryitem_price"
