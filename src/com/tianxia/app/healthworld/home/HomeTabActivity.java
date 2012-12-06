@@ -47,6 +47,7 @@ import com.tianxia.widget.image.SmartImageView;
 public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> {
 	public static final String TAG = "HomeTabActivity";
 	private int screenWidth;
+	private int gridItemHeight;
 	private FinalBitmap fb;
 	// 软件密码
 	private String password;
@@ -133,6 +134,8 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> {
 		int height = metric.heightPixels; // 屏幕高度（像素）
 		float density = metric.density; // 屏幕密度（0.75 / 1.0 / 1.5）
 		int densityDpi = metric.densityDpi; // 屏幕密度DPI（120 / 160 / 240）
+		gridItemHeight = (screenWidth - (int) Math.floor(12 * density) - 20) / 2;
+		Log.d(TAG, "gridview gridItemHeight: " + gridItemHeight);
 		Log.d(TAG, "width: " + screenWidth + " height: " + height
 				+ " density: " + density + " densityDpi: " + densityDpi);
 
@@ -392,6 +395,8 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> {
 					.findViewById(R.id.home_tab_galleryitem_sales);
 			holder.cover = (ImageView) convertView
 					.findViewById(R.id.item_image);
+			holder.cover.setLayoutParams(new RelativeLayout.LayoutParams(
+					gridItemHeight, gridItemHeight));
 			holder.cover.setScaleType(ScaleType.CENTER_CROP);
 
 			convertView.setTag(holder);
@@ -411,8 +416,8 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> {
 		// }
 		// bitmap加载就这一行代码，display还有其他重载，详情查看源码
 		fb.display(holder.cover, listData.get(position).mResUrl);
-		holder.sales.setText(listData.get(position).tradeCount);
-		holder.price.setText(listData.get(position).price);
+		holder.sales.setText("销量:" + listData.get(position).tradeCount);
+		holder.price.setText("￥" + listData.get(position).price);
 		// mItemTextView = (TextView) view.findViewById(R.id.item_category);
 		// mItemTextView.setText(listData.get(position).category + "("
 		// + listData.get(position).count + ")");
