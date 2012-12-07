@@ -27,7 +27,8 @@ public class AppApplication extends BaseApplication {
 	public static final String DOMAIN = "domain";
 	public static final String DOMAIN_URL = "url";
 	// public static String mDomain = "http://www.kaiyuanxiangmu.com/";
-	public static String mDomain = "http://doss.cn/";
+	public static String mDomain = "http://doss.cn:8080/";
+	// public static String mDomain = "http://183.129.179.77/";
 	public static String mBakeDomain = "http://1.kaiyuanxiangmu.sinaapp.com/";
 
 	private static final String DB_NAME = "qingqubao.db";

@@ -21,6 +21,7 @@ import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.PopupWindow;
@@ -134,8 +135,13 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> {
 		int height = metric.heightPixels; // 屏幕高度（像素）
 		float density = metric.density; // 屏幕密度（0.75 / 1.0 / 1.5）
 		int densityDpi = metric.densityDpi; // 屏幕密度DPI（120 / 160 / 240）
-		gridItemHeight = (screenWidth - (int) Math.floor(12 * density) - 20) / 2;
-		Log.d(TAG, "gridview gridItemHeight: " + gridItemHeight);
+		int gridColumn = (int) Math.ceil(screenWidth / 315.0);
+		((GridView) getListView()).setNumColumns(gridColumn);
+		gridItemHeight = (screenWidth
+				- (int) Math.floor(4 * (gridColumn + 1) * density) - 10 * gridColumn)
+				/ gridColumn;
+		Log.d(TAG, "gridview gridItemHeight: " + gridItemHeight
+				+ " gridColumn: " + gridColumn);
 		Log.d(TAG, "width: " + screenWidth + " height: " + height
 				+ " density: " + density + " densityDpi: " + densityDpi);
 

@@ -88,7 +88,6 @@
             android:gravity="center_horizontal"
             android:horizontalSpacing="4dip"
             android:listSelector="@null"
-            android:numColumns="2"
             android:stretchMode="columnWidth"
             android:verticalSpacing="4dip" >
         </GridView>
