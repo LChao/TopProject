@@ -15,19 +15,16 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup.LayoutParams;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.ImageView.ScaleType;
 import android.widget.Toast;
 
 import com.tianxia.app.healthworld.AppApplication;
@@ -38,7 +35,6 @@ import com.tianxia.app.healthworld.model.HomeDetailsInfo;
 import com.tianxia.lib.baseworld.activity.AdapterActivity;
 import com.tianxia.lib.baseworld.sync.http.AsyncHttpClient;
 import com.tianxia.lib.baseworld.sync.http.AsyncHttpResponseHandler;
-import com.tianxia.widget.image.SmartImageView;
 
 public class HomeDetailsActivity extends AdapterActivity<HomeDetailsInfo> {
 
@@ -53,8 +49,8 @@ public class HomeDetailsActivity extends AdapterActivity<HomeDetailsInfo> {
 	private TextView mAppLoadingTip = null;
 	private ProgressBar mAppLoadingPbar = null;
 	private ImageView mAppLoadingImage = null;
-
-	private SmartImageView mItemSmartImageView = null;
+	// 附图item宽度
+	private int imageWidth;
 
 	// 顶部广告栏
 	private LinearLayout mAdContainer = null;
@@ -71,17 +67,11 @@ public class HomeDetailsActivity extends AdapterActivity<HomeDetailsInfo> {
 	private ImageView collect;
 	private ImageView buy;
 
-	private int width;
-	private int height;
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		DisplayMetrics dm = new DisplayMetrics();
-		getWindowManager().getDefaultDisplay().getMetrics(dm);
-		width = dm.widthPixels;
-		height = dm.heightPixels;
+		imageWidth = (int) (AppApplication.screenWidth * 0.8);
 
 		db = AppApplication.mSQLiteHelper.getWritableDatabase();
 
@@ -266,13 +256,23 @@ public class HomeDetailsActivity extends AdapterActivity<HomeDetailsInfo> {
 
 	@Override
 	protected View getView(int position, View convertView) {
-		View view;
-		view = View.inflate(HomeDetailsActivity.this,
-				R.layout.home_details_gallery_item, null);
-		mItemSmartImageView = (SmartImageView) view
-				.findViewById(R.id.item_image);
-		mItemSmartImageView.setLayoutParams(new LinearLayout.LayoutParams(
-				width, LayoutParams.FILL_PARENT));
+		ViewHolder holder;
+		if (convertView == null) {
+			convertView = LayoutInflater.from(getApplicationContext()).inflate(
+					R.layout.home_details_gallery_item, null);
+			holder = new ViewHolder();
+
+			holder.detailImage = (ImageView) convertView
+					.findViewById(R.id.item_image);
+			holder.detailImage.setLayoutParams(new LinearLayout.LayoutParams(
+					imageWidth, imageWidth));
+
+			convertView.setTag(holder);
+		} else {
+			holder = (ViewHolder) convertView.getTag();
+		}
+		// mItemSmartImageView.setLayoutParams(new LinearLayout.LayoutParams(
+		// width, LayoutParams.FILL_PARENT));
 		// mItemSmartImageView.setScaleType(ScaleType.CENTER_CROP);
 		// mItemSmartImageView.setImageUrl(listData.get(position).origin,
 		// R.drawable.app_download_fail_large,
@@ -280,11 +280,17 @@ public class HomeDetailsActivity extends AdapterActivity<HomeDetailsInfo> {
 		// mItemSmartImageView.setImageUrl(listData.get(position).origin,
 		// R.drawable.app_download_fail_large,
 		// R.drawable.app_download_loading_large, true);
-		mItemSmartImageView.setScaleType(ScaleType.CENTER);
-		mItemSmartImageView
+		// mItemSmartImageView.setScaleType(ScaleType.CENTER);
+		holder.detailImage
 				.setImageResource((position & 1) == 1 ? R.drawable.gallery_it
-						: R.drawable.gallery_it0);
-		return view;
+						: R.drawable.griditem1);
+		return convertView;
+	}
+
+	static class ViewHolder {
+
+		ImageView detailImage;
+
 	}
 
 	@Override

@@ -2,33 +2,32 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFA"
+    android:background="#FFFFFF"
     android:orientation="vertical" >
 
     <RelativeLayout
-        android:id="@+id/app_banner"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/main_banner_bg"
-        android:padding="5dip" >
+        android:background="@drawable/home_banner_bg" >
 
-        <Button
+        <ImageView
             android:id="@+id/app_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
-            android:background="@drawable/app_btn_back"
-            android:text="@string/app_back" />
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/app_btn_back" />
 
         <TextView
-            android:id="@+id/setting_about_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="建议反馈"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="#000000" />
+            android:paddingBottom="4dp"
+            android:paddingTop="4dp"
+            android:text="意见反馈"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp" />
     </RelativeLayout>
 
     <TextView
