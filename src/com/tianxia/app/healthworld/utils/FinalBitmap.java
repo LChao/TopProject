@@ -674,7 +674,6 @@ public class FinalBitmap {
 				//设置图片的显示最大尺寸（为屏幕的大小,默认为屏幕宽度的1/3）
 				DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
 				int defaultWidth = (int)Math.floor(221);
-				Log.d("lclcclclcl", ""+displayMetrics.widthPixels);
 				defaultDisplayConfig.setBitmapHeight(defaultWidth);
 				defaultDisplayConfig.setBitmapWidth(defaultWidth);
 				
