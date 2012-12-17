@@ -53,6 +53,8 @@ public class AppApplication extends BaseApplication {
 		mTabPressImages.add(R.drawable.collect_press);
 		mTabPressImages.add(R.drawable.forum_press);
 		mTabPressImages.add(R.drawable.setting_press);
+		
+		// mTabMoveImage = r.
 	}
 
 	@Override
