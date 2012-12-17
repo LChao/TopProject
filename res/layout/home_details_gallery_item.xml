@@ -4,10 +4,18 @@
     android:layout_height="fill_parent"
     android:background="#FFFFFA" >
 
+    <!--
     <com.tianxia.widget.image.SmartImageView
         android:id="@+id/item_image"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:scaleType="fitXY" />
+        android:scaleType="centerCrop" />
+    -->
+
+    <ImageView
+        android:id="@+id/item_image"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:scaleType="centerCrop" />
 
 </LinearLayout>

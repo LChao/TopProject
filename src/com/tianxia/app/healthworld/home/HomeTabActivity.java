@@ -13,7 +13,6 @@ import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,11 +42,9 @@ import com.tianxia.lib.baseworld.activity.AdapterActivity;
 import com.tianxia.lib.baseworld.sync.http.AsyncHttpClient;
 import com.tianxia.lib.baseworld.sync.http.AsyncHttpResponseHandler;
 import com.tianxia.lib.baseworld.utils.PreferencesUtils;
-import com.tianxia.widget.image.SmartImageView;
 
 public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> {
 	public static final String TAG = "HomeTabActivity";
-	private int screenWidth;
 	private int gridItemHeight;
 	private FinalBitmap fb;
 	// 软件密码
@@ -67,9 +64,6 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> {
 	// 顶部刷新按钮
 	private ProgressBar mTopLoadingPbar = null;
 	private ImageView mTopLoadingImage = null;
-	// 网格item控件
-	private SmartImageView mItemImageView = null;
-	private TextView mItemTextView = null;
 
 	private Intent mIdentificationIntent = null;
 
@@ -77,15 +71,12 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		fb = new FinalBitmap(this).init();
-		fb.configLoadingImage(R.drawable.griditem);
+		fb.configLoadingImage(R.drawable.app_download_loading);
 		// fb.configLoadfailImage(R.drawable.gallery_it);
 		// 这里可以进行其他十几项的配置，也可以不用配置，配置之后必须调用init()函数,才生效
 		fb.configDiskCachePath(AppApplication.mSdcardImageDir);
-		// fb.configBitmapMaxHeight(221);
-		// fb.configBitmapMaxWidth(221);
 		fb.init();
 		// fb.configBitmapLoadThreadSize(int size)
-		// fb.configBitmapMaxHeight(bitmapHeight)
 
 		categotyTv = (TextView) findViewById(R.id.home_textview_category);
 
@@ -128,22 +119,14 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> {
 			}
 		});
 
-		// 获取当前屏幕属性
-		DisplayMetrics metric = new DisplayMetrics();
-		getWindowManager().getDefaultDisplay().getMetrics(metric);
-		screenWidth = metric.widthPixels; // 屏幕宽度（像素）
-		int height = metric.heightPixels; // 屏幕高度（像素）
-		float density = metric.density; // 屏幕密度（0.75 / 1.0 / 1.5）
-		int densityDpi = metric.densityDpi; // 屏幕密度DPI（120 / 160 / 240）
-		int gridColumn = (int) Math.ceil(screenWidth / 315.0);
+		int gridColumn = (int) Math.ceil(AppApplication.screenWidth / 315.0);
 		((GridView) getListView()).setNumColumns(gridColumn);
-		gridItemHeight = (screenWidth
-				- (int) Math.floor(4 * (gridColumn + 1) * density) - 10 * gridColumn)
+		gridItemHeight = (AppApplication.screenWidth
+				- (int) Math.floor(4 * (gridColumn + 1)
+						* AppApplication.screenDensity) - 10 * gridColumn)
 				/ gridColumn;
 		Log.d(TAG, "gridview gridItemHeight: " + gridItemHeight
 				+ " gridColumn: " + gridColumn);
-		Log.d(TAG, "width: " + screenWidth + " height: " + height
-				+ " density: " + density + " densityDpi: " + densityDpi);
 
 		password = PreferencesUtils.getStringPreference(
 				getApplicationContext(), "personalData", "password", "");
@@ -342,7 +325,7 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> {
 		});
 		popwindow.update();
 		popwindow.showAsDropDown(mBannerLayout,
-				(screenWidth - popwindow.getWidth()) / 2, -11);
+				(AppApplication.screenWidth - popwindow.getWidth()) / 2, -11);
 		// window.showAtLocation(parent, Gravity.CENTER_HORIZONTAL,
 		// 0, (int) getResources().getDimension(R.dimen.pop_layout_y));
 
