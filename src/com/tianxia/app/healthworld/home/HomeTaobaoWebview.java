@@ -44,6 +44,7 @@ public class HomeTaobaoWebview extends BaseActivity {
 		taobao.setWebViewClient(new WebViewClient() {
 			@Override
 			public boolean shouldOverrideUrlLoading(WebView view, String url) {
+				System.out.println("22222222222222: " + url);
 				return false;
 			}
 
@@ -72,8 +73,9 @@ public class HomeTaobaoWebview extends BaseActivity {
 				HomeTaobaoWebview.this.setProgress(progress * 100);
 			}
 		});
-		taobao.loadUrl(getIntent().getStringExtra("url").concat("&access_token=6101e309bd5366e7d56221cf25e56dde7a56461288c1c441069323553"));
-		Log.d(TAG, "URL: " + getIntent().getStringExtra("url").concat("&access_token=6101e309bd5366e7d56221cf25e56dde7a56461288c1c441069323553"));
+		taobao.loadUrl(getIntent().getStringExtra("url"));
+		// taobao.loadUrl("http://s.click.taobao.com/t?e=zGU34CA7K%2BPkqB07S4%2FK0CFcRfH0GoT805sipKvI1SjJA3Am3nGgIDDrQ5bY7COBEklLhc5vmGi8NotnbrwBIONc9GJ1Y3AgeTbJJSDDAz9YpA%3D%3D");
+		Log.d(TAG, "URL: " + getIntent().getStringExtra("url"));
 	}
 
 	public boolean onKeyDown(int keyCode, KeyEvent event) {

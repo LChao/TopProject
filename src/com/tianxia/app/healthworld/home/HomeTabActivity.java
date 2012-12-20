@@ -41,10 +41,17 @@ import com.tianxia.app.healthworld.utils.FinalBitmap;
 import com.tianxia.lib.baseworld.activity.AdapterActivity;
 import com.tianxia.lib.baseworld.sync.http.AsyncHttpClient;
 import com.tianxia.lib.baseworld.sync.http.AsyncHttpResponseHandler;
+import com.tianxia.lib.baseworld.sync.http.RequestParams;
 import com.tianxia.lib.baseworld.utils.PreferencesUtils;
 
 public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> {
 	public static final String TAG = "HomeTabActivity";
+
+	// 当前页面属性
+	private String curSortType = "1";
+	private String curTypeId = "";
+	private int curPage = 1;
+	// item相关
 	private int gridItemHeight;
 	private FinalBitmap fb;
 	// 软件密码
@@ -55,6 +62,7 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> {
 	private boolean isOpenPop = false;
 	private PopupWindow popwindow;
 	private static final String KEY = "key";
+	private static final String VALUE = "value";
 	private ArrayList<Map<String, Object>> items = new ArrayList<Map<String, Object>>();
 	// 新品、热门
 	private boolean isHot = true;
@@ -64,8 +72,6 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> {
 	// 顶部刷新按钮
 	private ProgressBar mTopLoadingPbar = null;
 	private ImageView mTopLoadingImage = null;
-
-	private Intent mIdentificationIntent = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -121,6 +127,7 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> {
 
 		int gridColumn = (int) Math.ceil(AppApplication.screenWidth / 315.0);
 		((GridView) getListView()).setNumColumns(gridColumn);
+		// ((GridView) getListView()).setOnScrollListener(l)
 		gridItemHeight = (AppApplication.screenWidth
 				- (int) Math.floor(4 * (gridColumn + 1)
 						* AppApplication.screenDensity) - 10 * gridColumn)
@@ -186,49 +193,72 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> {
 	private void loadGridView(boolean isRefresh) {
 		if (isRefresh) {
 			AsyncHttpClient client = new AsyncHttpClient();
-			client.get(HomeApi.HOME_GOODS_URL, new AsyncHttpResponseHandler() {
+			RequestParams params = new RequestParams();
+			if (curTypeId.equals("")) {
+				params.put("SortType", curSortType);
+				params.put("CurPage", String.valueOf(curPage));
+			} else {
+				params.put("SortType", curSortType);
+				params.put("CurPage", String.valueOf(curPage));
+				params.put("TypeId", curTypeId);
+			}
 
-				@Override
-				public void onStart() {
-					mAppLoadingTip.setText(R.string.app_loading);
-					mAppLoadingTip.setVisibility(View.VISIBLE);
-					mTopLoadingPbar.setVisibility(View.VISIBLE);
-					mTopLoadingImage.setVisibility(View.INVISIBLE);
-					listView.setAdapter(null);
-				}
+			client.post(HomeApi.HOME_GOODS_URL, params,
+					new AsyncHttpResponseHandler() {
 
-				@Override
-				public void onSuccess(String result) {
-					ConfigCache.setUrlCache(result, HomeApi.HOME_GOODS_URL);
-					setAppreciateCategoryList(result);
-				}
+						@Override
+						public void onStart() {
+							mAppLoadingTip.setText(R.string.app_loading);
+							mAppLoadingTip.setVisibility(View.VISIBLE);
+							mTopLoadingPbar.setVisibility(View.VISIBLE);
+							mTopLoadingImage.setVisibility(View.INVISIBLE);
+						}
 
-				@Override
-				public void onFailure(Throwable arg0) {
-					Toast.makeText(HomeTabActivity.this, "加载失败..", 0).show();
-					mAppLoadingTip.setVisibility(View.VISIBLE);
-					mAppLoadingTip.setText(R.string.app_loading_fail);
-				}
+						@Override
+						public void onSuccess(String result) {
+							if (curTypeId.equals("")) {
+								ConfigCache.setUrlCache(result,
+										HomeApi.HOME_GOODS_URL);
+							}
+							setAppreciateCategoryList(result);
+						}
 
-				@Override
-				public void onFinish() {
-					mAppLoadingTip.setVisibility(View.GONE);
-					mTopLoadingPbar.setVisibility(View.GONE);
-					mTopLoadingImage.setVisibility(View.VISIBLE);
-				}
-			});
+						@Override
+						public void onFailure(Throwable arg0) {
+							Toast.makeText(HomeTabActivity.this, "加载失败..", 0)
+									.show();
+							mAppLoadingTip.setVisibility(View.VISIBLE);
+							mAppLoadingTip.setText(R.string.app_loading_fail);
+						}
+
+						@Override
+						public void onFinish() {
+							mAppLoadingTip.setVisibility(View.GONE);
+							mTopLoadingPbar.setVisibility(View.GONE);
+							mTopLoadingImage.setVisibility(View.VISIBLE);
+						}
+					});
 		} else {
 
 			String cacheConfigString = ConfigCache
 					.getUrlCache(HomeApi.HOME_GOODS_URL);
-			if (cacheConfigString != null) {
+			if (curTypeId.endsWith("") && cacheConfigString != null) {
 				setAppreciateCategoryList(cacheConfigString);
 				mAppLoadingTip.setVisibility(View.GONE);
 				mTopLoadingPbar.setVisibility(View.GONE);
 				mTopLoadingImage.setVisibility(View.VISIBLE);
 			} else {
 				AsyncHttpClient client = new AsyncHttpClient();
-				client.get(HomeApi.HOME_GOODS_URL,
+				RequestParams params = new RequestParams();
+				if (curTypeId.equals("")) {
+					params.put("SortType", curSortType);
+					params.put("CurPage", String.valueOf(curPage));
+				} else {
+					params.put("SortType", curSortType);
+					params.put("CurPage", String.valueOf(curPage));
+					params.put("TypeId", curTypeId);
+				}
+				client.post(HomeApi.HOME_GOODS_URL, params,
 						new AsyncHttpResponseHandler() {
 
 							@Override
@@ -237,13 +267,14 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> {
 								mAppLoadingTip.setVisibility(View.VISIBLE);
 								mTopLoadingPbar.setVisibility(View.VISIBLE);
 								mTopLoadingImage.setVisibility(View.INVISIBLE);
-								listView.setAdapter(null);
 							}
 
 							@Override
 							public void onSuccess(String result) {
-								ConfigCache.setUrlCache(result,
-										HomeApi.HOME_GOODS_URL);
+								if (curTypeId.equals("")) {
+									ConfigCache.setUrlCache(result,
+											HomeApi.HOME_GOODS_URL);
+								}
 								setAppreciateCategoryList(result);
 							}
 
@@ -335,24 +366,26 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> {
 		try {
 			JSONObject json = new JSONObject(jsonString);
 			JSONArray jsonArray = json.getJSONArray("list");
-			listData = new ArrayList<HomeGoodsInfo>();
+			listData.clear();
 			HomeGoodsInfo appreciateCategoryInfo = null;
 			for (int i = 0; i < jsonArray.length(); i++) {
 				appreciateCategoryInfo = new HomeGoodsInfo();
+				appreciateCategoryInfo.cid = jsonArray.getJSONObject(i)
+						.optString("C_CID");
 				appreciateCategoryInfo.mResUrl = jsonArray.getJSONObject(i)
-						.optString("mResUrl");
+						.optString("C_MRES_URL");
 				appreciateCategoryInfo.price = jsonArray.getJSONObject(i)
-						.optString("price");
+						.optString("C_PRICE");
 				appreciateCategoryInfo.tradeCount = jsonArray.getJSONObject(i)
-						.optString("tradeCount");
+						.optString("C_TRADE_COUNT");
 				appreciateCategoryInfo.sResUrl = jsonArray.getJSONObject(i)
-						.optString("sResUrl");
+						.optString("C_SRES_URL");
 				appreciateCategoryInfo.name = jsonArray.getJSONObject(i)
-						.optString("name");
+						.optString("C_NAME");
 				appreciateCategoryInfo.desci = jsonArray.getJSONObject(i)
-						.optString("desci");
+						.optString("C_DESCI");
 				appreciateCategoryInfo.spreadUrl = jsonArray.getJSONObject(i)
-						.optString("spreadUrl");
+						.optString("C_SPREAD_URL");
 				appreciateCategoryInfo.evaluation = jsonArray.getJSONObject(i)
 						.optString("evaluation");
 				listData.add(appreciateCategoryInfo);
@@ -404,7 +437,8 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> {
 		// R.drawable.app_download_fail, R.drawable.app_download_loading);
 		// }
 		// bitmap加载就这一行代码，display还有其他重载，详情查看源码
-		fb.display(holder.cover, listData.get(position).mResUrl);
+		fb.display(holder.cover, listData.get(position).mResUrl
+				+ "_310x310.jpg");
 		holder.sales.setText("销量:" + listData.get(position).tradeCount);
 		holder.price.setText("￥" + listData.get(position).price);
 		// mItemTextView = (TextView) view.findViewById(R.id.item_category);
@@ -425,15 +459,22 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> {
 	@Override
 	protected void onItemClick(AdapterView<?> adapterView, View view,
 			int position, long id) {
-		mIdentificationIntent = new Intent(HomeTabActivity.this,
+		Intent goodsDetailsIntent = new Intent(HomeTabActivity.this,
 				HomeDetailsActivity.class);
-		mIdentificationIntent.putExtra("url", HomeApi.HOME_DETAILS_URL);
-		// mIdentificationIntent.putExtra("url",
-		// AppreciateApi.APPRECIATE_CATEGORY_BASE_URL +
-		// listData.get(position).filename + ".json");
-		// mIdentificationIntent.putExtra("title",
-		// listData.get(position).category);
-		startActivity(mIdentificationIntent);
+		Bundle bundle = new Bundle();
+		bundle.putString("cid", listData.get(position).cid);
+		String[] urls = listData.get(position).sResUrl.split(";");
+		bundle.putStringArray("sResUrl", urls);
+		bundle.putString("name", listData.get(position).name);
+		bundle.putString("price", listData.get(position).price);
+		bundle.putString("tradeCount", listData.get(position).tradeCount);
+		bundle.putString("desc", listData.get(position).desci);
+		bundle.putString("evaluation", listData.get(position).evaluation);
+		bundle.putString("mResUrl", listData.get(position).mResUrl);
+		bundle.putString("spreadUrl", listData.get(position).spreadUrl);
+
+		goodsDetailsIntent.putExtras(bundle);
+		startActivity(goodsDetailsIntent);
 	}
 
 	OnItemClickListener PopwindowlistClickListener = new OnItemClickListener() {
@@ -469,24 +510,29 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> {
 
 		map = new HashMap<String, Object>();
 		map.put(KEY, "全部精选");
+		map.put(VALUE, "");
+		items.add(map);
+		map = new HashMap<String, Object>();
+		map.put(KEY, "安全套");
+		map.put(VALUE, "50003114");
 		items.add(map);
 		map = new HashMap<String, Object>();
 		map.put(KEY, "情趣内衣");
+		map.put(VALUE, "50019652,50019653,50019656,50019657,50019658,50019659");
 		items.add(map);
 		map = new HashMap<String, Object>();
-		map.put(KEY, "计生用品");
+		map.put(KEY, "男欢世界");
+		map.put(VALUE,
+				"50019618,50019619,50019623,50019626,50019627,50019628,50019629");
+		items.add(map);
+		map = new HashMap<String, Object>();
+		map.put(KEY, "女爱欢心");
+		map.put(VALUE, "50019631,50019636,50019637,50019638,50019639,50019640");
 		items.add(map);
 		map = new HashMap<String, Object>();
 		map.put(KEY, "情趣用品");
-		items.add(map);
-		map = new HashMap<String, Object>();
-		map.put(KEY, "性保健品");
-		items.add(map);
-		map = new HashMap<String, Object>();
-		map.put(KEY, "男用器具");
-		items.add(map);
-		map = new HashMap<String, Object>();
-		map.put(KEY, "女用器具");
+		map.put(VALUE,
+				"50019642,50019643,50019644,50019645,50019646,50019647,50019700");
 		items.add(map);
 
 		return items;

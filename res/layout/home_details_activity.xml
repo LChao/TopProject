@@ -34,7 +34,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_centerVertical="true" >
+            android:layout_centerVertical="true"
+            android:visibility="gone" >
 
             <ProgressBar
                 android:id="@+id/app_loading_pbar_top"
@@ -63,14 +64,6 @@
         android:layout_marginLeft="2dip"
         android:layout_marginRight="2dip" >
     </LinearLayout>
-
-    <TextView
-        android:id="@+id/app_loading_tip"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:gravity="center"
-        android:text="@string/app_loading"
-        android:visibility="gone" />
 
     <RelativeLayout
         android:layout_width="fill_parent"
@@ -124,7 +117,6 @@
                 android:layout_gravity="center"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
-                android:text="257件"
                 android:textColor="#e9235f"
                 android:textSize="12sp" />
         </LinearLayout>
@@ -145,7 +137,6 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_marginTop="5dp"
-            android:text="￥19.00"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="#ffffff"
             android:textStyle="bold" />
@@ -163,7 +154,6 @@
             android:marqueeRepeatLimit="1"
             android:scrollHorizontally="true"
             android:singleLine="true"
-            android:text="包邮！蕾丝花边薄纱透明睡裙性感套装"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="#ffffff" />
     </RelativeLayout>
@@ -180,7 +170,6 @@
             android:layout_width="wrap_content"
             android:layout_height="0px"
             android:layout_weight="1"
-            android:text="商品简单描述"
             android:textAppearance="?android:attr/textAppearanceSmall" />
 
         <ImageView
@@ -193,7 +182,6 @@
             android:layout_width="wrap_content"
             android:layout_height="0px"
             android:layout_weight="1"
-            android:text="价格很便宜，料子也很光滑，比较满意！"
             android:textAppearance="?android:attr/textAppearanceSmall" />
     </LinearLayout>
 
@@ -210,8 +198,7 @@
             android:layout_marginBottom="5dp"
             android:layout_marginLeft="20dp"
             android:layout_marginTop="5dp"
-            android:background="@drawable/home_details_bt_collect_bg"
-            android:text="收藏" />
+            android:background="@drawable/home_details_bt_collect_bg" />
 
         <View
             android:layout_width="wrap_content"

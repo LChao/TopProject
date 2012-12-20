@@ -53,12 +53,14 @@ public class CollectTabActivity extends AdapterActivity<CollectInfo> {
 						CollectInfo collectInfo = new CollectInfo();
 						collectInfo.num_iid = cursor.getInt(cursor
 								.getColumnIndex("num_iid"));
-						collectInfo.thumbnail = cursor.getString(cursor
-								.getColumnIndex("thumbnail"));
-						collectInfo.title = cursor.getString(cursor
-								.getColumnIndex("title"));
-						collectInfo.date = cursor.getString(cursor
-								.getColumnIndex("date"));
+						collectInfo.mResUrl = cursor.getString(cursor
+								.getColumnIndex("mResUrl"));
+						collectInfo.price = cursor.getString(cursor
+								.getColumnIndex("price"));
+						collectInfo.tradeCount = cursor.getString(cursor
+								.getColumnIndex("tradeCount"));
+						collectInfo.spreadUrl = cursor.getString(cursor
+								.getColumnIndex("spreadUrl"));
 						listData.add(collectInfo);
 					} while (cursor.moveToNext());
 				} else {
@@ -85,16 +87,16 @@ public class CollectTabActivity extends AdapterActivity<CollectInfo> {
 		mItemConverImageView = (SmartImageView) view
 				.findViewById(R.id.collect_listitem_image);
 		mItemConverImageView.setImageUrl(
-				AppApplication.mDomain + listData.get(position).thumbnail,
+				AppApplication.mDomain + listData.get(position).mResUrl,
 				R.drawable.icon, R.drawable.app_download_loading);
 
 		mItemTitleTextView = (TextView) view
 				.findViewById(R.id.collect_listitem_title);
-		mItemTitleTextView.setText(listData.get(position).title);
+		// mItemTitleTextView.setText(listData.get(position).title);
 
 		mItemDateTextView = (TextView) view
 				.findViewById(R.id.collect_listitem_date);
-		mItemDateTextView.setText(listData.get(position).date);
+		// mItemDateTextView.setText(listData.get(position).date);
 
 		mItemDeleteView = (Button) view
 				.findViewById(R.id.collect_listitem_delete);

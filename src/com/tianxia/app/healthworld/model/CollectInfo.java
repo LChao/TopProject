@@ -3,8 +3,9 @@ package com.tianxia.app.healthworld.model;
 public class CollectInfo {
 
 	public int num_iid;
-	public String thumbnail;
-	public String title;
-	public String date;
+	public String mResUrl;
+	public String price;
+	public String tradeCount;
+	public String spreadUrl;
 
 }
