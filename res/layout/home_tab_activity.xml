@@ -68,15 +68,6 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" >
 
-        <TextView
-            android:id="@+id/app_loading_tip"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:gravity="center"
-            android:text="@string/app_loading"
-            android:textColor="#aaaaaa"
-            android:visibility="visible" />
-
         <GridView
             android:id="@+id/home_list"
             android:layout_width="fill_parent"
@@ -91,6 +82,15 @@
             android:stretchMode="columnWidth"
             android:verticalSpacing="4dip" >
         </GridView>
+
+        <TextView
+            android:id="@+id/app_loading_tip"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:gravity="center"
+            android:text="@string/app_loading"
+            android:textColor="#aaaaaa"
+            android:visibility="visible" />
     </FrameLayout>
 
 </LinearLayout>
