@@ -1,34 +1,59 @@
 package com.tianxia.app.healthworld.collect;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.GridView;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ImageView.ScaleType;
 
 import com.tianxia.app.healthworld.AppApplication;
 import com.tianxia.app.healthworld.AppSQLiteHelper;
 import com.tianxia.app.healthworld.R;
+import com.tianxia.app.healthworld.home.HomeTaobaoWebview;
 import com.tianxia.app.healthworld.model.CollectInfo;
+import com.tianxia.app.healthworld.utils.FinalBitmap;
 import com.tianxia.lib.baseworld.activity.AdapterActivity;
-import com.tianxia.lib.baseworld.activity.AdapterActivity.Adapter;
-import com.tianxia.widget.image.SmartImageView;
 
 public class CollectTabActivity extends AdapterActivity<CollectInfo> {
+	public static final String TAG = "CollectTabActivity";
 
-	private TextView mItemTitleTextView = null;
-	private SmartImageView mItemConverImageView = null;
-	private TextView mItemDateTextView = null;
-	private Button mItemDeleteView = null;
 	private SQLiteDatabase db;
+	// item相关
+	private int gridItemHeight;
+	private FinalBitmap fb;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		db = AppApplication.mSQLiteHelper.getWritableDatabase();
+
+		fb = new FinalBitmap(this).init();
+		fb.configLoadingImage(R.drawable.app_download_loading);
+		// fb.configLoadfailImage(R.drawable.gallery_it);
+		// 这里可以进行其他十几项的配置，也可以不用配置，配置之后必须调用init()函数,才生效
+		fb.configDiskCachePath(AppApplication.mSdcardImageDir);
+		fb.init();
+		// fb.configBitmapLoadThreadSize(int size)
+
+		int gridColumn = (int) Math.ceil(AppApplication.screenWidth / 315.0);
+		((GridView) getListView()).setNumColumns(gridColumn);
+		// ((GridView) getListView()).setOnScrollListener(l)
+		gridItemHeight = (AppApplication.screenWidth
+				- (int) Math.floor(4 * (gridColumn + 1)
+						* AppApplication.screenDensity) - 10 * gridColumn)
+				/ gridColumn;
+		Log.d(TAG, "gridview gridItemHeight: " + gridItemHeight
+				+ " gridColumn: " + gridColumn);
 
 		adapter = new Adapter(CollectTabActivity.this);
 		listView.setAdapter(adapter);
@@ -43,7 +68,6 @@ public class CollectTabActivity extends AdapterActivity<CollectInfo> {
 	private void getCollectList() {
 		listData.clear();
 		synchronized (AppApplication.mSQLiteHelper) {
-			db = AppApplication.mSQLiteHelper.getReadableDatabase();
 			Cursor cursor = null;
 			try {
 				cursor = db.query(AppSQLiteHelper.TABLE_COLLECT, null, null,
@@ -51,7 +75,7 @@ public class CollectTabActivity extends AdapterActivity<CollectInfo> {
 				if (cursor.moveToFirst()) {
 					do {
 						CollectInfo collectInfo = new CollectInfo();
-						collectInfo.num_iid = cursor.getInt(cursor
+						collectInfo.num_iid = cursor.getString(cursor
 								.getColumnIndex("num_iid"));
 						collectInfo.mResUrl = cursor.getString(cursor
 								.getColumnIndex("mResUrl"));
@@ -73,55 +97,85 @@ public class CollectTabActivity extends AdapterActivity<CollectInfo> {
 					cursor.close();
 				}
 			}
+			cursor.close();
 		}
 	}
 
 	@Override
 	protected View getView(final int position, View convertView) {
-		View view = convertView;
-		if (view == null) {
-			view = LayoutInflater.from(getApplicationContext()).inflate(
+		ViewHolder holder;
+		if (convertView == null) {
+			convertView = LayoutInflater.from(getApplicationContext()).inflate(
 					R.layout.collect_tab_list_item, null);
+			holder = new ViewHolder();
+
+			holder.price = (TextView) convertView
+					.findViewById(R.id.collect_listitem_price);
+			holder.sales = (TextView) convertView
+					.findViewById(R.id.collect_listitem_sales);
+			holder.cover = (ImageView) convertView
+					.findViewById(R.id.item_image);
+			holder.cover.setLayoutParams(new RelativeLayout.LayoutParams(
+					gridItemHeight, gridItemHeight));
+			holder.cover.setScaleType(ScaleType.CENTER_CROP);
+			holder.delete = (Button) convertView
+					.findViewById(R.id.collect_listitem_delete);
+			holder.goBuy = (Button) convertView
+					.findViewById(R.id.collect_listitem_goBuy);
+
+			convertView.setTag(holder);
+		} else {
+			holder = (ViewHolder) convertView.getTag();
 		}
 
-		mItemConverImageView = (SmartImageView) view
-				.findViewById(R.id.collect_listitem_image);
-		mItemConverImageView.setImageUrl(
-				AppApplication.mDomain + listData.get(position).mResUrl,
-				R.drawable.icon, R.drawable.app_download_loading);
-
-		mItemTitleTextView = (TextView) view
-				.findViewById(R.id.collect_listitem_title);
-		// mItemTitleTextView.setText(listData.get(position).title);
-
-		mItemDateTextView = (TextView) view
-				.findViewById(R.id.collect_listitem_date);
-		// mItemDateTextView.setText(listData.get(position).date);
-
-		mItemDeleteView = (Button) view
-				.findViewById(R.id.collect_listitem_delete);
-		mItemDeleteView.setOnClickListener(new Button.OnClickListener() {
+		// bitmap加载就这一行代码，display还有其他重载，详情查看源码
+		fb.display(holder.cover, listData.get(position).mResUrl
+				+ "_310x310.jpg");
+		holder.sales.setText("销量:" + listData.get(position).tradeCount);
+		holder.price.setText("￥" + listData.get(position).price);
+		holder.delete.setOnClickListener(new Button.OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				db.execSQL("delete from collection where num_iid = '"
 						+ listData.get(position).num_iid + "'");
-				Toast.makeText(CollectTabActivity.this, "删除收藏",
+				Toast.makeText(CollectTabActivity.this,
+						"删除收藏" + listData.get(position).num_iid,
 						Toast.LENGTH_SHORT).show();
 				showFavoriteList();
 			}
 		});
+		holder.goBuy.setOnClickListener(new Button.OnClickListener() {
 
-		return view;
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				Intent in = new Intent(CollectTabActivity.this,
+						HomeTaobaoWebview.class);
+				in.putExtra("url", listData.get(position).spreadUrl);
+				startActivity(in);
+			}
+		});
+
+		return convertView;
+	}
+
+	static class ViewHolder {
+
+		TextView price;
+		TextView sales;
+		ImageView cover;
+		Button delete;
+		Button goBuy;
+
 	}
 
 	protected void onItemClick(AdapterView<?> adapterView, View view,
 			int position, long id) {
-		// Intent intent = new Intent(this, ChapterListActivity.class);
-		// intent.putExtra("title", listData.get(position).title);
-		// intent.putExtra("url", listData.get(position).url);
-		// startActivity(intent);
+		Intent in = new Intent(CollectTabActivity.this, HomeTaobaoWebview.class);
+		in.putExtra("url", listData.get(position).spreadUrl);
+		startActivity(in);
 	}
 
 	@Override
@@ -134,6 +188,13 @@ public class CollectTabActivity extends AdapterActivity<CollectInfo> {
 	private void showFavoriteList() {
 		getCollectList();
 		adapter.notifyDataSetChanged();
+	}
+
+	@Override
+	protected void onDestroy() {
+		// TODO Auto-generated method stub
+		super.onDestroy();
+		db.close();
 	}
 
 }

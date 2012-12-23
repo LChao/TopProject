@@ -200,14 +200,7 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> {
 		if (isRefresh) {
 			AsyncHttpClient client = new AsyncHttpClient();
 			RequestParams params = new RequestParams();
-			if (curTypeId.equals("")) {
-				params.put("SortType", curSortType);
-				params.put("CurPage", String.valueOf(curPage));
-			} else {
-				params.put("SortType", curSortType);
-				params.put("CurPage", String.valueOf(curPage));
-				params.put("TypeId", curTypeId);
-			}
+			params.put("params", getCurParams());
 
 			client.post(HomeApi.HOME_GOODS_URL, params,
 					new AsyncHttpResponseHandler() {
@@ -222,7 +215,7 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> {
 
 						@Override
 						public void onSuccess(String result) {
-							if (curTypeId.equals("")) {
+							if (curTypeId.equals("") && curSortType.equals("1")) {
 								ConfigCache.setUrlCache(result,
 										HomeApi.HOME_GOODS_URL);
 							}
@@ -250,7 +243,8 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> {
 
 			String cacheConfigString = ConfigCache
 					.getUrlCache(HomeApi.HOME_GOODS_URL);
-			if (curTypeId.equals("") && cacheConfigString != null) {
+			if (curTypeId.equals("") && curSortType.equals("1")
+					&& cacheConfigString != null) {
 				setAppreciateCategoryList(cacheConfigString);
 				mAppLoadingTip.setVisibility(View.GONE);
 				mTopLoadingPbar.setVisibility(View.GONE);
@@ -260,17 +254,9 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> {
 			} else {
 				AsyncHttpClient client = new AsyncHttpClient();
 				RequestParams params = new RequestParams();
-				if (curTypeId.equals("")) {
-					params.put("SortType", "1");
-					params.put("CurPage", "1");
-					params.put("PageSize", "4");
-				} else {
-					params.put("SortType", curSortType);
-					params.put("CurPage", String.valueOf(curPage));
-					params.put("TypeId", curTypeId);
-				}
-				client.post(HomeTabActivity.this, HomeApi.HOME_GOODS_URL,
-						params, new AsyncHttpResponseHandler() {
+				params.put("params", getCurParams());
+				client.post(HomeApi.HOME_GOODS_URL, params,
+						new AsyncHttpResponseHandler() {
 
 							@Override
 							public void onStart() {
@@ -282,7 +268,8 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> {
 
 							@Override
 							public void onSuccess(String result) {
-								if (curTypeId.equals("")) {
+								if (curTypeId.equals("")
+										&& curSortType.equals("1")) {
 									ConfigCache.setUrlCache(result,
 											HomeApi.HOME_GOODS_URL);
 								}
@@ -499,11 +486,8 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> {
 					.getItemAtPosition(position);
 
 			if (!((CharSequence) map.get(KEY)).equals(mBannerTitle.getText())) {
-				Toast.makeText(HomeTabActivity.this, map.get(KEY) + "",
-						Toast.LENGTH_SHORT).show();
 				mBannerTitle.setText((CharSequence) map.get(KEY));
 				// 刷新数据
-				System.out.println((String) map.get(VALUE));
 				curTypeId = (String) map.get(VALUE);
 				loadGridView(false);
 			}
@@ -553,5 +537,22 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> {
 
 		return items;
 
+	}
+
+	private String getCurParams() {
+		JSONObject jb = new JSONObject();
+		try {
+			jb.put("CurPage", curPage);
+			jb.put("SortType", curSortType);
+			// jb.put("PageSize", "3");
+			if (!curTypeId.equals("")) {
+				jb.put("TypeId", curTypeId);
+			}
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		Log.d(TAG, "params: " + jb);
+		return jb.toString();
 	}
 }

@@ -1,54 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content" >
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
 
-    <FrameLayout
-        android:id="@+id/collect_listitem_topframe"
-        android:layout_width="fill_parent"
+    <RelativeLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="#dddddd"
-        android:padding="1px" >
+        android:background="@drawable/home_tab_galleryitem_bg" >
+
+        <!--
+    <com.tianxia.widget.image.SmartImageView
+        android:id="@+id/item_image"
+        android:layout_width="fill_parent"
+        android:layout_height="207dp"
+        android:scaleType="centerCrop" />
+        -->
+
+        <ImageView
+            android:id="@+id/item_image"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" />
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:background="#FFFFFA"
-            android:orientation="vertical"
-            android:padding="1px" >
-
-            <com.tianxia.widget.image.SmartImageView
-                android:id="@+id/collect_listitem_image"
-                android:layout_width="fill_parent"
-                android:layout_height="90dip"
-                android:scaleType="centerCrop" />
+            android:layout_alignParentBottom="true"
+            android:background="#90989892"
+            android:orientation="horizontal" >
 
             <TextView
-                android:id="@+id/collect_listitem_title"
+                android:id="@+id/collect_listitem_price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="10dp"
                 android:ellipsize="end"
                 android:singleLine="true"
-                android:textColor="#000000" />
+                android:text="￥25"
+                android:textColor="#ffffff"
+                android:textSize="10sp" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <TextView
+                android:id="@+id/collect_listitem_sales"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:text="销量：321"
+                android:textColor="#ffffff"
+                android:textSize="10sp" />
         </LinearLayout>
-    </FrameLayout>
+    </RelativeLayout>
 
-    <Button
-        android:id="@+id/collect_listitem_delete"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_below="@id/collect_listitem_topframe"
-        android:text="删除" />
+        android:orientation="horizontal" >
 
-    <TextView
-        android:id="@+id/collect_listitem_date"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@id/collect_listitem_topframe"
-        android:layout_toLeftOf="@id/collect_listitem_delete"
-        android:singleLine="true" />
+        <Button
+            android:id="@+id/collect_listitem_delete"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="删除" />
 
-</RelativeLayout>
+        <View
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <Button
+            android:id="@+id/collect_listitem_goBuy"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="前往购买" />
+    </LinearLayout>
+
+</LinearLayout>

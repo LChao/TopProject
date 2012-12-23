@@ -15,7 +15,7 @@ public class AppSQLiteHelper extends BaseSQLiteHelper {
 	@Override
 	public void InitCreateSql() {
 		mCreateSql = "create table if not exists " + TABLE_COLLECT + "("
-				+ "_id INTEGER PRIMARY KEY AUTOINCREMENT," + "num_iid INTEGER,"
+				+ "_id INTEGER PRIMARY KEY AUTOINCREMENT," + "num_iid TEXT,"
 				+ "mResUrl TEXT," + "spreadUrl TEXT," + "price TEXT,"
 				+ "tradeCount TEXT)";
 
