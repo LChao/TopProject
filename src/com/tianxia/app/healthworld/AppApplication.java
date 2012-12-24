@@ -20,7 +20,6 @@ import com.tianxia.lib.baseworld.sync.http.AsyncHttpClient;
 import com.tianxia.lib.baseworld.sync.http.AsyncHttpResponseHandler;
 import com.tianxia.lib.baseworld.utils.NetworkUtils;
 import com.tianxia.lib.baseworld.utils.PreferencesUtils;
-import com.waps.AppConnect;
 
 public class AppApplication extends BaseApplication {
 
@@ -53,7 +52,7 @@ public class AppApplication extends BaseApplication {
 		mTabPressImages.add(R.drawable.collect_press);
 		mTabPressImages.add(R.drawable.forum_press);
 		mTabPressImages.add(R.drawable.setting_press);
-		
+
 		// mTabMoveImage = r.
 	}
 
@@ -98,7 +97,6 @@ public class AppApplication extends BaseApplication {
 				.setMessage(this.getString(R.string.app_exit_message))
 				.setPositiveButton("退出", new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int id) {
-						AppConnect.getInstance(context).finalize();
 						android.os.Process.killProcess(android.os.Process
 								.myPid());
 					}

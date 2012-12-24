@@ -1,7 +1,5 @@
 package com.tianxia.app.healthworld.home;
 
-import net.youmi.android.AdView;
-
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
@@ -65,8 +63,6 @@ public class HomeDetailsActivity extends AdapterActivity<String> {
 	private TextView mAdCompanyTel = null;
 	private TextView mAdCompanyPhone = null;
 	private TextView mAdCompanyBusiness = null;
-
-	public AdView mAdView = null;
 	// 底部按钮栏
 	private ImageView collect;
 	private ImageView buy;
@@ -381,17 +377,4 @@ public class HomeDetailsActivity extends AdapterActivity<String> {
 		return result;
 	}
 
-	public void showAd() {
-		// 初始化广告视图
-		if (listData.size() < 10 && mAdView == null) {
-			mAdView = new AdView(this);
-			FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
-					FrameLayout.LayoutParams.MATCH_PARENT,
-					FrameLayout.LayoutParams.WRAP_CONTENT);
-			// 设置广告出现的位置(悬浮于屏幕右下角)
-			params.gravity = Gravity.BOTTOM | Gravity.RIGHT;
-			// 将广告视图加入 Activity 中
-			addContentView(mAdView, params);
-		}
-	}
 }

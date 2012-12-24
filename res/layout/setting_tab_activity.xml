@@ -103,7 +103,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="10dp"
-                android:src="@drawable/app_arrow_small" />
+                android:src="@drawable/app_arrow" />
         </LinearLayout>
 
         <ImageView
@@ -142,7 +142,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="10dp"
-                android:src="@drawable/app_arrow_small" />
+                android:src="@drawable/app_arrow" />
         </LinearLayout>
     </LinearLayout>
 
@@ -179,7 +179,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="10dp"
-                android:src="@drawable/app_arrow_small" />
+                android:src="@drawable/app_arrow" />
         </LinearLayout>
 
         <ImageView
@@ -212,7 +212,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="10dp"
-                android:src="@drawable/app_arrow_small" />
+                android:src="@drawable/app_arrow" />
         </LinearLayout>
     </LinearLayout>
 

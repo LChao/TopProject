@@ -23,21 +23,6 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@android:style/Theme.Black.NoTitleBar" >
-        <meta-data
-            android:name="UMENG_APPKEY"
-            android:value="4f672e2352701550360000c9" />
-        <meta-data
-            android:name="UMENG_CHANNEL"
-            android:value="dev" />
-        <!-- 以下属性为应用ID,从万普后台获取 -->
-        <meta-data
-            android:name="WAPS_ID"
-            android:value="923cfb1a970c051eccd0af856bd3752c" />
-        <!-- 以下属性为分发渠道ID,编码表参见本文档末附表 -->
-        <meta-data
-            android:name="WAPS_PID"
-            android:value="dev" />
-
         <activity
             android:name="com.tianxia.lib.baseworld.main.MainTabFrame"
             android:screenOrientation="portrait"
@@ -93,16 +78,6 @@
         <activity
             android:name="com.tianxia.lib.baseworld.activity.SettingAboutActivity"
             android:screenOrientation="portrait" />
-        <activity
-            android:name="com.feedback.ui.SendFeedback"
-            android:windowSoftInputMode="adjustResize" />
-        <activity android:name="com.feedback.ui.FeedbackConversations" />
-        <activity
-            android:name="com.feedback.ui.FeedbackConversation"
-            android:configChanges="keyboard" />
-        <activity
-            android:name="com.waps.OffersWebView"
-            android:configChanges="keyboardHidden|orientation" />
     </application>
 
 </manifest>
