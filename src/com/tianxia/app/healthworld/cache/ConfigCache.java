@@ -7,6 +7,7 @@ import android.os.Environment;
 import android.util.Log;
 
 import com.tianxia.app.healthworld.AppApplication;
+import com.tianxia.lib.baseworld.BaseApplication;
 import com.tianxia.lib.baseworld.utils.FileUtils;
 import com.tianxia.lib.baseworld.utils.NetworkUtils;
 import com.tianxia.lib.baseworld.utils.StringUtils;
@@ -21,8 +22,8 @@ public class ConfigCache {
         if (url == null) {
             return null;
         }
-
         String result = null;
+        if(BaseApplication.mNetWorkState!=NetworkUtils.NETWORN_NONE){
         File file = new File(AppApplication.mSdcardDataDir + "/" + StringUtils.replaceUrlWithPlus(url));
         if (file.exists() && file.isFile()) {
             long expiredTime = System.currentTimeMillis() - file.lastModified();
@@ -38,6 +39,14 @@ public class ConfigCache {
                 return null;
             }
             try {
+                result = FileUtils.readTextFile(file);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        }else{
+        	try {
+        		File file = new File(AppApplication.mSdcardDataDir + "/" + StringUtils.replaceUrlWithPlus(url));
                 result = FileUtils.readTextFile(file);
             } catch (IOException e) {
                 e.printStackTrace();

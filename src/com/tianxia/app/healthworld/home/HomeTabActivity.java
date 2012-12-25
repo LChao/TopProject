@@ -13,10 +13,12 @@ import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -29,6 +31,7 @@ import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView.ScaleType;
 import android.widget.PopupWindow.OnDismissListener;
@@ -42,15 +45,18 @@ import com.tianxia.lib.baseworld.activity.AdapterActivity;
 import com.tianxia.lib.baseworld.sync.http.AsyncHttpClient;
 import com.tianxia.lib.baseworld.sync.http.AsyncHttpResponseHandler;
 import com.tianxia.lib.baseworld.sync.http.RequestParams;
+import com.tianxia.lib.baseworld.utils.NetworkUtils;
 import com.tianxia.lib.baseworld.utils.PreferencesUtils;
 
-public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> {
+public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> implements
+		OnScrollListener {
 	public static final String TAG = "HomeTabActivity";
 
 	// 当前页面属性
 	private String curSortType = "1";
 	private String curTypeId = "";
 	private int curPage = 1;
+	private int lastVisibleItem = 0;
 	// item相关
 	private int gridItemHeight;
 	private FinalBitmap fb;
@@ -106,7 +112,11 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> {
 		mTopLoadingImage.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				loadGridView(true);
+				if (((AppApplication) getApplication()).mNetWorkState != NetworkUtils.NETWORN_NONE) {
+					loadGridView(true, 1);
+				} else {
+					Toast.makeText(HomeTabActivity.this, "无可用网络连接", 0).show();
+				}
 			}
 		});
 
@@ -115,23 +125,27 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				if (isHot) {
-					isHot = false;
-					curSortType = "0";
-					categotyTv.setText("新品");
-					loadGridView(true);
+				if (((AppApplication) getApplication()).mNetWorkState != NetworkUtils.NETWORN_NONE) {
+					if (isHot) {
+						isHot = false;
+						curSortType = "0";
+						categotyTv.setText("新品");
+						loadGridView(true, 1);
+					} else {
+						isHot = true;
+						curSortType = "1";
+						categotyTv.setText("热门");
+						loadGridView(false, 1);
+					}
 				} else {
-					isHot = true;
-					curSortType = "1";
-					categotyTv.setText("热门");
-					loadGridView(false);
+					Toast.makeText(HomeTabActivity.this, "无可用网络连接", 0).show();
 				}
 			}
 		});
 
 		int gridColumn = (int) Math.ceil(AppApplication.screenWidth / 315.0);
 		((GridView) getListView()).setNumColumns(gridColumn);
-		// ((GridView) getListView()).setOnScrollListener(l)
+		((GridView) getListView()).setOnScrollListener(this);
 		gridItemHeight = (AppApplication.screenWidth
 				- (int) Math.floor(4 * (gridColumn + 1)
 						* AppApplication.screenDensity) - 10 * gridColumn)
@@ -142,7 +156,7 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> {
 		password = PreferencesUtils.getStringPreference(
 				getApplicationContext(), "personalData", "password", "");
 		if (password.equals("")) {
-			loadGridView(false);
+			loadGridView(false, 1);
 		} else {
 			LayoutInflater li = getLayoutInflater();
 			View dialogView = li.inflate(
@@ -183,7 +197,7 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> {
 						Toast.makeText(HomeTabActivity.this, "亲，欢迎回来！", 1)
 								.show();
 						ad.dismiss();
-						loadGridView(false);
+						loadGridView(false, 1);
 					} else {
 						Toast.makeText(HomeTabActivity.this, "亲，密码输入错误", 1)
 								.show();
@@ -194,13 +208,13 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> {
 
 	}
 
-	private void loadGridView(boolean isRefresh) {
+	private void loadGridView(boolean isRefresh, final int page) {
 		categotyTv.setClickable(false);
 		mBannerTitle.setClickable(false);
 		if (isRefresh) {
 			AsyncHttpClient client = new AsyncHttpClient();
 			RequestParams params = new RequestParams();
-			params.put("params", getCurParams());
+			params.put("params", getCurParams(page));
 
 			client.post(HomeApi.HOME_GOODS_URL, params,
 					new AsyncHttpResponseHandler() {
@@ -215,11 +229,13 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> {
 
 						@Override
 						public void onSuccess(String result) {
-							if (curTypeId.equals("") && curSortType.equals("1")) {
+							if (curTypeId.equals("") && curSortType.equals("1")
+									&& page == 1) {
 								ConfigCache.setUrlCache(result,
 										HomeApi.HOME_GOODS_URL);
 							}
-							setAppreciateCategoryList(result);
+							setAppreciateCategoryList(result, page);
+							curPage = page;
 						}
 
 						@Override
@@ -244,8 +260,9 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> {
 			String cacheConfigString = ConfigCache
 					.getUrlCache(HomeApi.HOME_GOODS_URL);
 			if (curTypeId.equals("") && curSortType.equals("1")
-					&& cacheConfigString != null) {
-				setAppreciateCategoryList(cacheConfigString);
+					&& cacheConfigString != null && page == 1) {
+				setAppreciateCategoryList(cacheConfigString, page);
+				curPage = page;
 				mAppLoadingTip.setVisibility(View.GONE);
 				mTopLoadingPbar.setVisibility(View.GONE);
 				mTopLoadingImage.setVisibility(View.VISIBLE);
@@ -254,7 +271,7 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> {
 			} else {
 				AsyncHttpClient client = new AsyncHttpClient();
 				RequestParams params = new RequestParams();
-				params.put("params", getCurParams());
+				params.put("params", getCurParams(page));
 				client.post(HomeApi.HOME_GOODS_URL, params,
 						new AsyncHttpResponseHandler() {
 
@@ -269,11 +286,12 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> {
 							@Override
 							public void onSuccess(String result) {
 								if (curTypeId.equals("")
-										&& curSortType.equals("1")) {
+										&& curSortType.equals("1") && page == 1) {
 									ConfigCache.setUrlCache(result,
 											HomeApi.HOME_GOODS_URL);
 								}
-								setAppreciateCategoryList(result);
+								setAppreciateCategoryList(result, page);
+								curPage = page;
 							}
 
 							@Override
@@ -362,11 +380,13 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> {
 
 	}
 
-	private void setAppreciateCategoryList(String jsonString) {
+	private void setAppreciateCategoryList(String jsonString, int page) {
 		try {
 			JSONObject json = new JSONObject(jsonString);
 			JSONArray jsonArray = json.getJSONArray("list");
-			listData.clear();
+			if (page == 1) {
+				listData.clear();
+			}
 			HomeGoodsInfo appreciateCategoryInfo = null;
 			for (int i = 0; i < jsonArray.length(); i++) {
 				appreciateCategoryInfo = new HomeGoodsInfo();
@@ -486,10 +506,14 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> {
 					.getItemAtPosition(position);
 
 			if (!((CharSequence) map.get(KEY)).equals(mBannerTitle.getText())) {
-				mBannerTitle.setText((CharSequence) map.get(KEY));
-				// 刷新数据
-				curTypeId = (String) map.get(VALUE);
-				loadGridView(false);
+				if (((AppApplication) getApplication()).mNetWorkState != NetworkUtils.NETWORN_NONE) {
+					mBannerTitle.setText((CharSequence) map.get(KEY));
+					// 刷新数据
+					curTypeId = (String) map.get(VALUE);
+					loadGridView(false, 1);
+				} else {
+					Toast.makeText(HomeTabActivity.this, "无可用网络连接", 0).show();
+				}
 			}
 			if (popwindow != null) {
 				popwindow.dismiss();
@@ -539,10 +563,10 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> {
 
 	}
 
-	private String getCurParams() {
+	private String getCurParams(int page) {
 		JSONObject jb = new JSONObject();
 		try {
-			jb.put("CurPage", curPage);
+			jb.put("CurPage", page);
 			jb.put("SortType", curSortType);
 			// jb.put("PageSize", "3");
 			if (!curTypeId.equals("")) {
@@ -554,5 +578,26 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> {
 		}
 		Log.d(TAG, "params: " + jb);
 		return jb.toString();
+	}
+
+	@Override
+	public void onScroll(AbsListView view, int firstVisibleItem,
+			int visibleItemCount, int totalItemCount) {
+		// TODO Auto-generated method stub
+		Log.d("LChaoLChao...", "firstVisibleItem: " + firstVisibleItem
+				+ " visibleItemCount: " + visibleItemCount
+				+ " totalItemCount: " + totalItemCount);
+		lastVisibleItem = firstVisibleItem + visibleItemCount;
+	}
+
+	@Override
+	public void onScrollStateChanged(AbsListView view, int scrollState) {
+		// TODO Auto-generated method stub
+		Log.e("LChaoLChao...", "scrollState :" + scrollState);
+		if (scrollState == OnScrollListener.SCROLL_STATE_IDLE
+				&& lastVisibleItem == adapter.getCount()) {
+			Toast.makeText(HomeTabActivity.this, "加载更多", 0).show();
+			loadGridView(false, curPage + 1);
+		}
 	}
 }
