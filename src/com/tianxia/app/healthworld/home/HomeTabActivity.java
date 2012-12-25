@@ -13,7 +13,6 @@ import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,6 +40,7 @@ import com.tianxia.app.healthworld.R;
 import com.tianxia.app.healthworld.cache.ConfigCache;
 import com.tianxia.app.healthworld.model.HomeGoodsInfo;
 import com.tianxia.app.healthworld.utils.FinalBitmap;
+import com.tianxia.lib.baseworld.BaseApplication;
 import com.tianxia.lib.baseworld.activity.AdapterActivity;
 import com.tianxia.lib.baseworld.sync.http.AsyncHttpClient;
 import com.tianxia.lib.baseworld.sync.http.AsyncHttpResponseHandler;
@@ -112,7 +112,7 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> implements
 		mTopLoadingImage.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				if (((AppApplication) getApplication()).mNetWorkState != NetworkUtils.NETWORN_NONE) {
+				if (BaseApplication.mNetWorkState != NetworkUtils.NETWORN_NONE) {
 					loadGridView(true, 1);
 				} else {
 					Toast.makeText(HomeTabActivity.this, "无可用网络连接", 0).show();
@@ -125,7 +125,7 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> implements
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				if (((AppApplication) getApplication()).mNetWorkState != NetworkUtils.NETWORN_NONE) {
+				if (BaseApplication.mNetWorkState != NetworkUtils.NETWORN_NONE) {
 					if (isHot) {
 						isHot = false;
 						curSortType = "0";
@@ -413,7 +413,11 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> implements
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-		adapter.notifyDataSetChanged();
+		if (page == 1) {
+			listView.setAdapter(adapter);
+		} else {
+			adapter.notifyDataSetChanged();
+		}
 	}
 
 	@Override
@@ -447,24 +451,11 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> implements
 			holder = (ViewHolder) convertView.getTag();
 		}
 
-		// holder.cover.setScaleType(ScaleType.CENTER);
-		// holder.cover.setImageResource((position & 1) == 1 ?
-		// R.drawable.griditem
-		// : R.drawable.griditem1);
-
-		// mItemImageView = (SmartImageView) view.findViewById(R.id.item_image);
-		// if (listData != null && position < listData.size()) {
-		// holder.cover.setImageUrl(listData.get(position).mResUrl,
-		// R.drawable.app_download_fail, R.drawable.app_download_loading);
-		// }
 		// bitmap加载就这一行代码，display还有其他重载，详情查看源码
 		fb.display(holder.cover, listData.get(position).mResUrl
 				+ "_310x310.jpg");
 		holder.sales.setText("销量:" + listData.get(position).tradeCount);
 		holder.price.setText("￥" + listData.get(position).price);
-		// mItemTextView = (TextView) view.findViewById(R.id.item_category);
-		// mItemTextView.setText(listData.get(position).category + "("
-		// + listData.get(position).count + ")");
 
 		return convertView;
 	}
@@ -506,7 +497,7 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> implements
 					.getItemAtPosition(position);
 
 			if (!((CharSequence) map.get(KEY)).equals(mBannerTitle.getText())) {
-				if (((AppApplication) getApplication()).mNetWorkState != NetworkUtils.NETWORN_NONE) {
+				if (BaseApplication.mNetWorkState != NetworkUtils.NETWORN_NONE) {
 					mBannerTitle.setText((CharSequence) map.get(KEY));
 					// 刷新数据
 					curTypeId = (String) map.get(VALUE);
@@ -584,20 +575,22 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> implements
 	public void onScroll(AbsListView view, int firstVisibleItem,
 			int visibleItemCount, int totalItemCount) {
 		// TODO Auto-generated method stub
-		Log.d("LChaoLChao...", "firstVisibleItem: " + firstVisibleItem
-				+ " visibleItemCount: " + visibleItemCount
-				+ " totalItemCount: " + totalItemCount);
 		lastVisibleItem = firstVisibleItem + visibleItemCount;
 	}
 
 	@Override
 	public void onScrollStateChanged(AbsListView view, int scrollState) {
 		// TODO Auto-generated method stub
-		Log.e("LChaoLChao...", "scrollState :" + scrollState);
 		if (scrollState == OnScrollListener.SCROLL_STATE_IDLE
 				&& lastVisibleItem == adapter.getCount()) {
 			Toast.makeText(HomeTabActivity.this, "加载更多", 0).show();
 			loadGridView(false, curPage + 1);
 		}
+	}
+
+	@Override
+	public void onBackPressed() {
+		// TODO Auto-generated method stub
+		((AppApplication) getApplication()).exitApp(this);
 	}
 }

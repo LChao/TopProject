@@ -95,15 +95,15 @@ public class AppApplication extends BaseApplication {
 		alertBuilder
 				.setTitle(this.getString(R.string.app_exit_title))
 				.setMessage(this.getString(R.string.app_exit_message))
-				.setPositiveButton("退出", new DialogInterface.OnClickListener() {
+				.setPositiveButton("取消", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+						dialog.cancel();
+					}
+				})
+				.setNegativeButton("退出", new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int id) {
 						android.os.Process.killProcess(android.os.Process
 								.myPid());
-					}
-				})
-				.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int id) {
-						dialog.cancel();
 					}
 				});
 		alertBuilder.create().show();

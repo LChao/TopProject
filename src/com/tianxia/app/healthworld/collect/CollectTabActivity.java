@@ -109,6 +109,8 @@ public class CollectTabActivity extends AdapterActivity<CollectInfo> {
 					R.layout.collect_tab_list_item, null);
 			holder = new ViewHolder();
 
+			holder.imageLayout = (RelativeLayout) convertView
+					.findViewById(R.id.collect_listitem_imageLayout);
 			holder.price = (TextView) convertView
 					.findViewById(R.id.collect_listitem_price);
 			holder.sales = (TextView) convertView
@@ -157,25 +159,30 @@ public class CollectTabActivity extends AdapterActivity<CollectInfo> {
 				startActivity(in);
 			}
 		});
+		holder.imageLayout.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				Intent in = new Intent(CollectTabActivity.this,
+						HomeTaobaoWebview.class);
+				in.putExtra("url", listData.get(position).spreadUrl);
+				startActivity(in);
+			}
+		});
 
 		return convertView;
 	}
 
 	static class ViewHolder {
 
+		RelativeLayout imageLayout;
 		TextView price;
 		TextView sales;
 		ImageView cover;
 		Button delete;
 		Button goBuy;
 
-	}
-
-	protected void onItemClick(AdapterView<?> adapterView, View view,
-			int position, long id) {
-		Intent in = new Intent(CollectTabActivity.this, HomeTaobaoWebview.class);
-		in.putExtra("url", listData.get(position).spreadUrl);
-		startActivity(in);
 	}
 
 	@Override
@@ -197,4 +204,15 @@ public class CollectTabActivity extends AdapterActivity<CollectInfo> {
 		db.close();
 	}
 
+	@Override
+	public void onBackPressed() {
+		// TODO Auto-generated method stub
+		((AppApplication) getApplication()).exitApp(this);
+	}
+
+	@Override
+	protected void onItemClick(AdapterView<?> adapterView, View view,
+			int position, long id) {
+		// TODO Auto-generated method stub
+	}
 }

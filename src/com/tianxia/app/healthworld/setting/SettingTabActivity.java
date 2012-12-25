@@ -1,5 +1,6 @@
 package com.tianxia.app.healthworld.setting;
 
+import com.tianxia.app.healthworld.AppApplication;
 import com.tianxia.app.healthworld.R;
 import com.tianxia.lib.baseworld.activity.BaseActivity;
 import com.tianxia.lib.baseworld.activity.SettingAboutActivity;
@@ -230,5 +231,11 @@ public class SettingTabActivity extends BaseActivity {
 			});
 		}
 
+	}
+
+	@Override
+	public void onBackPressed() {
+		// TODO Auto-generated method stub
+		((AppApplication) getApplication()).exitApp(this);
 	}
 }
