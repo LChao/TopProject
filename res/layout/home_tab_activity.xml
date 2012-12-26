@@ -64,7 +64,7 @@
         </FrameLayout>
     </RelativeLayout>
 
-    <FrameLayout
+    <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" >
 
@@ -91,6 +91,14 @@
             android:text="@string/app_loading"
             android:textColor="#aaaaaa"
             android:visibility="visible" />
-    </FrameLayout>
+        <TextView
+            android:id="@+id/app_bottom_loading_tip"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:gravity="center"
+            android:text="正在努力为您加载更多"
+            android:textColor="#aaaaaa"
+            android:visibility="visible" />
+    </RelativeLayout>
 
 </LinearLayout>
