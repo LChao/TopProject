@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.animation.AnimationUtils;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -54,7 +55,9 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> implements
 
 	// 当前页面属性
 	private String curSortType = "1";
+	private String curSort = "remen";
 	private String curTypeId = "";
+	private String curType = "全部精选";
 	private int curPage = 1;
 	private int lastVisibleItem = 0;
 	// item相关
@@ -75,6 +78,7 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> implements
 	private TextView categotyTv = null;
 	// 主界面布局content部分的数据加载指示控件
 	private TextView mAppLoadingTip = null;
+	private TextView mBottomLoadingTip = null;
 	// 顶部刷新按钮
 	private ProgressBar mTopLoadingPbar = null;
 	private ImageView mTopLoadingImage = null;
@@ -93,6 +97,7 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> implements
 		categotyTv = (TextView) findViewById(R.id.home_textview_category);
 
 		mAppLoadingTip = (TextView) findViewById(R.id.app_loading_tip);
+		mBottomLoadingTip = (TextView) findViewById(R.id.app_bottom_loading_tip);
 		mTopLoadingPbar = (ProgressBar) findViewById(R.id.app_loading_pbar_top);
 		mTopLoadingImage = (ImageView) findViewById(R.id.app_loading_btn_top);
 
@@ -125,20 +130,18 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> implements
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				if (BaseApplication.mNetWorkState != NetworkUtils.NETWORN_NONE) {
-					if (isHot) {
-						isHot = false;
-						curSortType = "0";
-						categotyTv.setText("新品");
-						loadGridView(true, 1);
-					} else {
-						isHot = true;
-						curSortType = "1";
-						categotyTv.setText("热门");
-						loadGridView(false, 1);
-					}
+				if (isHot) {
+					isHot = false;
+					curSortType = "0";
+					categotyTv.setText("新品");
+					curSort = "xinpin";
+					loadGridView(true, 1);
 				} else {
-					Toast.makeText(HomeTabActivity.this, "无可用网络连接", 0).show();
+					isHot = true;
+					curSortType = "1";
+					categotyTv.setText("热门");
+					curSort = "remen";
+					loadGridView(false, 1);
 				}
 			}
 		});
@@ -229,13 +232,21 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> implements
 
 						@Override
 						public void onSuccess(String result) {
-							if (curTypeId.equals("") && curSortType.equals("1")
-									&& page == 1) {
-								ConfigCache.setUrlCache(result,
-										HomeApi.HOME_GOODS_URL);
+							if (result == null) {
+								Toast.makeText(HomeTabActivity.this, "加载失败..",
+										0).show();
+								mAppLoadingTip.setVisibility(View.VISIBLE);
+								mAppLoadingTip
+										.setText(R.string.app_loading_fail);
+							} else {
+								if (page == 1) {
+									ConfigCache.setUrlCache(result,
+											HomeApi.HOME_GOODS_URL + "/"
+													+ curSort + "/" + curType);
+								}
+								setAppreciateCategoryList(result, page);
+								curPage = page;
 							}
-							setAppreciateCategoryList(result, page);
-							curPage = page;
 						}
 
 						@Override
@@ -258,9 +269,9 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> implements
 		} else {
 
 			String cacheConfigString = ConfigCache
-					.getUrlCache(HomeApi.HOME_GOODS_URL);
-			if (curTypeId.equals("") && curSortType.equals("1")
-					&& cacheConfigString != null && page == 1) {
+					.getUrlCache(HomeApi.HOME_GOODS_URL + "/" + curSort + "/"
+							+ curType);
+			if (cacheConfigString != null && page == 1) {
 				setAppreciateCategoryList(cacheConfigString, page);
 				curPage = page;
 				mAppLoadingTip.setVisibility(View.GONE);
@@ -277,25 +288,45 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> implements
 
 							@Override
 							public void onStart() {
-								mAppLoadingTip.setText(R.string.app_loading);
-								mAppLoadingTip.setVisibility(View.VISIBLE);
 								mTopLoadingPbar.setVisibility(View.VISIBLE);
 								mTopLoadingImage.setVisibility(View.INVISIBLE);
+								if (page != 1) {
+									mBottomLoadingTip.startAnimation(AnimationUtils
+											.loadAnimation(
+													HomeTabActivity.this,
+													android.R.anim.fade_in));
+									mBottomLoadingTip
+											.setVisibility(View.VISIBLE);
+								} else {
+									mAppLoadingTip
+											.setText(R.string.app_loading);
+									mAppLoadingTip.setVisibility(View.VISIBLE);
+								}
 							}
 
 							@Override
 							public void onSuccess(String result) {
-								if (curTypeId.equals("")
-										&& curSortType.equals("1") && page == 1) {
-									ConfigCache.setUrlCache(result,
-											HomeApi.HOME_GOODS_URL);
+								if (result == null) {
+									Toast.makeText(HomeTabActivity.this,
+											"加载失败..", 0).show();
+									mAppLoadingTip
+											.setText(R.string.app_loading_fail);
+								} else {
+									if (page == 1) {
+										ConfigCache.setUrlCache(result,
+												HomeApi.HOME_GOODS_URL + "/"
+														+ curSort + "/"
+														+ curType);
+									}
+									setAppreciateCategoryList(result, page);
+									curPage = page;
 								}
-								setAppreciateCategoryList(result, page);
-								curPage = page;
 							}
 
 							@Override
 							public void onFailure(Throwable arg0) {
+								Toast.makeText(HomeTabActivity.this, "加载失败..",
+										0).show();
 								mAppLoadingTip
 										.setText(R.string.app_loading_fail);
 							}
@@ -304,9 +335,17 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> implements
 							public void onFinish() {
 								categotyTv.setClickable(true);
 								mBannerTitle.setClickable(true);
-								mAppLoadingTip.setVisibility(View.GONE);
 								mTopLoadingPbar.setVisibility(View.GONE);
 								mTopLoadingImage.setVisibility(View.VISIBLE);
+								if (page != 1) {
+									mBottomLoadingTip.startAnimation(AnimationUtils
+											.loadAnimation(
+													HomeTabActivity.this,
+													android.R.anim.fade_out));
+									mBottomLoadingTip.setVisibility(View.GONE);
+								} else {
+									mAppLoadingTip.setVisibility(View.GONE);
+								}
 							}
 						});
 			}
@@ -497,14 +536,11 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> implements
 					.getItemAtPosition(position);
 
 			if (!((CharSequence) map.get(KEY)).equals(mBannerTitle.getText())) {
-				if (BaseApplication.mNetWorkState != NetworkUtils.NETWORN_NONE) {
-					mBannerTitle.setText((CharSequence) map.get(KEY));
-					// 刷新数据
-					curTypeId = (String) map.get(VALUE);
-					loadGridView(false, 1);
-				} else {
-					Toast.makeText(HomeTabActivity.this, "无可用网络连接", 0).show();
-				}
+				mBannerTitle.setText((CharSequence) map.get(KEY));
+				// 刷新数据
+				curTypeId = (String) map.get(VALUE);
+				curType = (String) map.get(KEY);
+				loadGridView(false, 1);
 			}
 			if (popwindow != null) {
 				popwindow.dismiss();
@@ -583,8 +619,13 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> implements
 		// TODO Auto-generated method stub
 		if (scrollState == OnScrollListener.SCROLL_STATE_IDLE
 				&& lastVisibleItem == adapter.getCount()) {
-			Toast.makeText(HomeTabActivity.this, "加载更多", 0).show();
-			loadGridView(false, curPage + 1);
+			if (BaseApplication.mNetWorkState != NetworkUtils.NETWORN_NONE) {
+				if (mTopLoadingImage.getVisibility() == View.VISIBLE) {
+					loadGridView(false, curPage + 1);
+				}
+			} else {
+				Toast.makeText(HomeTabActivity.this, "无可用网络连接", 0).show();
+			}
 		}
 	}
 
