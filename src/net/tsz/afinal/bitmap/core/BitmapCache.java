@@ -142,7 +142,11 @@ public class BitmapCache {
 
         synchronized (mDiskCacheLock) {
             // 添加到硬盘缓存
-            if (mDiskLruCache != null) {
+            if (mDiskLruCache != null && mDiskLruCache.getDirectory()!= null ) {
+            	
+            	if(!mDiskLruCache.getDirectory().exists())
+            		mDiskLruCache.getDirectory().mkdirs();
+            	
                 final String key = FileNameGenerator.generator(data);
                 OutputStream out = null;
                 try {
@@ -233,10 +237,7 @@ public class BitmapCache {
      * this includes disk access so this should not be executed on the main/UI thread.
      */
     public void clearCache() {
-        if (mMemoryCache != null) {
-            mMemoryCache.evictAll();
-        }
-
+    	clearMemoryCache();
         synchronized (mDiskCacheLock) {
             mDiskCacheStarting = true;
             if (mDiskLruCache != null && !mDiskLruCache.isClosed()) {
@@ -248,6 +249,12 @@ public class BitmapCache {
                 mDiskLruCache = null;
                 initDiskCache();
             }
+        }
+    }
+    
+    public void clearMemoryCache(){
+    	if (mMemoryCache != null) {
+            mMemoryCache.evictAll();
         }
     }
 

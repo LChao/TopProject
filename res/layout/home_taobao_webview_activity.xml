@@ -29,11 +29,50 @@
             android:textSize="20sp" />
     </RelativeLayout>
 
-    <WebView
-        android:id="@+id/home_taobao_webview"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:scrollbarStyle="insideOverlay" />
+        android:layout_weight="1" >
+
+        <WebView
+            android:id="@+id/home_taobao_webview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbarStyle="insideOverlay" />
+        <RelativeLayout
+            android:id="@id/taobao_bottom_rel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/taobao_bottom_bg" >
+
+            <ImageButton
+                android:id="@id/taobao_back_but"
+                android:layout_width="40.0dip"
+                android:layout_height="40.0dip"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="20.0dip"
+                android:background="@drawable/taobao_bottom_left_not"
+                android:onClick="backClick" />
+
+            <ImageButton
+                android:id="@id/taobao_forward_but"
+                android:layout_width="40.0dip"
+                android:layout_height="40.0dip"
+                android:layout_marginLeft="20.0dip"
+                android:layout_toRightOf="@id/taobao_back_but"
+                android:background="@drawable/taobao_bottom_right_not"
+                android:onClick="forwardClick" />
+
+            <ImageButton
+                android:id="@id/taobao_refresh_but"
+                android:layout_width="40.0dip"
+                android:layout_height="40.0dip"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="20.0dip"
+                android:background="@drawable/taobao_bottom_refresh"
+                android:onClick="refreshClick" />
+        </RelativeLayout>
+    </RelativeLayout>
 
 </LinearLayout>

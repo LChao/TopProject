@@ -1,4 +1,4 @@
-package net.tsz.afinal.common;
+package net.tsz.afinal.core;
 
 
 import android.os.Build;
