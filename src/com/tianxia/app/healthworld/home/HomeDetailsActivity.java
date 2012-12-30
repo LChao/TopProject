@@ -49,7 +49,6 @@ public class HomeDetailsActivity extends AdapterActivity<String> {
 	private TextView goodsEvaluate;
 	// 顶部banner
 	private ImageView mAppBackButton = null;
-	private TextView mAppLoadingTip = null;
 	private ProgressBar mAppLoadingPbar = null;
 	private ImageView mAppLoadingImage = null;
 	// 顶部广告栏
@@ -76,7 +75,7 @@ public class HomeDetailsActivity extends AdapterActivity<String> {
 		fb.init();
 		// fb.configBitmapLoadThreadSize(int size)
 
-		imageWidth = (int) (AppApplication.screenWidth * 0.8);
+		imageWidth = (int) (AppApplication.screenWidth * 0.7);
 		db = AppApplication.mSQLiteHelper.getWritableDatabase();
 
 		intentData = getIntent().getExtras();
@@ -105,7 +104,6 @@ public class HomeDetailsActivity extends AdapterActivity<String> {
 		buy = (ImageView) findViewById(R.id.home_details_bt_buy);
 		mAdContainer = (LinearLayout) findViewById(R.id.home_details_ad);
 		mAppBackButton = (ImageView) findViewById(R.id.app_back);
-		mAppLoadingTip = (TextView) findViewById(R.id.app_loading_tip);
 		mAppLoadingPbar = (ProgressBar) findViewById(R.id.app_loading_pbar_top);
 		mAppLoadingImage = (ImageView) findViewById(R.id.app_loading_btn_top);
 

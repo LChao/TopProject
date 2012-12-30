@@ -24,6 +24,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.ProgressBar;
@@ -77,8 +78,9 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> implements
 	private boolean isHot = true;
 	private TextView categotyTv = null;
 	// 主界面布局content部分的数据加载指示控件
-	private TextView mAppLoadingTip = null;
-	private TextView mBottomLoadingTip = null;
+	private LinearLayout mAppLoadingLayoutTip = null;
+	private TextView mAppLoadingTextTip = null;
+	private LinearLayout mBottomLoadingTip = null;
 	// 顶部刷新按钮
 	private ProgressBar mTopLoadingPbar = null;
 	private ImageView mTopLoadingImage = null;
@@ -96,8 +98,9 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> implements
 
 		categotyTv = (TextView) findViewById(R.id.home_textview_category);
 
-		mAppLoadingTip = (TextView) findViewById(R.id.app_loading_tip);
-		mBottomLoadingTip = (TextView) findViewById(R.id.app_bottom_loading_tip);
+		mAppLoadingLayoutTip = (LinearLayout) findViewById(R.id.app_loading_layout_tip);
+		mAppLoadingTextTip = (TextView) findViewById(R.id.app_loading_textview_tip);
+		mBottomLoadingTip = (LinearLayout) findViewById(R.id.app_bottom_loading_tip);
 		mTopLoadingPbar = (ProgressBar) findViewById(R.id.app_loading_pbar_top);
 		mTopLoadingImage = (ImageView) findViewById(R.id.app_loading_btn_top);
 
@@ -146,7 +149,10 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> implements
 			}
 		});
 
-		int gridColumn = (int) Math.ceil(AppApplication.screenWidth / 315.0);
+		int gridColumn = (int) Math.floor(AppApplication.screenWidth / 320.0);
+		if (gridColumn <= 2) {
+			gridColumn = 2;
+		}
 		((GridView) getListView()).setNumColumns(gridColumn);
 		((GridView) getListView()).setOnScrollListener(this);
 		gridItemHeight = (AppApplication.screenWidth
@@ -224,8 +230,8 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> implements
 
 						@Override
 						public void onStart() {
-							mAppLoadingTip.setText(R.string.app_loading);
-							mAppLoadingTip.setVisibility(View.VISIBLE);
+							mAppLoadingTextTip.setText(R.string.app_loading);
+							mAppLoadingLayoutTip.setVisibility(View.VISIBLE);
 							mTopLoadingPbar.setVisibility(View.VISIBLE);
 							mTopLoadingImage.setVisibility(View.INVISIBLE);
 						}
@@ -233,48 +239,51 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> implements
 						@Override
 						public void onSuccess(String result) {
 							if (result == null) {
-								Toast.makeText(HomeTabActivity.this, "加载失败..",
-										0).show();
-								mAppLoadingTip.setVisibility(View.VISIBLE);
-								mAppLoadingTip
+								Toast.makeText(HomeTabActivity.this,
+										"加载失败,请重试", 0).show();
+								mAppLoadingLayoutTip
+										.setVisibility(View.VISIBLE);
+								mAppLoadingTextTip
 										.setText(R.string.app_loading_fail);
 							} else {
-								if (page == 1) {
-									ConfigCache.setUrlCache(result,
-											HomeApi.HOME_GOODS_URL + "/"
-													+ curSort + "/" + curType);
-								}
-								setAppreciateCategoryList(result, page);
 								curPage = page;
+								ConfigCache
+										.setUrlCache(result,
+												HomeApi.HOME_GOODS_URL + "/"
+														+ curSort + "/"
+														+ curType + "/"
+														+ curPage);
+								setAppreciateCategoryList(result, page);
 							}
 						}
 
 						@Override
 						public void onFailure(Throwable arg0) {
-							Toast.makeText(HomeTabActivity.this, "加载失败..", 0)
+							Toast.makeText(HomeTabActivity.this, "加载失败,请重试", 0)
 									.show();
-							mAppLoadingTip.setVisibility(View.VISIBLE);
-							mAppLoadingTip.setText(R.string.app_loading_fail);
+							mAppLoadingLayoutTip.setVisibility(View.VISIBLE);
+							mAppLoadingTextTip
+									.setText(R.string.app_loading_fail);
 						}
 
 						@Override
 						public void onFinish() {
 							categotyTv.setClickable(true);
 							mBannerTitle.setClickable(true);
-							mAppLoadingTip.setVisibility(View.GONE);
+							mAppLoadingLayoutTip.setVisibility(View.GONE);
 							mTopLoadingPbar.setVisibility(View.GONE);
 							mTopLoadingImage.setVisibility(View.VISIBLE);
 						}
 					});
 		} else {
-
 			String cacheConfigString = ConfigCache
 					.getUrlCache(HomeApi.HOME_GOODS_URL + "/" + curSort + "/"
-							+ curType);
-			if (cacheConfigString != null && page == 1) {
+							+ curType + "/" + page);
+			System.out.println("lclclclclclc: "+cacheConfigString);
+			if (cacheConfigString != null) {
 				setAppreciateCategoryList(cacheConfigString, page);
 				curPage = page;
-				mAppLoadingTip.setVisibility(View.GONE);
+				mAppLoadingLayoutTip.setVisibility(View.GONE);
 				mTopLoadingPbar.setVisibility(View.GONE);
 				mTopLoadingImage.setVisibility(View.VISIBLE);
 				categotyTv.setClickable(true);
@@ -298,9 +307,10 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> implements
 									mBottomLoadingTip
 											.setVisibility(View.VISIBLE);
 								} else {
-									mAppLoadingTip
+									mAppLoadingTextTip
 											.setText(R.string.app_loading);
-									mAppLoadingTip.setVisibility(View.VISIBLE);
+									mAppLoadingLayoutTip
+											.setVisibility(View.VISIBLE);
 								}
 							}
 
@@ -308,26 +318,24 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> implements
 							public void onSuccess(String result) {
 								if (result == null) {
 									Toast.makeText(HomeTabActivity.this,
-											"加载失败..", 0).show();
-									mAppLoadingTip
+											"加载失败,请重试", 0).show();
+									mAppLoadingTextTip
 											.setText(R.string.app_loading_fail);
 								} else {
-									if (page == 1) {
-										ConfigCache.setUrlCache(result,
-												HomeApi.HOME_GOODS_URL + "/"
-														+ curSort + "/"
-														+ curType);
-									}
-									setAppreciateCategoryList(result, page);
 									curPage = page;
+									ConfigCache.setUrlCache(result,
+											HomeApi.HOME_GOODS_URL + "/"
+													+ curSort + "/" + curType
+													+ "/" + curPage);
+									setAppreciateCategoryList(result, page);
 								}
 							}
 
 							@Override
 							public void onFailure(Throwable arg0) {
-								Toast.makeText(HomeTabActivity.this, "加载失败..",
-										0).show();
-								mAppLoadingTip
+								Toast.makeText(HomeTabActivity.this,
+										"加载失败,请重试", 0).show();
+								mAppLoadingTextTip
 										.setText(R.string.app_loading_fail);
 							}
 
@@ -344,7 +352,8 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> implements
 													android.R.anim.fade_out));
 									mBottomLoadingTip.setVisibility(View.GONE);
 								} else {
-									mAppLoadingTip.setVisibility(View.GONE);
+									mAppLoadingLayoutTip
+											.setVisibility(View.GONE);
 								}
 							}
 						});
