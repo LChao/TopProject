@@ -19,7 +19,7 @@ public class StartActivity extends BaseActivity implements Handler.Callback {
 		setContentView(R.layout.app_start_layout);
 		handler = new Handler(this);
 
-		handler.sendMessageDelayed(new Message(), 1000);
+		handler.sendMessageDelayed(new Message(), 1500);
 	}
 
 	@Override

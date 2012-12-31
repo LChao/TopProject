@@ -28,6 +28,7 @@ public class AppApplication extends BaseApplication {
 	// public static String mDomain = "http://www.kaiyuanxiangmu.com/";
 	public static String mDomain = "http://doss.cn:8080/";
 	// public static String mDomain = "http://183.129.179.77/";
+	// public static String mDomain = "http://101.71.22.209/";
 	public static String mBakeDomain = "http://1.kaiyuanxiangmu.sinaapp.com/";
 
 	private static final String DB_NAME = "qingqubao.db";
@@ -92,8 +93,7 @@ public class AppApplication extends BaseApplication {
 	@Override
 	public void exitApp(final Context context) {
 		AlertDialog.Builder alertBuilder = new AlertDialog.Builder(context);
-		alertBuilder
-				.setTitle(this.getString(R.string.app_exit_title))
+		alertBuilder.setTitle(this.getString(R.string.app_exit_title))
 				.setMessage(this.getString(R.string.app_exit_message))
 				.setPositiveButton("取消", new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int id) {

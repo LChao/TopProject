@@ -47,7 +47,9 @@ public class ConfigCache {
         }else{
         	try {
         		File file = new File(AppApplication.mSdcardDataDir + "/" + StringUtils.replaceUrlWithPlus(url));
-                result = FileUtils.readTextFile(file);
+        		if (file.exists() && file.isFile()) {
+        			result = FileUtils.readTextFile(file);
+        		}
             } catch (IOException e) {
                 e.printStackTrace();
             }

@@ -80,6 +80,7 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> implements
 	// 主界面布局content部分的数据加载指示控件
 	private LinearLayout mAppLoadingLayoutTip = null;
 	private TextView mAppLoadingTextTip = null;
+	private ProgressBar mAppLoadingPBTip;
 	private LinearLayout mBottomLoadingTip = null;
 	// 顶部刷新按钮
 	private ProgressBar mTopLoadingPbar = null;
@@ -100,6 +101,7 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> implements
 
 		mAppLoadingLayoutTip = (LinearLayout) findViewById(R.id.app_loading_layout_tip);
 		mAppLoadingTextTip = (TextView) findViewById(R.id.app_loading_textview_tip);
+		mAppLoadingPBTip = (ProgressBar) findViewById(R.id.app_loading_progressBar_tip);
 		mBottomLoadingTip = (LinearLayout) findViewById(R.id.app_bottom_loading_tip);
 		mTopLoadingPbar = (ProgressBar) findViewById(R.id.app_loading_pbar_top);
 		mTopLoadingImage = (ImageView) findViewById(R.id.app_loading_btn_top);
@@ -138,7 +140,7 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> implements
 					curSortType = "0";
 					categotyTv.setText("新品");
 					curSort = "xinpin";
-					loadGridView(true, 1);
+					loadGridView(false, 1);
 				} else {
 					isHot = true;
 					curSortType = "1";
@@ -243,6 +245,7 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> implements
 										"加载失败,请重试", 0).show();
 								mAppLoadingLayoutTip
 										.setVisibility(View.VISIBLE);
+								mAppLoadingPBTip.setVisibility(View.GONE);
 								mAppLoadingTextTip
 										.setText(R.string.app_loading_fail);
 							} else {
@@ -254,6 +257,7 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> implements
 														+ curType + "/"
 														+ curPage);
 								setAppreciateCategoryList(result, page);
+								mAppLoadingLayoutTip.setVisibility(View.GONE);
 							}
 						}
 
@@ -262,6 +266,7 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> implements
 							Toast.makeText(HomeTabActivity.this, "加载失败,请重试", 0)
 									.show();
 							mAppLoadingLayoutTip.setVisibility(View.VISIBLE);
+							mAppLoadingPBTip.setVisibility(View.GONE);
 							mAppLoadingTextTip
 									.setText(R.string.app_loading_fail);
 						}
@@ -270,7 +275,6 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> implements
 						public void onFinish() {
 							categotyTv.setClickable(true);
 							mBannerTitle.setClickable(true);
-							mAppLoadingLayoutTip.setVisibility(View.GONE);
 							mTopLoadingPbar.setVisibility(View.GONE);
 							mTopLoadingImage.setVisibility(View.VISIBLE);
 						}
@@ -279,7 +283,7 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> implements
 			String cacheConfigString = ConfigCache
 					.getUrlCache(HomeApi.HOME_GOODS_URL + "/" + curSort + "/"
 							+ curType + "/" + page);
-			System.out.println("lclclclclclc: "+cacheConfigString);
+			System.out.println("lclclclclclc: " + cacheConfigString);
 			if (cacheConfigString != null) {
 				setAppreciateCategoryList(cacheConfigString, page);
 				curPage = page;
@@ -289,6 +293,26 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> implements
 				categotyTv.setClickable(true);
 				mBannerTitle.setClickable(true);
 			} else {
+				if (BaseApplication.mNetWorkState == NetworkUtils.NETWORN_NONE) {
+					if (page == 1) {
+						categotyTv.setClickable(true);
+						mBannerTitle.setClickable(true);
+						mAppLoadingLayoutTip.setVisibility(View.VISIBLE);
+						mAppLoadingPBTip.setVisibility(View.GONE);
+						mAppLoadingTextTip.setText("无可用网络连接,请刷新重试");
+						mTopLoadingPbar.setVisibility(View.GONE);
+						mTopLoadingImage.setVisibility(View.VISIBLE);
+						Toast.makeText(HomeTabActivity.this, "无可用网络连接", 0)
+								.show();
+						return;
+					} else {
+						categotyTv.setClickable(true);
+						mBannerTitle.setClickable(true);
+						Toast.makeText(HomeTabActivity.this, "无可用网络连接", 0)
+								.show();
+						return;
+					}
+				}
 				AsyncHttpClient client = new AsyncHttpClient();
 				RequestParams params = new RequestParams();
 				params.put("params", getCurParams(page));
@@ -319,6 +343,9 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> implements
 								if (result == null) {
 									Toast.makeText(HomeTabActivity.this,
 											"加载失败,请重试", 0).show();
+									mAppLoadingLayoutTip
+											.setVisibility(View.VISIBLE);
+									mAppLoadingPBTip.setVisibility(View.GONE);
 									mAppLoadingTextTip
 											.setText(R.string.app_loading_fail);
 								} else {
@@ -328,6 +355,8 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> implements
 													+ curSort + "/" + curType
 													+ "/" + curPage);
 									setAppreciateCategoryList(result, page);
+									mAppLoadingLayoutTip
+											.setVisibility(View.GONE);
 								}
 							}
 
@@ -335,6 +364,9 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> implements
 							public void onFailure(Throwable arg0) {
 								Toast.makeText(HomeTabActivity.this,
 										"加载失败,请重试", 0).show();
+								mAppLoadingLayoutTip
+										.setVisibility(View.VISIBLE);
+								mAppLoadingPBTip.setVisibility(View.GONE);
 								mAppLoadingTextTip
 										.setText(R.string.app_loading_fail);
 							}
@@ -351,9 +383,6 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> implements
 													HomeTabActivity.this,
 													android.R.anim.fade_out));
 									mBottomLoadingTip.setVisibility(View.GONE);
-								} else {
-									mAppLoadingLayoutTip
-											.setVisibility(View.GONE);
 								}
 							}
 						});
@@ -628,12 +657,8 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> implements
 		// TODO Auto-generated method stub
 		if (scrollState == OnScrollListener.SCROLL_STATE_IDLE
 				&& lastVisibleItem == adapter.getCount()) {
-			if (BaseApplication.mNetWorkState != NetworkUtils.NETWORN_NONE) {
-				if (mTopLoadingImage.getVisibility() == View.VISIBLE) {
-					loadGridView(false, curPage + 1);
-				}
-			} else {
-				Toast.makeText(HomeTabActivity.this, "无可用网络连接", 0).show();
+			if (mTopLoadingImage.getVisibility() == View.VISIBLE) {
+				loadGridView(false, curPage + 1);
 			}
 		}
 	}
