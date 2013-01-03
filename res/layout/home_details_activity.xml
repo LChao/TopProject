@@ -193,28 +193,36 @@
         android:background="@drawable/tab_bg"
         android:orientation="horizontal" >
 
+        <View
+            android:layout_width="0px"
+            android:layout_height="0px"
+            android:layout_weight="1" />
+
         <ImageView
             android:id="@+id/home_details_bt_collect"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
-            android:layout_marginLeft="20dp"
             android:layout_marginTop="5dp"
             android:background="@drawable/home_details_bt_collect_bg" />
 
         <View
-            android:layout_width="wrap_content"
+            android:layout_width="0px"
             android:layout_height="0px"
-            android:layout_weight="1" />
+            android:layout_weight="3" />
 
         <ImageView
             android:id="@+id/home_details_bt_buy"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
-            android:layout_marginRight="20dp"
             android:layout_marginTop="5dp"
             android:background="@drawable/home_details_bt_buy_bg" />
+
+        <View
+            android:layout_width="0px"
+            android:layout_height="0px"
+            android:layout_weight="1" />
     </LinearLayout>
 
 </LinearLayout>

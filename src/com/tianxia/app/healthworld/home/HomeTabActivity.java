@@ -283,7 +283,6 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> implements
 			String cacheConfigString = ConfigCache
 					.getUrlCache(HomeApi.HOME_GOODS_URL + "/" + curSort + "/"
 							+ curType + "/" + page);
-			System.out.println("lclclclclclc: " + cacheConfigString);
 			if (cacheConfigString != null) {
 				setAppreciateCategoryList(cacheConfigString, page);
 				curPage = page;

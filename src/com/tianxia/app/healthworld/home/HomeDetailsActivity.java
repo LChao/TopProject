@@ -346,7 +346,7 @@ public class HomeDetailsActivity extends AdapterActivity<String> {
 				db.execSQL("delete from collection where num_iid = '" + cid
 						+ "'");
 				isFavorite = false;
-				Toast.makeText(this, "删除收藏", Toast.LENGTH_SHORT).show();
+				Toast.makeText(this, "删除成功", Toast.LENGTH_SHORT).show();
 				collect.setBackgroundResource(R.drawable.home_details_bt_collect_bg);
 			}
 		}
