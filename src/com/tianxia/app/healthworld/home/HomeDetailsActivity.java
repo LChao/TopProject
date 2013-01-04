@@ -340,7 +340,7 @@ public class HomeDetailsActivity extends AdapterActivity<String> {
 				// formatter.format(new Date(System.currentTimeMillis())));
 				db.insert("collection", null, contentValue);
 				isFavorite = true;
-				Toast.makeText(this, "收藏成功", Toast.LENGTH_SHORT).show();
+				Toast.makeText(this, "添加成功", Toast.LENGTH_SHORT).show();
 				collect.setBackgroundResource(R.drawable.home_details_bt_delete_bg);
 			} else {
 				db.execSQL("delete from collection where num_iid = '" + cid

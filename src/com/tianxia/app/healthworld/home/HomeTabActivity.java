@@ -62,6 +62,7 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> implements
 	private String curType = "全部精选";
 	private int curPage = 1;
 	private int lastVisibleItem = 0;
+	private int totalNum = 0;
 	// item相关
 	private int gridItemHeight;
 	private FinalBitmap fb;
@@ -166,9 +167,8 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> implements
 		}
 		((GridView) getListView()).setNumColumns(gridColumn);
 		((GridView) getListView()).setOnScrollListener(this);
-		gridItemHeight = (AppApplication.screenWidth
-				- (int) Math.floor(4 * (gridColumn + 1)
-						* AppApplication.screenDensity) - 10 * gridColumn)
+		gridItemHeight = (AppApplication.screenWidth - (int) Math.floor(4
+				* (gridColumn + 1) * AppApplication.screenDensity))
 				/ gridColumn;
 		Log.d(TAG, "gridview gridItemHeight: " + gridItemHeight
 				+ " gridColumn: " + gridColumn);
@@ -460,7 +460,7 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> implements
 		try {
 			JSONObject json = new JSONObject(jsonString);
 			JSONArray jsonArray = json.getJSONArray("list");
-			Toast.makeText(this,json.getString("totalNum") , 0).show();
+			totalNum = json.getInt("totalNum");
 			if (page == 1) {
 				listData.clear();
 			}
@@ -658,7 +658,11 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> implements
 		if (scrollState == OnScrollListener.SCROLL_STATE_IDLE
 				&& lastVisibleItem == adapter.getCount()) {
 			if (mTopLoadingImage.getVisibility() == View.VISIBLE) {
-				loadGridView(false, curPage + 1);
+				if (curPage < Math.ceil(totalNum / 24.0)) {
+					loadGridView(false, curPage + 1);
+				} else {
+					Toast.makeText(this, "最后一页了,亲", 0).show();
+				}
 			}
 		}
 	}

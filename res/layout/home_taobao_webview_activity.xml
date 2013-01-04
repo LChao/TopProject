@@ -25,7 +25,7 @@
             android:layout_centerInParent="true"
             android:paddingBottom="4dp"
             android:paddingTop="4dp"
-            android:text="淘宝网"
+            android:text="手机淘宝网"
             android:textColor="#FFFFFF"
             android:textSize="20sp" />
     </RelativeLayout>
@@ -73,7 +73,7 @@
         <WebView
             android:id="@+id/home_taobao_webview"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_above="@id/home_taobao_layout_bottom"
             android:scrollbarStyle="insideOverlay" />
 
