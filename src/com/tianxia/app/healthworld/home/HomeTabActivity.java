@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
@@ -82,6 +83,8 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> implements
 	private TextView mAppLoadingTextTip = null;
 	private ProgressBar mAppLoadingPBTip;
 	private LinearLayout mBottomLoadingTip = null;
+	private Animation fadeIn;
+	private Animation fadeOut;
 	// 顶部刷新按钮
 	private ProgressBar mTopLoadingPbar = null;
 	private ImageView mTopLoadingImage = null;
@@ -105,6 +108,12 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> implements
 		mBottomLoadingTip = (LinearLayout) findViewById(R.id.app_bottom_loading_tip);
 		mTopLoadingPbar = (ProgressBar) findViewById(R.id.app_loading_pbar_top);
 		mTopLoadingImage = (ImageView) findViewById(R.id.app_loading_btn_top);
+		fadeIn = AnimationUtils.loadAnimation(HomeTabActivity.this,
+				android.R.anim.fade_in);
+		fadeIn.setFillAfter(true);
+		fadeOut = AnimationUtils.loadAnimation(HomeTabActivity.this,
+				android.R.anim.fade_out);
+		fadeOut.setFillAfter(true);
 
 		mBannerLayout = (RelativeLayout) findViewById(R.id.home_tab_banner);
 		mBannerTitle = (TextView) findViewById(R.id.top_banner_title);
@@ -323,12 +332,7 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> implements
 								mTopLoadingPbar.setVisibility(View.VISIBLE);
 								mTopLoadingImage.setVisibility(View.INVISIBLE);
 								if (page != 1) {
-									mBottomLoadingTip.startAnimation(AnimationUtils
-											.loadAnimation(
-													HomeTabActivity.this,
-													android.R.anim.fade_in));
-									mBottomLoadingTip
-											.setVisibility(View.VISIBLE);
+									mBottomLoadingTip.startAnimation(fadeIn);
 								} else {
 									mAppLoadingTextTip
 											.setText(R.string.app_loading);
@@ -377,11 +381,7 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> implements
 								mTopLoadingPbar.setVisibility(View.GONE);
 								mTopLoadingImage.setVisibility(View.VISIBLE);
 								if (page != 1) {
-									mBottomLoadingTip.startAnimation(AnimationUtils
-											.loadAnimation(
-													HomeTabActivity.this,
-													android.R.anim.fade_out));
-									mBottomLoadingTip.setVisibility(View.GONE);
+									mBottomLoadingTip.startAnimation(fadeOut);
 								}
 							}
 						});
@@ -460,6 +460,7 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> implements
 		try {
 			JSONObject json = new JSONObject(jsonString);
 			JSONArray jsonArray = json.getJSONArray("list");
+			Toast.makeText(this,json.getString("totalNum") , 0).show();
 			if (page == 1) {
 				listData.clear();
 			}

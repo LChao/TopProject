@@ -173,7 +173,7 @@ public class SettingTabActivity extends BaseActivity {
 						ad.dismiss();
 					} else {
 						Toast.makeText(SettingTabActivity.this,
-								"亲，设置密码和重复密码不一致，请重新输入", 1).show();
+								"亲，设置密码和重复密码不一致", 1).show();
 					}
 				}
 			});
