@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -30,6 +31,7 @@ import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.RelativeLayout.LayoutParams;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -243,6 +245,7 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> implements
 						public void onStart() {
 							mAppLoadingTextTip.setText(R.string.app_loading);
 							mAppLoadingLayoutTip.setVisibility(View.VISIBLE);
+							mAppLoadingPBTip.setVisibility(View.VISIBLE);
 							mTopLoadingPbar.setVisibility(View.VISIBLE);
 							mTopLoadingImage.setVisibility(View.INVISIBLE);
 						}
@@ -469,14 +472,12 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> implements
 				appreciateCategoryInfo = new HomeGoodsInfo();
 				appreciateCategoryInfo.cid = jsonArray.getJSONObject(i)
 						.optString("C_CID");
-				appreciateCategoryInfo.mResUrl = jsonArray.getJSONObject(i)
-						.optString("C_MRES_URL");
 				appreciateCategoryInfo.price = jsonArray.getJSONObject(i)
 						.optString("C_PRICE");
 				appreciateCategoryInfo.tradeCount = jsonArray.getJSONObject(i)
 						.optString("C_TRADE_COUNT");
 				appreciateCategoryInfo.sResUrl = jsonArray.getJSONObject(i)
-						.optString("C_SRES_URL");
+						.optString("C_RES_URL").split(";");
 				appreciateCategoryInfo.name = jsonArray.getJSONObject(i)
 						.optString("C_NAME");
 				appreciateCategoryInfo.desci = jsonArray.getJSONObject(i)
@@ -506,7 +507,7 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> implements
 	}
 
 	@Override
-	protected View getView(int position, View convertView) {
+	protected View getView(int position, View convertView, ViewGroup parent) {
 		ViewHolder holder;
 		if (convertView == null) {
 			convertView = LayoutInflater.from(getApplicationContext()).inflate(
@@ -519,9 +520,12 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> implements
 					.findViewById(R.id.home_tab_galleryitem_sales);
 			holder.cover = (ImageView) convertView
 					.findViewById(R.id.item_image);
-			holder.cover.setLayoutParams(new RelativeLayout.LayoutParams(
-					gridItemHeight, gridItemHeight));
-			holder.cover.setScaleType(ScaleType.CENTER_CROP);
+
+			RelativeLayout.LayoutParams params = (LayoutParams) holder.cover
+					.getLayoutParams();
+			params.height = gridItemHeight;
+			params.width = gridItemHeight;
+			holder.cover.setLayoutParams(params);
 
 			convertView.setTag(holder);
 		} else {
@@ -529,7 +533,7 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> implements
 		}
 
 		// bitmap加载就这一行代码，display还有其他重载，详情查看源码
-		fb.display(holder.cover, listData.get(position).mResUrl
+		fb.display(holder.cover, listData.get(position).sResUrl[0]
 				+ "_310x310.jpg");
 		holder.sales.setText("销量:" + listData.get(position).tradeCount);
 		holder.price.setText("￥" + listData.get(position).price);
@@ -552,14 +556,13 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> implements
 				HomeDetailsActivity.class);
 		Bundle bundle = new Bundle();
 		bundle.putString("cid", listData.get(position).cid);
-		String[] urls = listData.get(position).sResUrl.split(";");
+		String[] urls = listData.get(position).sResUrl;
 		bundle.putStringArray("sResUrl", urls);
 		bundle.putString("name", listData.get(position).name);
 		bundle.putString("price", listData.get(position).price);
 		bundle.putString("tradeCount", listData.get(position).tradeCount);
 		bundle.putString("desc", listData.get(position).desci);
 		bundle.putString("evaluation", listData.get(position).evaluation);
-		bundle.putString("mResUrl", listData.get(position).mResUrl);
 		bundle.putString("spreadUrl", listData.get(position).spreadUrl);
 
 		goodsDetailsIntent.putExtras(bundle);

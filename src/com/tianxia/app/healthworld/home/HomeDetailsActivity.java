@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.ImageView;
@@ -39,7 +40,6 @@ public class HomeDetailsActivity extends AdapterActivity<String> {
 	private String tradeCount;
 	private String desc;
 	private String evaluation;
-	private String mResUrl;
 	private String spreadUrl;
 	// 界面数据显示View控件
 	private TextView goodsSales;
@@ -86,7 +86,6 @@ public class HomeDetailsActivity extends AdapterActivity<String> {
 		tradeCount = intentData.getString("tradeCount");
 		desc = intentData.getString("desc");
 		evaluation = intentData.getString("evaluation");
-		mResUrl = intentData.getString("mResUrl");
 		spreadUrl = intentData.getString("spreadUrl");
 
 		goodsSales = (TextView) findViewById(R.id.home_details_goods_sales);
@@ -276,7 +275,7 @@ public class HomeDetailsActivity extends AdapterActivity<String> {
 	}
 
 	@Override
-	protected View getView(int position, View convertView) {
+	protected View getView(int position, View convertView, ViewGroup parent) {
 		ViewHolder holder;
 		if (convertView == null) {
 			convertView = LayoutInflater.from(getApplicationContext()).inflate(
@@ -330,7 +329,7 @@ public class HomeDetailsActivity extends AdapterActivity<String> {
 			if (!isFavorite) {
 				ContentValues contentValue = new ContentValues();
 				contentValue.put("num_iid", cid);
-				contentValue.put("mResUrl", mResUrl);
+				contentValue.put("mResUrl", sResUrl[0]);
 				contentValue.put("price", price);
 				contentValue.put("tradeCount", tradeCount);
 				contentValue.put("spreadUrl", spreadUrl);

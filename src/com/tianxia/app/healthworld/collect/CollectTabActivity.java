@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
@@ -45,12 +46,14 @@ public class CollectTabActivity extends AdapterActivity<CollectInfo> {
 		fb.init();
 		// fb.configBitmapLoadThreadSize(int size)
 
-		int gridColumn = (int) Math.ceil(AppApplication.screenWidth / 315.0);
+		int gridColumn = (int) Math.floor(AppApplication.screenWidth / 320.0);
+		if (gridColumn <= 2) {
+			gridColumn = 2;
+		}
 		((GridView) getListView()).setNumColumns(gridColumn);
 		// ((GridView) getListView()).setOnScrollListener(l)
-		gridItemHeight = (AppApplication.screenWidth
-				- (int) Math.floor(4 * (gridColumn + 1)
-						* AppApplication.screenDensity) - 10 * gridColumn)
+		gridItemHeight = (AppApplication.screenWidth - (int) Math.floor(4
+				* (gridColumn + 1) * AppApplication.screenDensity))
 				/ gridColumn;
 		Log.d(TAG, "gridview gridItemHeight: " + gridItemHeight
 				+ " gridColumn: " + gridColumn);
@@ -102,7 +105,8 @@ public class CollectTabActivity extends AdapterActivity<CollectInfo> {
 	}
 
 	@Override
-	protected View getView(final int position, View convertView) {
+	protected View getView(final int position, View convertView,
+			ViewGroup parent) {
 		ViewHolder holder;
 		if (convertView == null) {
 			convertView = LayoutInflater.from(getApplicationContext()).inflate(

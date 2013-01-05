@@ -73,14 +73,15 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_gravity="center"
-            android:layout_margin="4dip"
             android:cacheColorHint="#00000000"
+            android:drawSelectorOnTop="true"
             android:fastScrollEnabled="true"
             android:gravity="center_horizontal"
-            android:horizontalSpacing="4dip"
-            android:listSelector="@null"
+            android:horizontalSpacing="4dp"
+            android:listSelector="@drawable/grid_item_selector"
+            android:padding="4dp"
             android:stretchMode="columnWidth"
-            android:verticalSpacing="4dip" >
+            android:verticalSpacing="4dp" >
         </GridView>
 
         <LinearLayout
