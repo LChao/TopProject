@@ -169,8 +169,9 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> implements
 		}
 		((GridView) getListView()).setNumColumns(gridColumn);
 		((GridView) getListView()).setOnScrollListener(this);
-		gridItemHeight = (AppApplication.screenWidth - (int) Math.floor(4
-				* (gridColumn + 1) * AppApplication.screenDensity))
+		gridItemHeight = (AppApplication.screenWidth
+				- (int) Math.floor(6 * (gridColumn + 1)
+						* AppApplication.screenDensity) - 2 * gridColumn)
 				/ gridColumn;
 		Log.d(TAG, "gridview gridItemHeight: " + gridItemHeight
 				+ " gridColumn: " + gridColumn);

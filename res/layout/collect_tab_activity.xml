@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    android:background="#FFFFFF"
     android:orientation="vertical" >
 
     <RelativeLayout
@@ -16,7 +17,7 @@
             android:layout_centerInParent="true"
             android:paddingBottom="4dp"
             android:paddingTop="4dp"
-            android:text="我的收藏"
+            android:text="我想要的"
             android:textColor="#FFFFFF"
             android:textSize="20sp" />
     </RelativeLayout>
@@ -25,16 +26,16 @@
         android:id="@+id/collect_list"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_margin="4dip"
-        android:background="#FFFFFF"
         android:cacheColorHint="#00000000"
+        android:drawSelectorOnTop="true"
         android:fastScrollEnabled="true"
         android:gravity="center"
-        android:horizontalSpacing="4dip"
-        android:listSelector="@null"
-        android:numColumns="3"
+        android:horizontalSpacing="4dp"
+        android:listSelector="@drawable/grid_item_selector"
+        android:padding="4dp"
+        android:scrollbarStyle="outsideOverlay"
         android:stretchMode="columnWidth"
-        android:verticalSpacing="4dip" >
+        android:verticalSpacing="4dp" >
     </GridView>
 
 </LinearLayout>

@@ -1,7 +1,7 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!-- <item android:drawable="@drawable/taobao_bottom_refresh" android:state_window_focused="false"/> -->
-    <item android:drawable="@drawable/tab_bottom_float" android:state_pressed="true"/>
-    <item android:drawable="@drawable/tab_bottom_float" android:state_window_focused="true"/>
+    <item android:drawable="@drawable/grid_item_pressed" android:state_pressed="true"/>
+    <item android:drawable="@drawable/grid_item_pressed" android:state_window_focused="true"/>
 
 </selector>

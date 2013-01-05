@@ -76,12 +76,13 @@
             android:cacheColorHint="#00000000"
             android:drawSelectorOnTop="true"
             android:fastScrollEnabled="true"
-            android:gravity="center_horizontal"
-            android:horizontalSpacing="4dp"
+            android:gravity="center"
+            android:horizontalSpacing="6dp"
             android:listSelector="@drawable/grid_item_selector"
-            android:padding="4dp"
+            android:padding="6dp"
+            android:scrollbarStyle="outsideOverlay"
             android:stretchMode="columnWidth"
-            android:verticalSpacing="4dp" >
+            android:verticalSpacing="6dp" >
         </GridView>
 
         <LinearLayout
