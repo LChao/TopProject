@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="setting_item_height">43dip</dimen>
-    <dimen name="home_popwindow_width">140dip</dimen>
-	<dimen name="home_popwindow_height">200dip</dimen>
+
+    <dimen name="setting_item_height">43dp</dimen>
+    <dimen name="home_popwindow_width">200dp</dimen>
+    <dimen name="home_popwindow_height">200dp</dimen>
+
 </resources>

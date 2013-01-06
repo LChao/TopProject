@@ -160,20 +160,30 @@
             android:textColor="#ffffff" />
     </RelativeLayout>
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0px"
         android:layout_margin="3dp"
         android:layout_weight="1"
-        android:orientation="vertical" >
+        android:scrollbarStyle="outsideOverlay" >
 
-        <TextView
-            android:id="@+id/home_details_tv_describe"
-            android:layout_width="wrap_content"
-            android:layout_height="0px"
-            android:layout_weight="1"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
 
+            <WebView
+                android:id="@+id/home_details_tv_describe"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" />
+
+            <WebView
+                android:id="@+id/home_details_tv_evaluate"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <!--
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="1px"
@@ -185,7 +195,9 @@
             android:layout_height="0px"
             android:layout_weight="1"
             android:textAppearance="?android:attr/textAppearanceSmall" />
-    </LinearLayout>
+        -->
+
+    </ScrollView>
 
     <LinearLayout
         android:layout_width="match_parent"

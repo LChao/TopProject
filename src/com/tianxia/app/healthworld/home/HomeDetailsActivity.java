@@ -5,10 +5,13 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -45,8 +48,8 @@ public class HomeDetailsActivity extends AdapterActivity<String> {
 	private TextView goodsSales;
 	private TextView goodsPrice;
 	private TextView goodsName;
-	private TextView goodsDesc;
-	private TextView goodsEvaluate;
+	private WebView goodsDesc;
+	private WebView goodsEvaluate;
 	// 顶部banner
 	private ImageView mAppBackButton = null;
 	private ProgressBar mAppLoadingPbar = null;
@@ -91,13 +94,16 @@ public class HomeDetailsActivity extends AdapterActivity<String> {
 		goodsSales = (TextView) findViewById(R.id.home_details_goods_sales);
 		goodsPrice = (TextView) findViewById(R.id.home_details_goods_price);
 		goodsName = (TextView) findViewById(R.id.home_details_goods_name);
-		goodsDesc = (TextView) findViewById(R.id.home_details_tv_describe);
-		goodsEvaluate = (TextView) findViewById(R.id.home_details_tv_evaluate);
+		goodsDesc = (WebView) findViewById(R.id.home_details_tv_describe);
+		goodsEvaluate = (WebView) findViewById(R.id.home_details_tv_evaluate);
 		goodsSales.setText(tradeCount + "件");
 		goodsPrice.setText("￥" + price);
 		goodsName.setText(name);
-		goodsDesc.setText(desc);
-		goodsEvaluate.setText(evaluation);
+		goodsDesc.getSettings().setDefaultTextEncodingName("utf-8");
+		goodsDesc.loadData(desc, "text/html", "utf-8");
+		WebSettings taobaoSettings = goodsEvaluate.getSettings();
+		taobaoSettings.setJavaScriptEnabled(true);
+		goodsEvaluate.loadUrl(HomeApi.HOME_GOODS_COMMENTS_URL + cid);
 
 		collect = (ImageView) findViewById(R.id.home_details_bt_collect);
 		buy = (ImageView) findViewById(R.id.home_details_bt_buy);

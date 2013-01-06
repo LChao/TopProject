@@ -37,7 +37,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ImageView.ScaleType;
 import android.widget.PopupWindow.OnDismissListener;
 
 import com.tianxia.app.healthworld.AppApplication;
@@ -435,8 +434,7 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> implements
 			list.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 			list.setOnItemClickListener(PopwindowlistClickListener);
 			popwindow = new PopupWindow(v, (int) getResources().getDimension(
-					R.dimen.home_popwindow_width), (int) getResources()
-					.getDimension(R.dimen.home_popwindow_height));
+					R.dimen.home_popwindow_width), android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
 		}
 		popwindow.setBackgroundDrawable(getResources().getDrawable(
 				R.drawable.home_popwindow_bg));
