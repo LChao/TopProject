@@ -5,25 +5,26 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.tianxia.app.healthworld.AppApplication;
 import com.tianxia.app.healthworld.R;
-import com.tianxia.app.healthworld.model.HomeDetailsAdCompanyInfo;
 import com.tianxia.app.healthworld.utils.FinalBitmap;
+import com.tianxia.lib.baseworld.BaseApplication;
 import com.tianxia.lib.baseworld.activity.AdapterActivity;
+import com.tianxia.lib.baseworld.utils.NetworkUtils;
 
 public class HomeDetailsActivity extends AdapterActivity<String> {
 
@@ -42,7 +43,6 @@ public class HomeDetailsActivity extends AdapterActivity<String> {
 	private String price;
 	private String tradeCount;
 	private String desc;
-	private String evaluation;
 	private String spreadUrl;
 	// 界面数据显示View控件
 	private TextView goodsSales;
@@ -52,17 +52,15 @@ public class HomeDetailsActivity extends AdapterActivity<String> {
 	private WebView goodsEvaluate;
 	// 顶部banner
 	private ImageView mAppBackButton = null;
-	private ProgressBar mAppLoadingPbar = null;
-	private ImageView mAppLoadingImage = null;
 	// 顶部广告栏
-	private LinearLayout mAdContainer = null;
-	private HomeDetailsAdCompanyInfo mAdCompanyInfo;
-	private TextView mAdCompanyName = null;
-	private TextView mAdCompanyContact = null;
-	private TextView mAdCompanyAddress = null;
-	private TextView mAdCompanyTel = null;
-	private TextView mAdCompanyPhone = null;
-	private TextView mAdCompanyBusiness = null;
+	// private LinearLayout mAdContainer = null;
+	// private HomeDetailsAdCompanyInfo mAdCompanyInfo;
+	// private TextView mAdCompanyName = null;
+	// private TextView mAdCompanyContact = null;
+	// private TextView mAdCompanyAddress = null;
+	// private TextView mAdCompanyTel = null;
+	// private TextView mAdCompanyPhone = null;
+	// private TextView mAdCompanyBusiness = null;
 	// 底部按钮栏
 	private ImageView collect;
 	private ImageView buy;
@@ -78,7 +76,7 @@ public class HomeDetailsActivity extends AdapterActivity<String> {
 		fb.init();
 		// fb.configBitmapLoadThreadSize(int size)
 
-		imageWidth = (int) (AppApplication.screenWidth * 0.7);
+		imageWidth = (int) (AppApplication.screenWidth * 0.8);
 		db = AppApplication.mSQLiteHelper.getWritableDatabase();
 
 		intentData = getIntent().getExtras();
@@ -88,7 +86,6 @@ public class HomeDetailsActivity extends AdapterActivity<String> {
 		price = intentData.getString("price");
 		tradeCount = intentData.getString("tradeCount");
 		desc = intentData.getString("desc");
-		evaluation = intentData.getString("evaluation");
 		spreadUrl = intentData.getString("spreadUrl");
 
 		goodsSales = (TextView) findViewById(R.id.home_details_goods_sales);
@@ -103,26 +100,20 @@ public class HomeDetailsActivity extends AdapterActivity<String> {
 		goodsDesc.loadData(desc, "text/html", "utf-8");
 		WebSettings taobaoSettings = goodsEvaluate.getSettings();
 		taobaoSettings.setJavaScriptEnabled(true);
-		goodsEvaluate.loadUrl(HomeApi.HOME_GOODS_COMMENTS_URL + cid);
-
+		goodsEvaluate.setWebViewClient(new MyWebChrome());
+		if (BaseApplication.mNetWorkState != NetworkUtils.NETWORN_NONE) {
+			goodsEvaluate.loadUrl(HomeApi.HOME_GOODS_COMMENTS_URL + cid);
+		} else {
+			Toast.makeText(HomeDetailsActivity.this, "无可用网络连接", 0).show();
+		}
 		collect = (ImageView) findViewById(R.id.home_details_bt_collect);
 		buy = (ImageView) findViewById(R.id.home_details_bt_buy);
-		mAdContainer = (LinearLayout) findViewById(R.id.home_details_ad);
 		mAppBackButton = (ImageView) findViewById(R.id.app_back);
-		mAppLoadingPbar = (ProgressBar) findViewById(R.id.app_loading_pbar_top);
-		mAppLoadingImage = (ImageView) findViewById(R.id.app_loading_btn_top);
 
 		mAppBackButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				onBackPressed();
-			}
-		});
-
-		mAppLoadingImage.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				// loadGridView();
 			}
 		});
 
@@ -257,28 +248,28 @@ public class HomeDetailsActivity extends AdapterActivity<String> {
 	/**
 	 * 顶部广告栏初始化
 	 */
-	private void setHeaderView() {
-		View view = LayoutInflater.from(this).inflate(
-				R.layout.home_ad_company_shop, null);
-		mAdCompanyName = (TextView) view.findViewById(R.id.ad_company_name);
-		mAdCompanyContact = (TextView) view
-				.findViewById(R.id.ad_company_contact);
-		mAdCompanyAddress = (TextView) view
-				.findViewById(R.id.ad_company_address);
-		mAdCompanyTel = (TextView) view.findViewById(R.id.ad_company_tel);
-		mAdCompanyPhone = (TextView) view.findViewById(R.id.ad_company_phone);
-		mAdCompanyBusiness = (TextView) view
-				.findViewById(R.id.ad_company_business);
-
-		mAdCompanyName.setText(mAdCompanyInfo.name);
-		mAdCompanyContact.setText(mAdCompanyInfo.contact);
-		mAdCompanyAddress.setText(mAdCompanyInfo.address);
-		mAdCompanyTel.setText(mAdCompanyInfo.tel);
-		mAdCompanyPhone.setText(mAdCompanyInfo.phone);
-		mAdCompanyBusiness.setText(mAdCompanyInfo.business);
-		mAdContainer.removeAllViews();
-		mAdContainer.addView(view);
-	}
+	// private void setHeaderView() {
+	// View view = LayoutInflater.from(this).inflate(
+	// R.layout.home_ad_company_shop, null);
+	// mAdCompanyName = (TextView) view.findViewById(R.id.ad_company_name);
+	// mAdCompanyContact = (TextView) view
+	// .findViewById(R.id.ad_company_contact);
+	// mAdCompanyAddress = (TextView) view
+	// .findViewById(R.id.ad_company_address);
+	// mAdCompanyTel = (TextView) view.findViewById(R.id.ad_company_tel);
+	// mAdCompanyPhone = (TextView) view.findViewById(R.id.ad_company_phone);
+	// mAdCompanyBusiness = (TextView) view
+	// .findViewById(R.id.ad_company_business);
+	//
+	// mAdCompanyName.setText(mAdCompanyInfo.name);
+	// mAdCompanyContact.setText(mAdCompanyInfo.contact);
+	// mAdCompanyAddress.setText(mAdCompanyInfo.address);
+	// mAdCompanyTel.setText(mAdCompanyInfo.tel);
+	// mAdCompanyPhone.setText(mAdCompanyInfo.phone);
+	// mAdCompanyBusiness.setText(mAdCompanyInfo.business);
+	// mAdContainer.removeAllViews();
+	// mAdContainer.addView(view);
+	// }
 
 	@Override
 	protected View getView(int position, View convertView, ViewGroup parent) {
@@ -297,33 +288,18 @@ public class HomeDetailsActivity extends AdapterActivity<String> {
 		} else {
 			holder = (ViewHolder) convertView.getTag();
 		}
-		// mItemSmartImageView.setLayoutParams(new LinearLayout.LayoutParams(
-		// width, LayoutParams.FILL_PARENT));
-		// mItemSmartImageView.setScaleType(ScaleType.CENTER_CROP);
-		// mItemSmartImageView.setImageUrl(listData.get(position).origin,
-		// R.drawable.app_download_fail_large,
-		// R.drawable.app_download_loading_large, true);
-		// mItemSmartImageView.setImageUrl(listData.get(position).origin,
-		// R.drawable.app_download_fail_large,
-		// R.drawable.app_download_loading_large, true);
-		// mItemSmartImageView.setScaleType(ScaleType.CENTER);
+
 		fb.display(holder.detailImage, listData.get(position));
-		// holder.detailImage
-		// .setImageResource((position & 1) == 1 ? R.drawable.gallery_it
-		// : R.drawable.griditem1);
 		return convertView;
 	}
 
 	static class ViewHolder {
-
 		ImageView detailImage;
-
 	}
 
 	@Override
 	protected void onItemClick(AdapterView<?> adapterView, View view,
 			int position, long id) {
-		// Toast.makeText(this, "position" + position, 0).show();
 	}
 
 	/**
@@ -376,6 +352,15 @@ public class HomeDetailsActivity extends AdapterActivity<String> {
 			cursor.close();
 		}
 		return result;
+	}
+
+	class MyWebChrome extends WebViewClient {
+		@Override
+		public void onReceivedError(WebView view, int errorCode,
+				String description, String failingUrl) {
+			// TODO Auto-generated method stub
+			super.onReceivedError(view, errorCode, description, failingUrl);
+		}
 	}
 
 }

@@ -20,6 +20,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.tianxia.app.healthworld.R;
+import com.tianxia.lib.baseworld.BaseApplication;
 import com.tianxia.lib.baseworld.activity.BaseActivity;
 
 public class HomeTaobaoWebview extends BaseActivity {
@@ -121,7 +122,9 @@ public class HomeTaobaoWebview extends BaseActivity {
 		// HomeTaobaoWebview.this.setProgress(progress * 100);
 		// }
 		// });
-		taobao.loadUrl(getIntent().getStringExtra("url"));
+		taobao.loadUrl(getIntent().getStringExtra("url") + "&ttid="
+				+ "400000_21247503@qingqubao_Android_"
+				+ BaseApplication.mVersionName);
 		// taobao.loadUrl("http://s.click.taobao.com/t?e=zGU34CA7K%2BPkqB07S4%2FK0CFcRfH0GoT805sipKvI1SjJA3Am3nGgIDDrQ5bY7COBEklLhc5vmGi8NotnbrwBIONc9GJ1Y3AgeTbJJSDDAz9YpA%3D%3D");
 		// Log.d(TAG, "URL: " + getIntent().getStringExtra("url"));
 		Toast msg = Toast.makeText(HomeTaobaoWebview.this, "亲,进入淘宝商品页,请放心购买!",
