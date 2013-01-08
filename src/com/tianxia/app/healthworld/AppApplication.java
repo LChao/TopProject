@@ -2,6 +2,8 @@ package com.tianxia.app.healthworld;
 
 import java.io.File;
 
+import javax.xml.transform.sax.SAXResult;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -156,6 +158,10 @@ public class AppApplication extends BaseApplication {
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public void checkNewVersion(){
+		SAXRead
 	}
 
 }

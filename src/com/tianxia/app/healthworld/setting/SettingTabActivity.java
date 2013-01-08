@@ -93,7 +93,7 @@ public class SettingTabActivity extends BaseActivity {
 				// TODO Auto-generated method stub
 				// Toast.makeText(SettingTabActivity.this, "意见反馈", 0).show();
 				Intent intent = new Intent(SettingTabActivity.this,
-						SettingFeedbackActivity.class);
+						SettingsFeedbackActivity.class);
 				startActivity(intent);
 			}
 		});

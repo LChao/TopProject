@@ -112,7 +112,7 @@
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".setting.SettingFeedbackActivity"
+            android:name=".setting.SettingsFeedbackActivity"
             android:screenOrientation="portrait" >
         </activity>
         <activity
