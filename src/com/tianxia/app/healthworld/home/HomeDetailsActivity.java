@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
-import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -97,7 +96,7 @@ public class HomeDetailsActivity extends AdapterActivity<String> {
 		goodsPrice.setText("￥" + price);
 		goodsName.setText(name);
 		goodsDesc.getSettings().setDefaultTextEncodingName("utf-8");
-		goodsDesc.loadData(desc, "text/html", "utf-8");
+		goodsDesc.loadData(desc, "text/html;charset=UTF-8", "utf-8");
 		WebSettings taobaoSettings = goodsEvaluate.getSettings();
 		taobaoSettings.setJavaScriptEnabled(true);
 		goodsEvaluate.setWebViewClient(new MyWebChrome());
