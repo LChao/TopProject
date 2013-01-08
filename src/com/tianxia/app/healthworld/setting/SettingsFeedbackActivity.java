@@ -91,7 +91,7 @@ public class SettingsFeedbackActivity extends Activity {
 						public void onSuccess(String content) {
 							// TODO Auto-generated method stub
 							Toast.makeText(SettingsFeedbackActivity.this,
-									"提交成功,请重试", 0).show();
+									"提交成功", 0).show();
 							Log.d(TAG, content);
 							finish();
 						}

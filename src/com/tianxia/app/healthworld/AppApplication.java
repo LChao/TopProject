@@ -2,8 +2,6 @@ package com.tianxia.app.healthworld;
 
 import java.io.File;
 
-import javax.xml.transform.sax.SAXResult;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -28,7 +26,8 @@ public class AppApplication extends BaseApplication {
 	public static final String DOMAIN = "domain";
 	public static final String DOMAIN_URL = "url";
 	// public static String mDomain = "http://www.kaiyuanxiangmu.com/";
-	public static String mDomain = "http://doss.cn:8080/";
+	// public static String mDomain = "http://doss.cn:8080/";
+	public static String mDomain = "http://dmy.cn:8080/";
 	// public static String mDomain = "http://183.129.179.77/";
 	// public static String mDomain = "http://101.71.22.209/";
 	public static String mBakeDomain = "http://1.kaiyuanxiangmu.sinaapp.com/";
@@ -159,9 +158,8 @@ public class AppApplication extends BaseApplication {
 			e.printStackTrace();
 		}
 	}
-	
-	public void checkNewVersion(){
-		SAXRead
-	}
 
+	public void checkNewVersion() {
+
+	}
 }
