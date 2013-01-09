@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,12 +41,14 @@ public class HomeDetailsActivity extends AdapterActivity<String> {
 	private String[] sResUrl;
 	private String name;
 	private String price;
+	private String umPrice;
 	private String tradeCount;
 	private String desc;
 	private String spreadUrl;
 	// 界面数据显示View控件
 	private TextView goodsSales;
 	private TextView goodsPrice;
+	private TextView goodsUMPrice;
 	private TextView goodsName;
 	private WebView goodsDesc;
 	private WebView goodsEvaluate;
@@ -83,12 +86,15 @@ public class HomeDetailsActivity extends AdapterActivity<String> {
 		sResUrl = intentData.getStringArray("sResUrl");
 		name = intentData.getString("name");
 		price = intentData.getString("price");
+		umPrice = intentData.getString("umPrice");
 		tradeCount = intentData.getString("tradeCount");
 		desc = intentData.getString("desc");
 		spreadUrl = intentData.getString("spreadUrl");
 
 		goodsSales = (TextView) findViewById(R.id.home_details_goods_sales);
 		goodsPrice = (TextView) findViewById(R.id.home_details_goods_price);
+		goodsPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
+		goodsUMPrice = (TextView) findViewById(R.id.home_details_goods_umPrice);
 		goodsName = (TextView) findViewById(R.id.home_details_goods_name);
 		goodsDesc = (WebView) findViewById(R.id.home_details_tv_describe);
 		goodsEvaluate = (WebView) findViewById(R.id.home_details_tv_evaluate);

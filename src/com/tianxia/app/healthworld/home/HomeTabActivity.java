@@ -434,7 +434,8 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> implements
 			list.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 			list.setOnItemClickListener(PopwindowlistClickListener);
 			popwindow = new PopupWindow(v, (int) getResources().getDimension(
-					R.dimen.home_popwindow_width), android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
+					R.dimen.home_popwindow_width),
+					android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
 		}
 		popwindow.setBackgroundDrawable(getResources().getDrawable(
 				R.drawable.home_popwindow_bg));
@@ -473,6 +474,10 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> implements
 						.optString("C_CID");
 				appreciateCategoryInfo.price = jsonArray.getJSONObject(i)
 						.optString("C_PRICE");
+				appreciateCategoryInfo.umPrice = jsonArray.getJSONObject(i)
+						.optString("C_UMPRICE");
+				System.out.println("caocaocao:::"
+						+ appreciateCategoryInfo.umPrice);
 				appreciateCategoryInfo.tradeCount = jsonArray.getJSONObject(i)
 						.optString("C_TRADE_COUNT");
 				appreciateCategoryInfo.sResUrl = jsonArray.getJSONObject(i)
@@ -559,6 +564,7 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> implements
 		bundle.putStringArray("sResUrl", urls);
 		bundle.putString("name", listData.get(position).name);
 		bundle.putString("price", listData.get(position).price);
+		bundle.putString("umPrice", listData.get(position).umPrice);
 		bundle.putString("tradeCount", listData.get(position).tradeCount);
 		bundle.putString("desc", listData.get(position).desci);
 		bundle.putString("evaluation", listData.get(position).evaluation);

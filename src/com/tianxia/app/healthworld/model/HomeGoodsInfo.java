@@ -4,6 +4,7 @@ public class HomeGoodsInfo {
 
 	public String cid;
 	public String price;
+	public String umPrice;
 	public String tradeCount;
 	public String[] sResUrl;
 	public String name;

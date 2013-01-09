@@ -15,6 +15,7 @@ import com.tianxia.app.healthworld.collect.CollectTabActivity;
 import com.tianxia.app.healthworld.forum.ForumTabActivity;
 import com.tianxia.app.healthworld.home.HomeTabActivity;
 import com.tianxia.app.healthworld.setting.SettingTabActivity;
+import com.tianxia.app.healthworld.setting.SettingsTabActivity;
 import com.tianxia.lib.baseworld.BaseApplication;
 import com.tianxia.lib.baseworld.sync.http.AsyncHttpClient;
 import com.tianxia.lib.baseworld.sync.http.AsyncHttpResponseHandler;
@@ -43,7 +44,7 @@ public class AppApplication extends BaseApplication {
 		mTabActivitys.add(HomeTabActivity.class);
 		mTabActivitys.add(CollectTabActivity.class);
 		mTabActivitys.add(ForumTabActivity.class);
-		mTabActivitys.add(SettingTabActivity.class);
+		mTabActivitys.add(SettingsTabActivity.class);
 
 		mTabNormalImages.add(R.drawable.home_normal);
 		mTabNormalImages.add(R.drawable.collect_normal);

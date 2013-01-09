@@ -101,46 +101,75 @@
                 </LinearLayout>
             </RelativeLayout>
 
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:background="#e9235f" >
+                android:layout_margin="5dp"
+                android:gravity="center"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/home_details_goods_umPrice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:text="￥100.00"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="#ff0066"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/home_details_goods_price"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginTop="5dp"
+                    android:text="￥120.00"
                     android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textColor="#ffffff"
-                    android:textStyle="bold" />
+                    android:textColor="#666666" />
+            </LinearLayout>
 
-                <TextView
-                    android:id="@+id/home_details_goods_name"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="10dp"
-                    android:layout_toLeftOf="@id/home_details_goods_price"
-                    android:ellipsize="end"
-                    android:focusable="true"
-                    android:focusableInTouchMode="true"
-                    android:marqueeRepeatLimit="1"
-                    android:scrollHorizontally="true"
-                    android:singleLine="true"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textColor="#ffffff" />
-            </RelativeLayout>
+            <TextView
+                android:id="@+id/home_details_goods_name"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:singleLine="true"
+                android:text="其实我是一名演员。。。。"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="#333333"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:drawableLeft="@drawable/home_details_tv_describe"
+                android:drawableTop="@drawable/home_details_line"
+                android:paddingLeft="5dp"
+                android:text="商品描述"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="#ff0066"
+                android:textStyle="bold" />
 
             <WebView
                 android:id="@+id/home_details_tv_describe"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:drawableLeft="@drawable/home_details_tv_evaluate"
+                android:drawableTop="@drawable/home_details_line"
+                android:paddingLeft="5dp"
+                android:text="买家评价"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="#ff0066"
+                android:textStyle="bold" />
 
             <WebView
                 android:id="@+id/home_details_tv_evaluate"
