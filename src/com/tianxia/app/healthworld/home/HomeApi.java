@@ -14,7 +14,7 @@ public class HomeApi {
 			+ "androidclient/bothsex/bothsex!addSuggestion";
 
 	public static String CHECK_VERSION_URL = AppApplication.mDomain
-			+ "androidclient/bothsex/bothsex!addSuggestion";
+			+ "upgradeClient.xml";
 	// public static String HOME_DETAILS_URL =
 	// "http://1.kaiyuanxiangmu.sinaapp.com/floworld/data/json/appreciate/category/shaoyao.json";
 }

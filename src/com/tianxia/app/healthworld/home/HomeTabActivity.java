@@ -11,6 +11,7 @@ import org.json.JSONObject;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -49,6 +50,7 @@ import com.tianxia.lib.baseworld.activity.AdapterActivity;
 import com.tianxia.lib.baseworld.sync.http.AsyncHttpClient;
 import com.tianxia.lib.baseworld.sync.http.AsyncHttpResponseHandler;
 import com.tianxia.lib.baseworld.sync.http.RequestParams;
+import com.tianxia.lib.baseworld.upgrade.AppUpgradeService;
 import com.tianxia.lib.baseworld.utils.NetworkUtils;
 import com.tianxia.lib.baseworld.utils.PreferencesUtils;
 
@@ -179,6 +181,7 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> implements
 				getApplicationContext(), "personalData", "password", "");
 		if (password.equals("")) {
 			loadGridView(false, 1);
+			checkNewVersion();
 		} else {
 			LayoutInflater li = getLayoutInflater();
 			View dialogView = li.inflate(
@@ -220,6 +223,7 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> implements
 								.show();
 						ad.dismiss();
 						loadGridView(false, 1);
+						checkNewVersion();
 					} else {
 						Toast.makeText(HomeTabActivity.this, "亲，密码输入错误", 1)
 								.show();
@@ -476,8 +480,6 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> implements
 						.optString("C_PRICE");
 				appreciateCategoryInfo.umPrice = jsonArray.getJSONObject(i)
 						.optString("C_UMPRICE");
-				System.out.println("caocaocao:::"
-						+ appreciateCategoryInfo.umPrice);
 				appreciateCategoryInfo.tradeCount = jsonArray.getJSONObject(i)
 						.optString("C_TRADE_COUNT");
 				appreciateCategoryInfo.sResUrl = jsonArray.getJSONObject(i)
@@ -679,5 +681,35 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> implements
 	public void onBackPressed() {
 		// TODO Auto-generated method stub
 		((AppApplication) getApplication()).exitApp(this);
+	}
+
+	public void checkNewVersion() {
+		Log.d(TAG, "checkNewVersion: "+"mVersionCode:"+BaseApplication.mVersionCode+" mLastestVersionCode:"+BaseApplication.mLastestVersionCode);
+		if (BaseApplication.mVersionCode < BaseApplication.mLastestVersionCode) {
+			new AlertDialog.Builder(this)
+					.setTitle(R.string.check_new_version)
+					.setMessage(BaseApplication.mLatestVersionUpdate)
+					.setPositiveButton(R.string.app_upgrade_confirm,
+							new DialogInterface.OnClickListener() {
+								@Override
+								public void onClick(DialogInterface dialog,
+										int which) {
+									Intent intent = new Intent(
+											HomeTabActivity.this,
+											AppUpgradeService.class);
+									intent.putExtra("downloadUrl",
+											BaseApplication.mDownloadPath);
+									startService(intent);
+								}
+							})
+					.setNeutralButton(R.string.app_upgrade_cancel,
+							new DialogInterface.OnClickListener() {
+								@Override
+								public void onClick(DialogInterface dialog,
+										int which) {
+
+								}
+							}).create().show();
+		}
 	}
 }
