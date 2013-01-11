@@ -113,7 +113,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="10dp"
-                    android:text="￥100.00"
+                    android:text="未知"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="#ff0066"
                     android:textStyle="bold" />
@@ -122,7 +122,7 @@
                     android:id="@+id/home_details_goods_price"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="￥120.00"
+                    android:text="未知"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:textColor="#666666" />
             </LinearLayout>
@@ -135,7 +135,6 @@
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
                 android:singleLine="true"
-                android:text="其实我是一名演员。。。。"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="#333333"
                 android:textStyle="bold" />

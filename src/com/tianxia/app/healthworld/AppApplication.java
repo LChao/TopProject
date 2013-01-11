@@ -1,26 +1,19 @@
 package com.tianxia.app.healthworld;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.xmlpull.v1.XmlPullParser;
 
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Environment;
-import android.util.Log;
-import android.util.Xml;
-import android.widget.Toast;
 
 import com.tianxia.app.healthworld.cache.ConfigCache;
 import com.tianxia.app.healthworld.collect.CollectTabActivity;
 import com.tianxia.app.healthworld.forum.ForumTabActivity;
-import com.tianxia.app.healthworld.home.HomeApi;
 import com.tianxia.app.healthworld.home.HomeTabActivity;
-import com.tianxia.app.healthworld.setting.SettingTabActivity;
 import com.tianxia.app.healthworld.setting.SettingsTabActivity;
 import com.tianxia.lib.baseworld.BaseApplication;
 import com.tianxia.lib.baseworld.sync.http.AsyncHttpClient;
@@ -95,12 +88,6 @@ public class AppApplication extends BaseApplication {
 		}
 		// 更新网络状态
 		mNetWorkState = NetworkUtils.getNetworkState(this);
-		// 读取服务器新版本客户端配置文件
-		if (BaseApplication.mNetWorkState != NetworkUtils.NETWORN_NONE) {
-			checkNewVersion();
-		} else {
-			Toast.makeText(getApplicationContext(), "无可用网络连接", 0).show();
-		}
 		// checkDomain(mDomain, false);
 	}
 
@@ -170,92 +157,5 @@ public class AppApplication extends BaseApplication {
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-	}
-
-	public void checkNewVersion() {
-		AsyncHttpClient client = new AsyncHttpClient();
-		client.get(HomeApi.CHECK_VERSION_URL, new AsyncHttpResponseHandler() {
-
-			@Override
-			public void onStart() {
-
-			}
-
-			@Override
-			public void onSuccess(String result) {
-				Toast.makeText(getApplicationContext(), "onSuccessxxxx", 0).show();
-				System.out.println("fuck me:::" + result);
-				if (result == null || result.trim().equals("")) {
-					return;
-				}
-				// 由android.util.Xml创建一个XmlPullParser实例
-				try {
-
-					XmlPullParser parser = Xml.newPullParser();
-					// 设置输入流 并指明编码方式
-					parser.setInput(
-							new ByteArrayInputStream(result.getBytes()),
-							"UTF-8");
-
-					int eventType = parser.getEventType();
-					while (eventType != XmlPullParser.END_DOCUMENT) {
-						switch (eventType) {
-						case XmlPullParser.START_DOCUMENT:
-							break;
-						case XmlPullParser.START_TAG:
-							if (parser.getName().equals("name")) {
-								eventType = parser.next();
-								BaseApplication.mLatestVersionUpdate = parser
-										.getText();
-								// book.setId(Integer.parseInt(parser.getText()));
-							} else if (parser.getName().equals("version")) {
-								eventType = parser.next();
-								BaseApplication.mLastestVersionCode = Integer
-										.parseInt(parser.getText());
-								// book.setName(parser.getText());
-							} else if (parser.getName().equals("description")) {
-								eventType = parser.next();
-								BaseApplication.mLastestVersionName = parser
-										.getText();
-								// book.setPrice(Float.parseFloat(parser.getText()));
-							} else if (parser.getName().equals("url")) {
-								eventType = parser.next();
-								BaseApplication.mDownloadPath = parser
-										.getText();
-							}
-							break;
-						case XmlPullParser.END_TAG:
-							// if (parser.getName().equals("book")) {
-							// books.add(book);
-							// book = null;
-							// }
-							break;
-						}
-						eventType = parser.next();
-					}
-				} catch (Exception e) {
-					// TODO: handle exception
-					Log.d("AppApplication",
-							"checkNewVersion exception:" + e.toString());
-				}
-				System.out.println("fuck me:::" + "mLatestVersionUpdate:"
-						+ BaseApplication.mLatestVersionUpdate
-						+ " mLastestVersionCode:"
-						+ BaseApplication.mLastestVersionCode
-						+ " mLastestVersionName:"
-						+ BaseApplication.mLastestVersionName
-						+ " mDownloadPath:" + BaseApplication.mDownloadPath);
-			}
-
-			@Override
-			public void onFailure(Throwable arg0) {
-				Log.d("AppApplication", "checkNewVersion onFailure");
-			}
-
-			@Override
-			public void onFinish() {
-
-			}
-		});
 	}
 }

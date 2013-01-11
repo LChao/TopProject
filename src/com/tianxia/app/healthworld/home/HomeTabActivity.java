@@ -1,5 +1,6 @@
 package com.tianxia.app.healthworld.home;
 
+import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -7,6 +8,7 @@ import java.util.Map;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.xmlpull.v1.XmlPullParser;
 
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
@@ -15,6 +17,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Xml;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,6 +60,7 @@ import com.tianxia.lib.baseworld.utils.PreferencesUtils;
 public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> implements
 		OnScrollListener {
 	public static final String TAG = "HomeTabActivity";
+	private String apkDownloadPath = null;
 
 	// 当前页面属性
 	private String curSortType = "1";
@@ -127,7 +131,6 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> implements
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				Log.d(TAG, "mBannerTitle clicked...");
 				changPopState(v);
 			}
 		});
@@ -181,7 +184,7 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> implements
 				getApplicationContext(), "personalData", "password", "");
 		if (password.equals("")) {
 			loadGridView(false, 1);
-			checkNewVersion();
+			checkNewVersionInfo();
 		} else {
 			LayoutInflater li = getLayoutInflater();
 			View dialogView = li.inflate(
@@ -223,7 +226,7 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> implements
 								.show();
 						ad.dismiss();
 						loadGridView(false, 1);
-						checkNewVersion();
+						checkNewVersionInfo();
 					} else {
 						Toast.makeText(HomeTabActivity.this, "亲，密码输入错误", 1)
 								.show();
@@ -542,7 +545,11 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> implements
 		fb.display(holder.cover, listData.get(position).sResUrl[0]
 				+ "_310x310.jpg");
 		holder.sales.setText("销量:" + listData.get(position).tradeCount);
-		holder.price.setText("￥" + listData.get(position).price);
+		if (listData.get(position).umPrice.equals("")) {
+			holder.price.setText("￥" + listData.get(position).price);
+		} else {
+			holder.price.setText("￥" + listData.get(position).umPrice);
+		}
 
 		return convertView;
 	}
@@ -684,7 +691,9 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> implements
 	}
 
 	public void checkNewVersion() {
-		Log.d(TAG, "checkNewVersion: "+"mVersionCode:"+BaseApplication.mVersionCode+" mLastestVersionCode:"+BaseApplication.mLastestVersionCode);
+		if (apkDownloadPath == null || apkDownloadPath.equals("")) {
+			return;
+		}
 		if (BaseApplication.mVersionCode < BaseApplication.mLastestVersionCode) {
 			new AlertDialog.Builder(this)
 					.setTitle(R.string.check_new_version)
@@ -698,7 +707,7 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> implements
 											HomeTabActivity.this,
 											AppUpgradeService.class);
 									intent.putExtra("downloadUrl",
-											BaseApplication.mDownloadPath);
+											apkDownloadPath);
 									startService(intent);
 								}
 							})
@@ -711,5 +720,87 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> implements
 								}
 							}).create().show();
 		}
+	}
+
+	public void checkNewVersionInfo() {
+		if (BaseApplication.mNetWorkState == NetworkUtils.NETWORN_NONE) {
+			Toast.makeText(HomeTabActivity.this, "检查版本更新失败", 0).show();
+			return;
+		}
+		AsyncHttpClient client = new AsyncHttpClient();
+		client.get(HomeApi.CHECK_VERSION_URL, new AsyncHttpResponseHandler() {
+
+			@Override
+			public void onStart() {
+
+			}
+
+			@Override
+			public void onSuccess(String result) {
+				if (result == null || result.trim().equals("")) {
+					return;
+				}
+				// 由android.util.Xml创建一个XmlPullParser实例
+				try {
+
+					XmlPullParser parser = Xml.newPullParser();
+					// 设置输入流 并指明编码方式
+					parser.setInput(
+							new ByteArrayInputStream(result.getBytes()),
+							"UTF-8");
+
+					int eventType = parser.getEventType();
+					while (eventType != XmlPullParser.END_DOCUMENT) {
+						switch (eventType) {
+						case XmlPullParser.START_DOCUMENT:
+							break;
+						case XmlPullParser.START_TAG:
+							if (parser.getName().equals("name")) {
+								eventType = parser.next();
+								BaseApplication.mLatestVersionUpdate = parser
+										.getText();
+								// book.setId(Integer.parseInt(parser.getText()));
+							} else if (parser.getName().equals("version")) {
+								eventType = parser.next();
+								BaseApplication.mLastestVersionCode = Integer
+										.parseInt(parser.getText());
+								// book.setName(parser.getText());
+							} else if (parser.getName().equals("description")) {
+								eventType = parser.next();
+								BaseApplication.mLastestVersionName = parser
+										.getText();
+								// book.setPrice(Float.parseFloat(parser.getText()));
+							} else if (parser.getName().equals("url")) {
+								eventType = parser.next();
+								apkDownloadPath = parser.getText();
+							}
+							break;
+						case XmlPullParser.END_TAG:
+							// if (parser.getName().equals("book")) {
+							// books.add(book);
+							// book = null;
+							// }
+							break;
+						}
+						eventType = parser.next();
+					}
+				} catch (Exception e) {
+					// TODO: handle exception
+					Log.d("AppApplication",
+							"checkNewVersion exception:" + e.toString());
+				}
+				checkNewVersion();
+			}
+
+			@Override
+			public void onFailure(Throwable arg0) {
+				Log.d("AppApplication", "checkNewVersion onFailure");
+			}
+
+			@Override
+			public void onFinish() {
+
+			}
+		});
 	}
 }

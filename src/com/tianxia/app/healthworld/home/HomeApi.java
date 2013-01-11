@@ -8,7 +8,7 @@ public class HomeApi {
 			+ "androidclient/bothsex/bothsex!queryCommodity";
 
 	public static String HOME_GOODS_COMMENTS_URL = AppApplication.mDomain
-			+ "androidclient/bothsex/bothsex-comment?";
+			+ "androidclient/bothsex/bothsex-comment?x";
 
 	public static String FEEDBACK_URL = AppApplication.mDomain
 			+ "androidclient/bothsex/bothsex!addSuggestion";

@@ -41,16 +41,16 @@ public class SettingTabActivity extends BaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.setting_tab_activity);
-
-		tvAccount = (TextView) findViewById(R.id.setting_account);
-		btLogin = (Button) findViewById(R.id.setting_login);
-		layoutPassword = (LinearLayout) findViewById(R.id.setting_password);
-		layoutFeedback = (LinearLayout) findViewById(R.id.setting_feedback);
-		layoutUpdate = (LinearLayout) findViewById(R.id.setting_update);
-		layoutAbout = (LinearLayout) findViewById(R.id.setting_about);
-		tvPassword = (TextView) findViewById(R.id.setting_textview_password);
-		tvPasswordHint = (TextView) findViewById(R.id.setting_textview_password_hint);
+//		setContentView(R.layout.setting_tab_activity);
+//
+//		tvAccount = (TextView) findViewById(R.id.setting_account);
+//		btLogin = (Button) findViewById(R.id.setting_login);
+//		layoutPassword = (LinearLayout) findViewById(R.id.setting_password);
+//		layoutFeedback = (LinearLayout) findViewById(R.id.setting_feedback);
+//		layoutUpdate = (LinearLayout) findViewById(R.id.setting_update);
+//		layoutAbout = (LinearLayout) findViewById(R.id.setting_about);
+//		tvPassword = (TextView) findViewById(R.id.setting_textview_password);
+//		tvPasswordHint = (TextView) findViewById(R.id.setting_textview_password_hint);
 
 		password = PreferencesUtils.getStringPreference(
 				getApplicationContext(), PERSONAL, PASSWORD, "");

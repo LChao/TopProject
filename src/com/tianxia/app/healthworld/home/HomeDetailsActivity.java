@@ -98,9 +98,15 @@ public class HomeDetailsActivity extends AdapterActivity<String> {
 		goodsName = (TextView) findViewById(R.id.home_details_goods_name);
 		goodsDesc = (WebView) findViewById(R.id.home_details_tv_describe);
 		goodsEvaluate = (WebView) findViewById(R.id.home_details_tv_evaluate);
-		goodsSales.setText(tradeCount + "件");
-		goodsPrice.setText("￥" + price);
+		if (umPrice.equals("")) {
+			goodsUMPrice.setText("￥" + price);
+			goodsPrice.setVisibility(View.GONE);
+		} else {
+			goodsUMPrice.setText("￥" + umPrice);
+			goodsPrice.setText("￥" + price);
+		}
 		goodsName.setText(name);
+		goodsSales.setText(tradeCount + "件");
 		goodsDesc.getSettings().setDefaultTextEncodingName("utf-8");
 		goodsDesc.loadData(desc, "text/html;charset=UTF-8", "utf-8");
 		WebSettings taobaoSettings = goodsEvaluate.getSettings();
