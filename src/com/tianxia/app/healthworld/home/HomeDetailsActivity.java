@@ -109,9 +109,11 @@ public class HomeDetailsActivity extends AdapterActivity<String> {
 		goodsSales.setText(tradeCount + "件");
 		goodsDesc.getSettings().setDefaultTextEncodingName("utf-8");
 		goodsDesc.loadData(desc, "text/html;charset=UTF-8", "utf-8");
+		goodsDesc.setScrollBarStyle(WebView.SCROLLBARS_INSIDE_OVERLAY);
 		WebSettings taobaoSettings = goodsEvaluate.getSettings();
 		taobaoSettings.setJavaScriptEnabled(true);
-		goodsEvaluate.setWebViewClient(new MyWebChrome());
+		// goodsEvaluate.setWebViewClient(new MyWebChrome());
+		taobaoSettings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
 		if (BaseApplication.mNetWorkState != NetworkUtils.NETWORN_NONE) {
 			goodsEvaluate.loadUrl(HomeApi.HOME_GOODS_COMMENTS_URL + cid);
 		} else {

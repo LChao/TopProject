@@ -2,7 +2,7 @@
 <resources>
 
     <dimen name="setting_item_height">43dp</dimen>
-    <dimen name="home_popwindow_width">200dp</dimen>
-    <dimen name="home_popwindow_height">200dp</dimen>
+    <dimen name="home_popwindow_width">180dp</dimen>
+    <dimen name="home_popwindow_height">240dp</dimen>
 
 </resources>

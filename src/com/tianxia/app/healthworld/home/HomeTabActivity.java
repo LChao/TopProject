@@ -441,8 +441,8 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> implements
 			list.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 			list.setOnItemClickListener(PopwindowlistClickListener);
 			popwindow = new PopupWindow(v, (int) getResources().getDimension(
-					R.dimen.home_popwindow_width),
-					android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
+					R.dimen.home_popwindow_width), (int) getResources()
+					.getDimension(R.dimen.home_popwindow_height));
 		}
 		popwindow.setBackgroundDrawable(getResources().getDrawable(
 				R.drawable.home_popwindow_bg));

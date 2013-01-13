@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:background="#FFFFFF"
     android:orientation="vertical" >
 
     <RelativeLayout
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/home_banner_bg" >
 
@@ -35,7 +35,7 @@
         android:layout_width="match_parent"
         android:layout_height="0px"
         android:layout_weight="1"
-        android:scrollbarStyle="outsideOverlay" >
+        android:scrollbarStyle="insideOverlay" >
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -43,12 +43,12 @@
             android:orientation="vertical" >
 
             <RelativeLayout
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content" >
 
                 <Gallery
                     android:id="@+id/home_details_gallery"
-                    android:layout_width="fill_parent"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
                     android:layout_margin="5dp"
@@ -59,14 +59,16 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"
-                    android:src="@drawable/home_details_nav_left" />
+                    android:src="@drawable/home_details_nav_left"
+                    android:visibility="gone" />
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:src="@drawable/home_details_nav_right" />
+                    android:src="@drawable/home_details_nav_right"
+                    android:visibility="gone" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -75,7 +77,7 @@
                     android:layout_alignParentTop="true"
                     android:layout_marginRight="3dp"
                     android:layout_marginTop="6dp"
-                    android:background="#90999999"
+                    android:background="#60333333"
                     android:orientation="vertical" >
 
                     <TextView
@@ -84,8 +86,8 @@
                         android:layout_gravity="center"
                         android:layout_marginLeft="5dp"
                         android:layout_marginRight="5dp"
-                        android:text="30天销量"
-                        android:textColor="#333333"
+                        android:text="月销量"
+                        android:textColor="#ffffff"
                         android:textSize="12sp" />
 
                     <TextView
@@ -95,17 +97,16 @@
                         android:layout_gravity="center"
                         android:layout_marginLeft="5dp"
                         android:layout_marginRight="5dp"
-                        android:textColor="#e9235f"
+                        android:textColor="#ffffff"
                         android:textSize="14sp"
                         android:textStyle="bold" />
                 </LinearLayout>
             </RelativeLayout>
 
             <LinearLayout
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:gravity="center"
+                android:gravity="center_horizontal"
                 android:orientation="horizontal" >
 
                 <TextView
@@ -114,8 +115,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="10dp"
                     android:text="未知"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="#ff0066"
+                    android:textSize="18sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -123,57 +124,73 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="未知"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textColor="#666666" />
+                    android:textColor="#666666"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
             </LinearLayout>
 
             <TextView
                 android:id="@+id/home_details_goods_name"
-                android:layout_width="fill_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:ellipsize="end"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="-3dp"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
-                android:singleLine="true"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="#333333"
+                android:textColor="#000000"
+                android:textSize="16sp"
                 android:textStyle="bold" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="3dp"
+                android:background="#ff4d94"
                 android:drawableLeft="@drawable/home_details_tv_describe"
-                android:drawableTop="@drawable/home_details_line"
-                android:paddingLeft="5dp"
+                android:paddingBottom="3dp"
+                android:paddingLeft="10dp"
+                android:paddingTop="3dp"
                 android:text="商品描述"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="#ff0066"
+                android:textColor="#ffffff"
+                android:textSize="16sp"
                 android:textStyle="bold" />
 
             <WebView
                 android:id="@+id/home_details_tv_describe"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content" />
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="3dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="3dp"
+                android:minHeight="200dp"
+                android:scrollbarStyle="outsideOverlay" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:layout_marginTop="5dp"
+                android:layout_marginBottom="3dp"
+                android:layout_marginTop="3dp"
+                android:background="#ff4d94"
                 android:drawableLeft="@drawable/home_details_tv_evaluate"
-                android:drawableTop="@drawable/home_details_line"
-                android:paddingLeft="5dp"
+                android:paddingBottom="3dp"
+                android:paddingLeft="10dp"
+                android:paddingTop="3dp"
                 android:text="买家评价"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="#ff0066"
+                android:textColor="#ffffff"
+                android:textSize="16sp"
                 android:textStyle="bold" />
 
             <WebView
                 android:id="@+id/home_details_tv_evaluate"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content" />
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="3dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="3dp"
+                android:minHeight="200px"
+                android:scrollbarStyle="outsideOverlay" />
         </LinearLayout>
     </ScrollView>
 
