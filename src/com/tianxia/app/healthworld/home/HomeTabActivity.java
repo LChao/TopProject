@@ -666,13 +666,15 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> implements
 	public void onScroll(AbsListView view, int firstVisibleItem,
 			int visibleItemCount, int totalItemCount) {
 		// TODO Auto-generated method stub
+		System.out.println("testtestetest:"+"onScroll"+firstVisibleItem);
 		lastVisibleItem = firstVisibleItem + visibleItemCount;
 	}
 
 	@Override
 	public void onScrollStateChanged(AbsListView view, int scrollState) {
 		// TODO Auto-generated method stub
-		if (scrollState == OnScrollListener.SCROLL_STATE_IDLE
+		System.out.println("testtestetest:"+"onScrollStateChanged"+scrollState);
+		if (scrollState != OnScrollListener.SCROLL_STATE_TOUCH_SCROLL
 				&& lastVisibleItem == adapter.getCount()) {
 			if (mTopLoadingImage.getVisibility() == View.VISIBLE) {
 				if (curPage < Math.ceil(totalNum / 24.0)) {
