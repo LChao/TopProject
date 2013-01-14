@@ -108,11 +108,12 @@ public class HomeDetailsActivity extends AdapterActivity<String> {
 		goodsName.setText(name);
 		goodsSales.setText(tradeCount + "件");
 		goodsDesc.getSettings().setDefaultTextEncodingName("utf-8");
+		goodsDesc.getSettings().setCacheMode(
+				WebSettings.LOAD_CACHE_ELSE_NETWORK);
 		goodsDesc.loadData(desc, "text/html;charset=UTF-8", "utf-8");
-		goodsDesc.setScrollBarStyle(WebView.SCROLLBARS_INSIDE_OVERLAY);
 		WebSettings taobaoSettings = goodsEvaluate.getSettings();
 		taobaoSettings.setJavaScriptEnabled(true);
-		// goodsEvaluate.setWebViewClient(new MyWebChrome());
+		goodsEvaluate.setWebViewClient(new MyWebChrome());
 		taobaoSettings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
 		if (BaseApplication.mNetWorkState != NetworkUtils.NETWORN_NONE) {
 			goodsEvaluate.loadUrl(HomeApi.HOME_GOODS_COMMENTS_URL + cid);
@@ -373,6 +374,12 @@ public class HomeDetailsActivity extends AdapterActivity<String> {
 				String description, String failingUrl) {
 			// TODO Auto-generated method stub
 			super.onReceivedError(view, errorCode, description, failingUrl);
+		}
+
+		@Override
+		public void onPageFinished(WebView view, String url) {
+			// TODO Auto-generated method stub
+			super.onPageFinished(view, url);
 		}
 	}
 
