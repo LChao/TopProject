@@ -16,6 +16,7 @@ import android.webkit.WebViewClient;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -379,6 +380,10 @@ public class HomeDetailsActivity extends AdapterActivity<String> {
 		@Override
 		public void onPageFinished(WebView view, String url) {
 			// TODO Auto-generated method stub
+			LinearLayout.LayoutParams params = (LayoutParams) view
+					.getLayoutParams();
+			params.bottomMargin = (int) (3 * BaseApplication.screenDensity);
+			view.setLayoutParams(params);
 			super.onPageFinished(view, url);
 		}
 	}

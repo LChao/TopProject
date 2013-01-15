@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.tianxia.app.healthworld"
     android:versionCode="2"
-    android:versionName="V1.0.1Beta" >
+    android:versionName="V1.0.2Beta" >
 
     <uses-sdk
         android:minSdkVersion="8"
