@@ -3,14 +3,11 @@ package com.tianxia.app.healthworld.home;
 import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.os.Handler;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.animation.AnimationUtils;
-import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -28,7 +25,6 @@ public class HomeTaobaoWebview extends BaseActivity {
 
 	private ImageView mAppBackButton = null;
 	private ProgressBar mAppPB;
-	private Handler handler;
 
 	private WebView taobao;
 	private ImageButton backBut;
@@ -41,7 +37,6 @@ public class HomeTaobaoWebview extends BaseActivity {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.home_taobao_webview_activity);
-		handler = new Handler();
 		taobao = (WebView) findViewById(R.id.home_taobao_webview);
 		mAppPB = (ProgressBar) findViewById(R.id.home_taobao_webview_pb);
 		backBut = (ImageButton) findViewById(R.id.home_taobao_button_back);
@@ -70,15 +65,10 @@ public class HomeTaobaoWebview extends BaseActivity {
 				// Log.d(TAG, "onPageFinished,URL is: " + url);
 				// document.getElementById('J_Taojia').style.display='none';
 				// document.body.removeChild(document.getElementById(\"J_Taojia\"));
-				if (url.contains("m.taobao.com")) {
-					handler.postDelayed(new Runnable() {
-
-						@Override
-						public void run() {
-							// TODO Auto-generated method stub
-							webView.loadUrl("javascript:document.body.removeChild(document.getElementById(\"J_Taojia\"));");
-						}
-					}, 50);
+				if (url.contains("m.taobao.com") || url.contains("m.tmall.com")) {
+					mAppPB.startAnimation(AnimationUtils.loadAnimation(
+							HomeTaobaoWebview.this, android.R.anim.fade_out));
+					mAppPB.setVisibility(View.GONE);
 					if (taobao.canGoBack()) {
 						backBut.setClickable(true);
 						backBut.setBackgroundResource(R.drawable.taobao_bottom_left);
@@ -97,7 +87,7 @@ public class HomeTaobaoWebview extends BaseActivity {
 			@Override
 			public void onPageStarted(WebView view, String url, Bitmap favicon) {
 				// TODO Auto-generated method stub
-				if (url.contains("m.taobao.com")) {
+				if (url.contains("m.taobao.com") || url.contains("m.tmall.com")) {
 					backBut.setClickable(false);
 					forwardBut.setClickable(false);
 					refreshBut.setClickable(false);
@@ -106,9 +96,6 @@ public class HomeTaobaoWebview extends BaseActivity {
 							.setBackgroundResource(R.drawable.taobao_bottom_right_not);
 					refreshBut
 							.setBackgroundResource(R.drawable.taobao_bottom_refresh_not);
-					mAppPB.startAnimation(AnimationUtils.loadAnimation(
-							HomeTaobaoWebview.this, android.R.anim.fade_out));
-					mAppPB.setVisibility(View.GONE);
 				}
 				super.onPageStarted(view, url, favicon);
 			}
@@ -125,8 +112,6 @@ public class HomeTaobaoWebview extends BaseActivity {
 		taobao.loadUrl(getIntent().getStringExtra("url") + "&ttid="
 				+ "400000_21247503@qingqubao_Android_"
 				+ BaseApplication.mVersionName);
-		// taobao.loadUrl("http://s.click.taobao.com/t?e=zGU34CA7K%2BPkqB07S4%2FK0CFcRfH0GoT805sipKvI1SjJA3Am3nGgIDDrQ5bY7COBEklLhc5vmGi8NotnbrwBIONc9GJ1Y3AgeTbJJSDDAz9YpA%3D%3D");
-		// Log.d(TAG, "URL: " + getIntent().getStringExtra("url"));
 		Toast msg = Toast.makeText(HomeTaobaoWebview.this, "亲,进入淘宝商品页,请放心购买!",
 				Toast.LENGTH_LONG);
 		msg.setGravity(Gravity.CENTER, 0, 0);

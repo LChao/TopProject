@@ -38,12 +38,15 @@ public class CollectTabActivity extends AdapterActivity<CollectInfo> {
 		super.onCreate(savedInstanceState);
 		db = AppApplication.mSQLiteHelper.getWritableDatabase();
 
-		fb = new FinalBitmap(this).init();
+		fb = FinalBitmap.create(this, AppApplication.mSdcardImageDir);
 		fb.configLoadingImage(R.drawable.app_download_loading);
+		fb.configCalculateBitmapSizeWhenDecode(true);
+		// fb = new FinalBitmap(this).init();
+		// fb.configLoadingImage(R.drawable.app_download_loading);
 		// fb.configLoadfailImage(R.drawable.gallery_it);
 		// 这里可以进行其他十几项的配置，也可以不用配置，配置之后必须调用init()函数,才生效
-		fb.configDiskCachePath(AppApplication.mSdcardImageDir);
-		fb.init();
+		// fb.configDiskCachePath(AppApplication.mSdcardImageDir);
+		// fb.init();
 		// fb.configBitmapLoadThreadSize(int size)
 
 		int gridColumn = (int) Math.floor(AppApplication.screenWidth / 320.0);
@@ -193,8 +196,9 @@ public class CollectTabActivity extends AdapterActivity<CollectInfo> {
 	@Override
 	protected void onResume() {
 		// TODO Auto-generated method stub
-		super.onResume();
+		fb.onResume();
 		showFavoriteList();
+		super.onResume();
 	}
 
 	private void showFavoriteList() {
@@ -205,8 +209,9 @@ public class CollectTabActivity extends AdapterActivity<CollectInfo> {
 	@Override
 	protected void onDestroy() {
 		// TODO Auto-generated method stub
-		super.onDestroy();
 		db.close();
+		// fb.onDestroy();
+		super.onDestroy();
 	}
 
 	@Override
@@ -219,5 +224,12 @@ public class CollectTabActivity extends AdapterActivity<CollectInfo> {
 	protected void onItemClick(AdapterView<?> adapterView, View view,
 			int position, long id) {
 		// TODO Auto-generated method stub
+	}
+
+	@Override
+	protected void onPause() {
+		// TODO Auto-generated method stub
+		fb.onPause();
+		super.onPause();
 	}
 }

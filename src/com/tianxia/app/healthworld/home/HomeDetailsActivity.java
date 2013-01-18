@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Paint;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -71,12 +72,15 @@ public class HomeDetailsActivity extends AdapterActivity<String> {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		fb = new FinalBitmap(this).init();
+		fb = FinalBitmap.create(this, AppApplication.mSdcardImageDir);
 		fb.configLoadingImage(R.drawable.app_download_loading);
+		fb.configCalculateBitmapSizeWhenDecode(true);
+		// fb = new FinalBitmap(this).init();
+		// fb.configLoadingImage(R.drawable.app_download_loading);
 		// fb.configLoadfailImage(R.drawable.gallery_it);
 		// 这里可以进行其他十几项的配置，也可以不用配置，配置之后必须调用init()函数,才生效
-		fb.configDiskCachePath(AppApplication.mSdcardImageDir);
-		fb.init();
+		// fb.configDiskCachePath(AppApplication.mSdcardImageDir);
+		// fb.init();
 		// fb.configBitmapLoadThreadSize(int size)
 
 		imageWidth = (int) (AppApplication.screenWidth * 0.8);
@@ -109,13 +113,9 @@ public class HomeDetailsActivity extends AdapterActivity<String> {
 		goodsName.setText(name);
 		goodsSales.setText(tradeCount + "件");
 		goodsDesc.getSettings().setDefaultTextEncodingName("utf-8");
-		goodsDesc.getSettings().setCacheMode(
-				WebSettings.LOAD_CACHE_ELSE_NETWORK);
 		goodsDesc.loadData(desc, "text/html;charset=UTF-8", "utf-8");
-		WebSettings taobaoSettings = goodsEvaluate.getSettings();
-		taobaoSettings.setJavaScriptEnabled(true);
+		goodsEvaluate.getSettings().setJavaScriptEnabled(true);
 		goodsEvaluate.setWebViewClient(new MyWebChrome());
-		taobaoSettings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
 		if (BaseApplication.mNetWorkState != NetworkUtils.NETWORN_NONE) {
 			goodsEvaluate.loadUrl(HomeApi.HOME_GOODS_COMMENTS_URL + cid);
 		} else {
@@ -380,12 +380,32 @@ public class HomeDetailsActivity extends AdapterActivity<String> {
 		@Override
 		public void onPageFinished(WebView view, String url) {
 			// TODO Auto-generated method stub
-			LinearLayout.LayoutParams params = (LayoutParams) view
-					.getLayoutParams();
-			params.bottomMargin = (int) (3 * BaseApplication.screenDensity);
-			view.setLayoutParams(params);
+			// LinearLayout.LayoutParams params = (LayoutParams) view
+			// .getLayoutParams();
+			// params.bottomMargin = (int) (3 * BaseApplication.screenDensity);
+			// view.setLayoutParams(params);
 			super.onPageFinished(view, url);
 		}
 	}
 
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		fb.onResume();
+		super.onResume();
+	}
+
+	@Override
+	protected void onPause() {
+		// TODO Auto-generated method stub
+		fb.onPause();
+		super.onPause();
+	}
+
+	@Override
+	protected void onDestroy() {
+		// TODO Auto-generated method stub
+		// fb.onDestroy();
+		super.onDestroy();
+	}
 }

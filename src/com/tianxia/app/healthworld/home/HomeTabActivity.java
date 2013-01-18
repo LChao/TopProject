@@ -100,12 +100,15 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> implements
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		fb = new FinalBitmap(this).init();
+		fb = FinalBitmap.create(this, AppApplication.mSdcardImageDir, 0.5f);
 		fb.configLoadingImage(R.drawable.app_download_loading);
+		fb.configCalculateBitmapSizeWhenDecode(true);
+		// fb = new FinalBitmap(this).init();
+		// fb.configLoadingImage(R.drawable.app_download_loading);
 		// fb.configLoadfailImage(R.drawable.gallery_it);
 		// 这里可以进行其他十几项的配置，也可以不用配置，配置之后必须调用init()函数,才生效
-		fb.configDiskCachePath(AppApplication.mSdcardImageDir);
-		fb.init();
+		// fb.configDiskCachePath(AppApplication.mSdcardImageDir);
+		// fb.init();
 		// fb.configBitmapLoadThreadSize(int size)
 
 		categotyTv = (TextView) findViewById(R.id.home_textview_category);
@@ -802,5 +805,26 @@ public class HomeTabActivity extends AdapterActivity<HomeGoodsInfo> implements
 
 			}
 		});
+	}
+
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		fb.onResume();
+		super.onResume();
+	}
+
+	@Override
+	protected void onPause() {
+		// TODO Auto-generated method stub
+		fb.onPause();
+		super.onPause();
+	}
+
+	@Override
+	protected void onDestroy() {
+		// TODO Auto-generated method stub
+		fb.onDestroy();
+		super.onDestroy();
 	}
 }
