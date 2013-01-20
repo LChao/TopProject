@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF"
+    android:background="#eeeeee"
     android:orientation="vertical" >
 
     <RelativeLayout
@@ -51,7 +51,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:layout_margin="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="5dp"
                     android:spacing="5dp" />
 
                 <ImageView
@@ -59,16 +60,14 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"
-                    android:src="@drawable/home_details_nav_left"
-                    android:visibility="gone" />
+                    android:src="@drawable/home_details_nav_left" />
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:src="@drawable/home_details_nav_right"
-                    android:visibility="gone" />
+                    android:src="@drawable/home_details_nav_right" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -136,7 +135,7 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:layout_marginTop="0dp"
+                android:layout_marginTop="-3dp"
                 android:textColor="#000000"
                 android:textSize="16sp"
                 android:textStyle="bold" />
@@ -146,7 +145,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="3dp"
                 android:layout_marginTop="3dp"
-                android:background="#ff4d94"
+                android:background="#ff4f91"
                 android:drawableLeft="@drawable/home_details_tv_describe"
                 android:paddingBottom="3dp"
                 android:paddingLeft="10dp"
@@ -172,7 +171,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="3dp"
                 android:layout_marginTop="3dp"
-                android:background="#ff4d94"
+                android:background="#ff4f91"
                 android:drawableLeft="@drawable/home_details_tv_evaluate"
                 android:paddingBottom="3dp"
                 android:paddingLeft="10dp"
