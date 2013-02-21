@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.tianxia.app.healthworld"
-    android:versionCode="2"
-    android:versionName="V1.0.2Beta" >
+    android:versionCode="3"
+    android:versionName="V1.0.3Beta" >
 
     <uses-sdk
         android:minSdkVersion="8"
@@ -116,7 +116,7 @@
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name="com.tianxia.lib.baseworld.activity.SettingAboutActivity"
+            android:name=".setting.SettingAboutActivity"
             android:screenOrientation="portrait" />
     </application>
 
